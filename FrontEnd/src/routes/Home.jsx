@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ConfigProvider, Table, Button, Tag, Space, Input, Popconfirm, Card, message, DatePicker, Segmented, Tabs, Modal, Select, theme as antTheme } from 'antd';
+import { ConfigProvider, Table, Button, Tag, Space, Input, Popconfirm, message, DatePicker, Segmented, Tabs, Modal, Select, theme as antTheme } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlus,
@@ -10,17 +10,16 @@ import {
   faFileCsv,
   faChartPie,
   faListCheck,
-  faWallet,
-  faUserCheck,
-  faCalendarDays,
-  faFilterCircleXmark,
+  faShieldHalved,
+  faVault,
   faCircleQuestion,
   faWandMagicSparkles,
   faMoon,
   faSun,
   faCoins,
-  faShieldHalved,
-  faVault
+  faPiggyBank,
+  faRepeat,
+  faHeartPulse
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -31,6 +30,9 @@ import QuickAddPresets from '../components/transactions/QuickAddPresets';
 import BudgetMeter from '../components/transactions/BudgetMeter';
 import AchievementBadges from '../components/transactions/AchievementBadges';
 import FinancialAnalyticsChart from '../components/transactions/FinancialAnalyticsChart';
+import FinancialHealthScore from '../components/transactions/FinancialHealthScore';
+import SavingsGoals from '../components/transactions/SavingsGoals';
+import RecurringSubscriptions from '../components/transactions/RecurringSubscriptions';
 import {
   fetchTransactions,
   createTransaction,
@@ -320,7 +322,7 @@ const Home = () => {
       <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
-          {/* Top Bar / Navigation Header */}
+          {/* Top Bar Navigation Header */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
             isDarkMode ? 'bg-slate-900/90 border-slate-800 shadow-xl' : 'bg-white border-slate-200/90 shadow-sm'
           }`}>
@@ -437,7 +439,10 @@ const Home = () => {
             isDarkMode={isDarkMode}
           />
 
-          {/* Financial Cash Flow Analytics Chart */}
+          {/* Algorithmic Financial Health Rating & Predictions */}
+          <FinancialHealthScore summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
+
+          {/* Cash Flow Analytics Chart */}
           <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
 
           {/* Interactive Tools (Presets & Budget Meter) */}
@@ -446,93 +451,7 @@ const Home = () => {
             <BudgetMeter totalExpenses={convertedSummary.totalExpenses} isDarkMode={isDarkMode} />
           </div>
 
-          {/* Search, Date & Type Filter Toolbar */}
-          <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
-            isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
-          }`}>
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <Segmented
-                  size="large"
-                  value={filterType}
-                  onChange={value => setFilterType(value)}
-                  options={[
-                    { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
-                    { label: <span className="font-extrabold text-emerald-500 px-3">💰 INCOME</span>, value: 'income' },
-                    { label: <span className="font-extrabold text-rose-500 px-3">💸 EXPENSES</span>, value: 'expense' }
-                  ]}
-                  className={isDarkMode ? 'bg-slate-800 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
-                />
-
-                <Input
-                  placeholder="Search category..."
-                  prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
-                  value={searchCategory}
-                  onChange={e => setSearchCategory(e.target.value)}
-                  style={{ width: 190 }}
-                  size="large"
-                  className="rounded-2xl"
-                  allowClear
-                />
-
-                <RangePicker
-                  value={dateRange}
-                  onChange={dates => setDateRange(dates)}
-                  size="large"
-                  className="rounded-2xl"
-                  format="YYYY-MM-DD"
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                {hasActiveFilters && (
-                  <Button
-                    danger
-                    type="dashed"
-                    icon={<FontAwesomeIcon icon={faFilterCircleXmark} />}
-                    onClick={handleClearFilters}
-                    size="large"
-                    className="rounded-2xl font-extrabold"
-                  >
-                    Clear Filters
-                  </Button>
-                )}
-                <Button
-                  icon={<FontAwesomeIcon icon={faArrowsRotate} />}
-                  onClick={loadData}
-                  loading={loading}
-                  size="large"
-                  className="rounded-2xl font-extrabold"
-                >
-                  Refresh
-                </Button>
-              </div>
-            </div>
-
-            {/* Active Filter Chips */}
-            {hasActiveFilters && (
-              <div className="mt-4 pt-3 border-t border-slate-800/40 flex flex-wrap items-center gap-2 text-xs">
-                <span className="font-bold text-slate-400">Active Filters:</span>
-                {filterType !== 'all' && (
-                  <Tag closable onClose={() => setFilterType('all')} color="blue" className="font-bold rounded-xl px-2.5 py-0.5">
-                    Type: {filterType.toUpperCase()}
-                  </Tag>
-                )}
-                {searchCategory.trim() !== '' && (
-                  <Tag closable onClose={() => setSearchCategory('')} color="purple" className="font-bold rounded-xl px-2.5 py-0.5">
-                    Category: &quot;{searchCategory}&quot;
-                  </Tag>
-                )}
-                {dateRange !== null && (
-                  <Tag closable onClose={() => setDateRange(null)} color="amber" className="font-bold rounded-xl px-2.5 py-0.5">
-                    Range Filter
-                  </Tag>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Ledger vs Category Analytics Tabs */}
+          {/* Main Content Tabs (Ledger, Category Breakdown, Savings Goals, Subscriptions) */}
           <Tabs
             defaultActiveKey="overview"
             size="large"
@@ -546,31 +465,97 @@ const Home = () => {
                   </span>
                 ),
                 children: (
-                  <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
-                    isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
-                  }`}>
-                    <Table
-                      columns={columns}
-                      dataSource={transactions}
-                      rowKey="id"
-                      loading={loading}
-                      pagination={{
-                        pageSize: 8,
-                        showSizeChanger: true,
-                        showTotal: renderPaginationTotal
-                      }}
-                      locale={{
-                        emptyText: (
-                          <div className="py-16 text-center space-y-3">
-                            <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
-                            <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
-                            <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-blue-600 font-extrabold rounded-2xl mt-2">
-                              Load Demo Data
+                  <div className="space-y-4">
+                    {/* Search, Date & Type Filter Toolbar */}
+                    <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
+                      isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+                    }`}>
+                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <Segmented
+                            size="large"
+                            value={filterType}
+                            onChange={value => setFilterType(value)}
+                            options={[
+                              { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
+                              { label: <span className="font-extrabold text-emerald-500 px-3">💰 INCOME</span>, value: 'income' },
+                              { label: <span className="font-extrabold text-rose-500 px-3">💸 EXPENSES</span>, value: 'expense' }
+                            ]}
+                            className={isDarkMode ? 'bg-slate-800 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
+                          />
+
+                          <Input
+                            placeholder="Search category..."
+                            prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
+                            value={searchCategory}
+                            onChange={e => setSearchCategory(e.target.value)}
+                            style={{ width: 190 }}
+                            size="large"
+                            className="rounded-2xl"
+                            allowClear
+                          />
+
+                          <RangePicker
+                            value={dateRange}
+                            onChange={dates => setDateRange(dates)}
+                            size="large"
+                            className="rounded-2xl"
+                            format="YYYY-MM-DD"
+                          />
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {hasActiveFilters && (
+                            <Button
+                              danger
+                              type="dashed"
+                              icon={<FontAwesomeIcon icon={faArrowsRotate} />}
+                              onClick={handleClearFilters}
+                              size="large"
+                              className="rounded-2xl font-extrabold"
+                            >
+                              Clear Filters
                             </Button>
-                          </div>
-                        )
-                      }}
-                    />
+                          )}
+                          <Button
+                            icon={<FontAwesomeIcon icon={faArrowsRotate} />}
+                            onClick={loadData}
+                            loading={loading}
+                            size="large"
+                            className="rounded-2xl font-extrabold"
+                          >
+                            Refresh
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
+                      isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+                    }`}>
+                      <Table
+                        columns={columns}
+                        dataSource={transactions}
+                        rowKey="id"
+                        loading={loading}
+                        pagination={{
+                          pageSize: 8,
+                          showSizeChanger: true,
+                          showTotal: renderPaginationTotal
+                        }}
+                        locale={{
+                          emptyText: (
+                            <div className="py-16 text-center space-y-3">
+                              <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
+                              <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
+                              <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-blue-600 font-extrabold rounded-2xl mt-2">
+                                Load Demo Data
+                              </Button>
+                            </div>
+                          )
+                        }}
+                      />
+                    </div>
                   </div>
                 )
               },
@@ -583,6 +568,26 @@ const Home = () => {
                   </span>
                 ),
                 children: <CategoryAnalytics transactions={transactions} isDarkMode={isDarkMode} />
+              },
+              {
+                key: 'goals',
+                label: (
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faPiggyBank} className="text-indigo-400" />
+                    Savings Goals Vault
+                  </span>
+                ),
+                children: <SavingsGoals onSuccess={loadData} isDarkMode={isDarkMode} />
+              },
+              {
+                key: 'subscriptions',
+                label: (
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faRepeat} className="text-rose-400" />
+                    Recurring Bills & Subscriptions
+                  </span>
+                ),
+                children: <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
               }
             ]}
           />
@@ -617,10 +622,10 @@ const Home = () => {
 
               <ol className="list-decimal list-inside space-y-2.5">
                 <li><strong>Multi-Currency</strong>: Switch between USD $, EUR €, GBP £, and PKR Rs instantly!</li>
-                <li><strong>Dark/Light Mode</strong>: Toggle between Dark 🌙 and Light ☀️ mode with 1 click.</li>
-                <li><strong>1-Click Log</strong>: Use Quick Add preset buttons (☕ Coffee, 🛒 Groceries, 💼 Paycheck) for instant logging.</li>
+                <li><strong>Health Score Index</strong>: View your credit-style 0-100 financial health rating and burn rate forecast.</li>
+                <li><strong>Savings Goals Vault</strong>: Track target goals and deposit funds directly with 1 click.</li>
+                <li><strong>Recurring Subscriptions</strong>: Track monthly commitment burdens and log bill payments instantly.</li>
                 <li><strong>Interactive Stat Cards</strong>: Click on <em>Total Income</em> or <em>Total Expenses</em> card to filter your ledger.</li>
-                <li><strong>Budget Target Goal</strong>: Click the gear ⚙️ icon on <em>Monthly Budget Target Goal</em> meter to adjust limit.</li>
                 <li><strong>Export CSV</strong>: Download your transaction ledger to CSV anytime via <em>Export CSV</em> button.</li>
               </ol>
             </div>
