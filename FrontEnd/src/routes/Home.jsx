@@ -19,7 +19,7 @@ import {
   faCoins,
   faPiggyBank,
   faRepeat,
-  faHeartPulse
+  faSeedling
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -33,6 +33,8 @@ import FinancialAnalyticsChart from '../components/transactions/FinancialAnalyti
 import FinancialHealthScore from '../components/transactions/FinancialHealthScore';
 import SavingsGoals from '../components/transactions/SavingsGoals';
 import RecurringSubscriptions from '../components/transactions/RecurringSubscriptions';
+import WealthGrowthCalculator from '../components/transactions/WealthGrowthCalculator';
+import EmergencyRunway from '../components/transactions/EmergencyRunway';
 import {
   fetchTransactions,
   createTransaction,
@@ -191,7 +193,7 @@ const Home = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `FINDIARY_PRO_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
+    link.setAttribute('download', `VAULTIX_PRO_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -322,30 +324,30 @@ const Home = () => {
       <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
-          {/* Top Bar Navigation Header */}
+          {/* Navigation Header */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
             isDarkMode ? 'bg-slate-900/90 border-slate-800 shadow-xl' : 'bg-white border-slate-200/90 shadow-sm'
           }`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               
-              {/* Brand Logo & Live Status */}
+              {/* Brand Logo & Status */}
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-blue-500/25">
+                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-teal-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-blue-500/25">
                   <FontAwesomeIcon icon={faVault} />
                 </div>
                 <div>
                   <div className="flex items-center gap-3">
-                    <h1 className="text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent m-0">
-                      FINDIARY PRO
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-400 to-indigo-400 bg-clip-text text-transparent m-0">
+                      VAULTIX PRO
                     </h1>
                     <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      LIVE VAULT
+                      ACTIVE VAULT
                     </span>
                   </div>
                   <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                     <FontAwesomeIcon icon={faShieldHalved} className="text-blue-400" />
-                    Executive Financial Tracker • {dayjs().format('dddd, MMMM D, YYYY')}
+                    Executive Wealth Platform • {dayjs().format('dddd, MMMM D, YYYY')}
                   </span>
                 </div>
               </div>
@@ -409,7 +411,7 @@ const Home = () => {
                   size="large"
                   icon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={handleOpenAddModal}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black rounded-2xl shadow-lg shadow-blue-600/30 border-0 px-6"
+                  className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-500 hover:to-teal-500 text-white font-black rounded-2xl shadow-lg shadow-blue-600/30 border-0 px-6"
                 >
                   + Add Entry
                 </Button>
@@ -445,13 +447,14 @@ const Home = () => {
           {/* Cash Flow Analytics Chart */}
           <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
 
-          {/* Interactive Tools (Presets & Budget Meter) */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Interactive Tools (Presets, Budget & Emergency Runway) */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <QuickAddPresets onSuccess={loadData} isDarkMode={isDarkMode} />
             <BudgetMeter totalExpenses={convertedSummary.totalExpenses} isDarkMode={isDarkMode} />
+            <EmergencyRunway summary={convertedSummary} isDarkMode={isDarkMode} />
           </div>
 
-          {/* Main Content Tabs (Ledger, Category Breakdown, Savings Goals, Subscriptions) */}
+          {/* Main Content Tabs (Ledger, Category Breakdown, Savings Goals, Subscriptions, Wealth Growth) */}
           <Tabs
             defaultActiveKey="overview"
             size="large"
@@ -588,6 +591,16 @@ const Home = () => {
                   </span>
                 ),
                 children: <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
+              },
+              {
+                key: 'growth',
+                label: (
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faSeedling} className="text-teal-400" />
+                    Wealth Growth Simulator
+                  </span>
+                ),
+                children: <WealthGrowthCalculator isDarkMode={isDarkMode} />
               }
             ]}
           />
@@ -617,16 +630,16 @@ const Home = () => {
           >
             <div className="space-y-4 text-sm py-2 font-medium">
               <div className="p-4 bg-blue-500/10 rounded-2xl text-blue-400 border border-blue-500/20">
-                Welcome to <strong>FINDIARY PRO</strong>! Executive financial management simplified.
+                Welcome to <strong>VAULTIX PRO</strong>! Executive wealth & cash flow management.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">
                 <li><strong>Multi-Currency</strong>: Switch between USD $, EUR €, GBP £, and PKR Rs instantly!</li>
-                <li><strong>Health Score Index</strong>: View your credit-style 0-100 financial health rating and burn rate forecast.</li>
+                <li><strong>Wealth Growth Simulator</strong>: Project long-term compound net worth over 1 to 30 years.</li>
+                <li><strong>Emergency Safety Runway</strong>: View months of zero-income survival buffer.</li>
                 <li><strong>Savings Goals Vault</strong>: Track target goals and deposit funds directly with 1 click.</li>
-                <li><strong>Recurring Subscriptions</strong>: Track monthly commitment burdens and log bill payments instantly.</li>
-                <li><strong>Interactive Stat Cards</strong>: Click on <em>Total Income</em> or <em>Total Expenses</em> card to filter your ledger.</li>
-                <li><strong>Export CSV</strong>: Download your transaction ledger to CSV anytime via <em>Export CSV</em> button.</li>
+                <li><strong>Recurring Subscriptions</strong>: Track monthly commitment burdens and log bill payments.</li>
+                <li><strong>Export CSV</strong>: Download your transaction ledger to CSV anytime.</li>
               </ol>
             </div>
           </Modal>
