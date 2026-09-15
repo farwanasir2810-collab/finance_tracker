@@ -19,7 +19,8 @@ import {
   faCoins,
   faPiggyBank,
   faRepeat,
-  faSeedling
+  faSeedling,
+  faWallet
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -53,7 +54,7 @@ const CURRENCIES = {
 };
 
 const renderPaginationTotal = total => (
-  <span className="font-extrabold text-slate-400 text-xs">Total {total} entries recorded</span>
+  <span className="font-extrabold text-purple-300/60 text-xs">Total {total} entries recorded</span>
 );
 
 const SAMPLE_ENTRIES = [
@@ -193,7 +194,7 @@ const Home = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `VAULTIX_PRO_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
+    link.setAttribute('download', `Vaultly_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -214,11 +215,11 @@ const Home = () => {
       width: 130,
       render: type =>
         type === 'income' ? (
-          <span className="px-3 py-1 text-xs font-black rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 uppercase tracking-wider inline-flex items-center gap-1">
+          <span className="px-3 py-1 text-xs font-black rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 uppercase tracking-wider inline-flex items-center gap-1">
             ▲ Income
           </span>
         ) : (
-          <span className="px-3 py-1 text-xs font-black rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-500 uppercase tracking-wider inline-flex items-center gap-1">
+          <span className="px-3 py-1 text-xs font-black rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 uppercase tracking-wider inline-flex items-center gap-1">
             ▼ Expense
           </span>
         )
@@ -237,7 +238,7 @@ const Home = () => {
             >
               <FontAwesomeIcon icon={meta.icon} />
             </div>
-            <span className={`font-black text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{text}</span>
+            <span className={`font-black text-sm ${isDarkMode ? 'text-purple-100' : 'text-slate-900'}`}>{text}</span>
           </div>
         );
       }
@@ -246,7 +247,7 @@ const Home = () => {
       title: 'Description / Notes',
       dataIndex: 'description',
       key: 'description',
-      render: text => <span className={`font-medium text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{text || '-'}</span>
+      render: text => <span className={`font-medium text-sm ${isDarkMode ? 'text-purple-200/70' : 'text-slate-600'}`}>{text || '-'}</span>
     },
     {
       title: 'Date',
@@ -254,7 +255,7 @@ const Home = () => {
       key: 'date',
       width: 140,
       sorter: (a, b) => new Date(a.date) - new Date(b.date),
-      render: date => <span className={`font-extrabold text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{dayjs(date).format('MMM DD, YYYY')}</span>
+      render: date => <span className={`font-extrabold text-xs ${isDarkMode ? 'text-purple-300/60' : 'text-slate-500'}`}>{dayjs(date).format('MMM DD, YYYY')}</span>
     },
     {
       title: 'Amount',
@@ -267,7 +268,7 @@ const Home = () => {
         const isIncome = record.type === 'income';
         const converted = Number(amount) * currency.rate;
         return (
-          <span className={`font-black text-base tracking-tight ${isIncome ? 'text-emerald-500' : 'text-rose-500'}`}>
+          <span className={`font-black text-base tracking-tight ${isIncome ? 'text-emerald-400' : 'text-rose-400'}`}>
             {isIncome ? '+' : '-'}{currency.symbol}{converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         );
@@ -282,7 +283,7 @@ const Home = () => {
         <Space size="small">
           <Button
             type="text"
-            className="hover:bg-blue-500/10 rounded-xl text-blue-500 font-bold"
+            className="hover:bg-purple-500/20 rounded-xl text-purple-300 font-bold"
             icon={<FontAwesomeIcon icon={faPenToSquare} />}
             onClick={() => handleOpenEditModal(record)}
             title="Edit"
@@ -298,7 +299,7 @@ const Home = () => {
             <Button
               type="text"
               danger
-              className="hover:bg-rose-500/10 rounded-xl text-rose-500 font-bold"
+              className="hover:bg-rose-500/20 rounded-xl text-rose-400 font-bold"
               icon={<FontAwesomeIcon icon={faTrash} />}
               title="Delete"
             />
@@ -315,39 +316,40 @@ const Home = () => {
       theme={{
         algorithm: isDarkMode ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
         token: {
-          colorPrimary: '#3b82f6',
+          colorPrimary: '#a855f7',
+          colorBgContainer: isDarkMode ? '#120924' : '#ffffff',
           borderRadius: 16,
           fontFamily: 'Plus Jakarta Sans, sans-serif'
         }
       }}
     >
-      <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-[#090514] text-purple-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
           {/* Navigation Header */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
-            isDarkMode ? 'bg-slate-900/90 border-slate-800 shadow-xl' : 'bg-white border-slate-200/90 shadow-sm'
+            isDarkMode ? 'bg-[#120924] border-purple-900/50 shadow-2xl shadow-purple-950/50' : 'bg-white border-slate-200/90 shadow-sm'
           }`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               
-              {/* Brand Logo & Status */}
+              {/* Brand Logo & Catchy Short Name */}
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-teal-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-blue-500/25">
-                  <FontAwesomeIcon icon={faVault} />
+                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-purple-700 via-indigo-600 to-purple-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-purple-600/30">
+                  <FontAwesomeIcon icon={faWallet} />
                 </div>
                 <div>
                   <div className="flex items-center gap-3">
-                    <h1 className="text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-teal-400 to-indigo-400 bg-clip-text text-transparent m-0">
-                      VAULTIX PRO
+                    <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-purple-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent m-0">
+                      Vaultly
                     </h1>
-                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      ACTIVE VAULT
+                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                      <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                      SMART VAULT
                     </span>
                   </div>
-                  <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    <FontAwesomeIcon icon={faShieldHalved} className="text-blue-400" />
-                    Executive Wealth Platform • {dayjs().format('dddd, MMMM D, YYYY')}
+                  <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-purple-300/70' : 'text-slate-500'}`}>
+                    <FontAwesomeIcon icon={faShieldHalved} className="text-purple-400" />
+                    Smart Finance & Expense Tracker • {dayjs().format('dddd, MMMM D, YYYY')}
                   </span>
                 </div>
               </div>
@@ -374,7 +376,7 @@ const Home = () => {
                   onClick={() => setIsDarkMode(!isDarkMode)}
                   icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-slate-600'} />}
                   className={`rounded-2xl font-extrabold border ${
-                    isDarkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    isDarkMode ? 'bg-purple-950/60 border-purple-800/60 text-purple-200' : 'bg-slate-100 border-slate-200 text-slate-700'
                   }`}
                 >
                   {isDarkMode ? 'Light' : 'Dark'}
@@ -382,12 +384,12 @@ const Home = () => {
 
                 {/* Load Demo Data */}
                 <Button
-                  icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-purple-400" />}
+                  icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-fuchsia-400" />}
                   size="large"
                   onClick={handleLoadSampleData}
                   loading={loading}
                   className={`font-extrabold rounded-2xl border ${
-                    isDarkMode ? 'bg-purple-950/40 border-purple-800/50 text-purple-300 hover:bg-purple-900/60' : 'bg-purple-50 border-purple-200 text-purple-700'
+                    isDarkMode ? 'bg-fuchsia-950/40 border-fuchsia-800/50 text-fuchsia-300 hover:bg-fuchsia-900/60' : 'bg-purple-50 border-purple-200 text-purple-700'
                   }`}
                 >
                   Demo Data
@@ -395,11 +397,11 @@ const Home = () => {
 
                 {/* Export CSV */}
                 <Button
-                  icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-slate-300' : 'text-slate-600'} />}
+                  icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-purple-300' : 'text-slate-600'} />}
                   size="large"
                   onClick={exportToCSV}
                   className={`font-extrabold rounded-2xl border ${
-                    isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    isDarkMode ? 'bg-purple-950/60 border-purple-800/60 text-purple-200 hover:bg-purple-900/70' : 'bg-slate-100 border-slate-200 text-slate-700'
                   }`}
                 >
                   Export CSV
@@ -411,7 +413,7 @@ const Home = () => {
                   size="large"
                   icon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={handleOpenAddModal}
-                  className="bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-500 hover:to-teal-500 text-white font-black rounded-2xl shadow-lg shadow-blue-600/30 border-0 px-6"
+                  className="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black rounded-2xl shadow-lg shadow-purple-600/40 border-0 px-6"
                 >
                   + Add Entry
                 </Button>
@@ -420,7 +422,7 @@ const Home = () => {
                 <Button
                   type="text"
                   size="large"
-                  icon={<FontAwesomeIcon icon={faCircleQuestion} className="text-slate-400 text-xl" />}
+                  icon={<FontAwesomeIcon icon={faCircleQuestion} className="text-purple-300/70 text-xl" />}
                   onClick={() => setIsHelpOpen(true)}
                   title="User Guide"
                 />
@@ -462,8 +464,8 @@ const Home = () => {
               {
                 key: 'overview',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faListCheck} className="text-blue-500" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faListCheck} className="text-purple-400" />
                     Transactions Ledger ({currencyKey})
                   </span>
                 ),
@@ -471,7 +473,7 @@ const Home = () => {
                   <div className="space-y-4">
                     {/* Search, Date & Type Filter Toolbar */}
                     <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
-                      isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+                      isDarkMode ? 'bg-[#120924] border-purple-900/50' : 'bg-white border-slate-200/90 shadow-sm'
                     }`}>
                       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <div className="flex flex-wrap items-center gap-3">
@@ -481,15 +483,15 @@ const Home = () => {
                             onChange={value => setFilterType(value)}
                             options={[
                               { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
-                              { label: <span className="font-extrabold text-emerald-500 px-3">💰 INCOME</span>, value: 'income' },
-                              { label: <span className="font-extrabold text-rose-500 px-3">💸 EXPENSES</span>, value: 'expense' }
+                              { label: <span className="font-extrabold text-emerald-400 px-3">💰 INCOME</span>, value: 'income' },
+                              { label: <span className="font-extrabold text-rose-400 px-3">💸 EXPENSES</span>, value: 'expense' }
                             ]}
-                            className={isDarkMode ? 'bg-slate-800 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
+                            className={isDarkMode ? 'bg-purple-950/70 text-purple-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
                           />
 
                           <Input
                             placeholder="Search category..."
-                            prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
+                            prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-purple-400/60" />}
                             value={searchCategory}
                             onChange={e => setSearchCategory(e.target.value)}
                             style={{ width: 190 }}
@@ -534,7 +536,7 @@ const Home = () => {
                     </div>
 
                     <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
-                      isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+                      isDarkMode ? 'bg-[#120924] border-purple-900/50' : 'bg-white border-slate-200/90 shadow-sm'
                     }`}>
                       <Table
                         columns={columns}
@@ -549,9 +551,9 @@ const Home = () => {
                         locale={{
                           emptyText: (
                             <div className="py-16 text-center space-y-3">
-                              <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
-                              <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
-                              <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-blue-600 font-extrabold rounded-2xl mt-2">
+                              <span className="block font-black text-purple-300/70 text-lg">No transactions recorded yet!</span>
+                              <span className="block text-purple-300/50 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
+                              <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-purple-600 font-extrabold rounded-2xl mt-2">
                                 Load Demo Data
                               </Button>
                             </div>
@@ -565,8 +567,8 @@ const Home = () => {
               {
                 key: 'analytics',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faChartPie} className="text-emerald-500" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faChartPie} className="text-emerald-400" />
                     Category Breakdown Insights
                   </span>
                 ),
@@ -575,8 +577,8 @@ const Home = () => {
               {
                 key: 'goals',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faPiggyBank} className="text-indigo-400" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faPiggyBank} className="text-violet-400" />
                     Savings Goals Vault
                   </span>
                 ),
@@ -585,7 +587,7 @@ const Home = () => {
               {
                 key: 'subscriptions',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
                     <FontAwesomeIcon icon={faRepeat} className="text-rose-400" />
                     Recurring Bills & Subscriptions
                   </span>
@@ -595,8 +597,8 @@ const Home = () => {
               {
                 key: 'growth',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faSeedling} className="text-teal-400" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faSeedling} className="text-fuchsia-400" />
                     Wealth Growth Simulator
                   </span>
                 ),
@@ -623,14 +625,14 @@ const Home = () => {
             open={isHelpOpen}
             onCancel={() => setIsHelpOpen(false)}
             footer={[
-              <Button key="ok" type="primary" onClick={() => setIsHelpOpen(false)} className="bg-blue-600 font-bold rounded-xl">
+              <Button key="ok" type="primary" onClick={() => setIsHelpOpen(false)} className="bg-purple-600 font-bold rounded-xl">
                 Got it!
               </Button>
             ]}
           >
             <div className="space-y-4 text-sm py-2 font-medium">
-              <div className="p-4 bg-blue-500/10 rounded-2xl text-blue-400 border border-blue-500/20">
-                Welcome to <strong>VAULTIX PRO</strong>! Executive wealth & cash flow management.
+              <div className="p-4 bg-purple-500/20 rounded-2xl text-purple-200 border border-purple-500/30">
+                Welcome to <strong>Vaultly</strong>! Smart finance & expense management.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">
