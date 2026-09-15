@@ -1,0 +1,46 @@
+/* World-Class Modern Fintech Theme */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Custom Styled Table */
+.light-styled-table .ant-table {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+}
+
+.light-styled-table .ant-table-thead > tr > th {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  font-size: 0.725rem !important;
+  letter-spacing: 0.06em !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  padding: 14px 20px !important;
+}
+
+.light-styled-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding: 16px 20px !important;
+}
+
+.light-styled-table .ant-table-tbody > tr:hover > td {
+  background: #f8fafc !important;
+}
+
+.light-tabs .ant-tabs-nav::before {
+  border-bottom: 2px solid #e2e8f0 !important;
+}
+
+.light-tabs .ant-tabs-tab-btn {
+  font-weight: 800 !important;
+}
