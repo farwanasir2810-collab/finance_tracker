@@ -18,7 +18,9 @@ import {
   faWandMagicSparkles,
   faMoon,
   faSun,
-  faCoins
+  faCoins,
+  faShieldHalved,
+  faVault
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -47,7 +49,7 @@ const CURRENCIES = {
 };
 
 const renderPaginationTotal = total => (
-  <span className="font-bold text-slate-500 text-xs">Total {total} entries recorded</span>
+  <span className="font-extrabold text-slate-400 text-xs">Total {total} entries recorded</span>
 );
 
 const SAMPLE_ENTRIES = [
@@ -64,9 +66,9 @@ const Home = () => {
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState({ totalIncome: 0, totalExpenses: 0, balance: 0 });
 
-  // Customization & Controls
+  // Theme & Customization
   const [currencyKey, setCurrencyKey] = useState('USD');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   // Filters
   const [filterType, setFilterType] = useState('all');
@@ -187,11 +189,11 @@ const Home = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `financial_report_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
+    link.setAttribute('download', `FINDIARY_PRO_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    message.success(`Transactions exported in ${currencyKey}!`);
+    message.success(`Ledger exported in ${currencyKey}!`);
   };
 
   const convertedSummary = {
@@ -205,16 +207,16 @@ const Home = () => {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      width: 120,
+      width: 130,
       render: type =>
         type === 'income' ? (
-          <Tag color="emerald" className="px-3 py-1 text-xs font-extrabold rounded-full uppercase tracking-wider border border-emerald-200 bg-emerald-50 text-emerald-700">
+          <span className="px-3 py-1 text-xs font-black rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 uppercase tracking-wider inline-flex items-center gap-1">
             ▲ Income
-          </Tag>
+          </span>
         ) : (
-          <Tag color="rose" className="px-3 py-1 text-xs font-extrabold rounded-full uppercase tracking-wider border border-rose-200 bg-rose-50 text-rose-700">
+          <span className="px-3 py-1 text-xs font-black rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-500 uppercase tracking-wider inline-flex items-center gap-1">
             ▼ Expense
-          </Tag>
+          </span>
         )
     },
     {
@@ -226,12 +228,12 @@ const Home = () => {
         return (
           <div className="flex items-center gap-3">
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-sm shadow-xs border border-slate-200/60"
+              className="w-10 h-10 rounded-2xl flex items-center justify-center text-sm shadow-inner border border-white/10"
               style={{ backgroundColor: meta.bg, color: meta.color }}
             >
               <FontAwesomeIcon icon={meta.icon} />
             </div>
-            <span className="font-extrabold text-slate-900 text-sm">{text}</span>
+            <span className={`font-black text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{text}</span>
           </div>
         );
       }
@@ -240,7 +242,7 @@ const Home = () => {
       title: 'Description / Notes',
       dataIndex: 'description',
       key: 'description',
-      render: text => <span className="text-slate-600 font-medium text-sm">{text || '-'}</span>
+      render: text => <span className={`font-medium text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{text || '-'}</span>
     },
     {
       title: 'Date',
@@ -248,20 +250,20 @@ const Home = () => {
       key: 'date',
       width: 140,
       sorter: (a, b) => new Date(a.date) - new Date(b.date),
-      render: date => <span className="text-slate-600 font-semibold text-xs">{dayjs(date).format('MMM DD, YYYY')}</span>
+      render: date => <span className={`font-extrabold text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{dayjs(date).format('MMM DD, YYYY')}</span>
     },
     {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
       align: 'right',
-      width: 160,
+      width: 170,
       sorter: (a, b) => a.amount - b.amount,
       render: (amount, record) => {
         const isIncome = record.type === 'income';
         const converted = Number(amount) * currency.rate;
         return (
-          <span className={`font-black text-lg ${isIncome ? 'text-emerald-700' : 'text-rose-700'}`}>
+          <span className={`font-black text-base tracking-tight ${isIncome ? 'text-emerald-500' : 'text-rose-500'}`}>
             {isIncome ? '+' : '-'}{currency.symbol}{converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         );
@@ -271,19 +273,19 @@ const Home = () => {
       title: 'Actions',
       key: 'actions',
       align: 'center',
-      width: 120,
+      width: 110,
       render: (_, record) => (
         <Space size="small">
           <Button
             type="text"
-            className="hover:bg-slate-100 rounded-lg text-blue-600 font-bold"
+            className="hover:bg-blue-500/10 rounded-xl text-blue-500 font-bold"
             icon={<FontAwesomeIcon icon={faPenToSquare} />}
             onClick={() => handleOpenEditModal(record)}
             title="Edit"
           />
           <Popconfirm
-            title="Delete record?"
-            description="Are you sure you want to remove this entry?"
+            title="Delete transaction?"
+            description="Are you sure you want to remove this record?"
             onConfirm={() => handleDelete(record.id)}
             okText="Yes, Delete"
             cancelText="Cancel"
@@ -292,7 +294,7 @@ const Home = () => {
             <Button
               type="text"
               danger
-              className="hover:bg-rose-50 rounded-lg text-rose-600 font-bold"
+              className="hover:bg-rose-500/10 rounded-xl text-rose-500 font-bold"
               icon={<FontAwesomeIcon icon={faTrash} />}
               title="Delete"
             />
@@ -309,44 +311,52 @@ const Home = () => {
       theme={{
         algorithm: isDarkMode ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
         token: {
-          colorPrimary: '#2563eb',
-          borderRadius: 12,
+          colorPrimary: '#3b82f6',
+          borderRadius: 16,
           fontFamily: 'Plus Jakarta Sans, sans-serif'
         }
       }}
     >
       <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
-          {/* Next-Gen Executive Header Banner */}
-          <div className={`rounded-2xl border ${isDarkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-200/90 bg-white'} p-6 md:p-8 shadow-sm transition-colors`}>
+
+          {/* Top Bar / Navigation Header */}
+          <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
+            isDarkMode ? 'bg-slate-900/90 border-slate-800 shadow-xl' : 'bg-white border-slate-200/90 shadow-sm'
+          }`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              
+              {/* Brand Logo & Live Status */}
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-xl font-black shadow-md shadow-blue-500/20">
-                  <FontAwesomeIcon icon={faWallet} />
+                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-blue-500/25">
+                  <FontAwesomeIcon icon={faVault} />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2.5">
-                    <h1 className={`text-2xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'} m-0`}>FINDIARY PRO</h1>
-                    <Tag color="emerald" className="m-0 font-bold px-2.5 py-0.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 text-xs">
-                      <FontAwesomeIcon icon={faUserCheck} className="mr-1.5" />
-                      Verified Account
-                    </Tag>
+                  <div className="flex items-center gap-3">
+                    <h1 className="text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent m-0">
+                      FINDIARY PRO
+                    </h1>
+                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      LIVE VAULT
+                    </span>
                   </div>
-                  <span className={`mt-1 flex items-center gap-1.5 text-xs font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    <FontAwesomeIcon icon={faCalendarDays} className="text-slate-400" />
-                    {dayjs().format('dddd, MMMM D, YYYY')}
+                  <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <FontAwesomeIcon icon={faShieldHalved} className="text-blue-400" />
+                    Executive Financial Tracker • {dayjs().format('dddd, MMMM D, YYYY')}
                   </span>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2.5">
-                {/* Currency Selector */}
+              {/* Toolbar Controls */}
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Currency Switcher */}
                 <Select
                   value={currencyKey}
                   onChange={val => setCurrencyKey(val)}
                   size="large"
-                  className="w-28 rounded-xl font-extrabold"
-                  suffixIcon={<FontAwesomeIcon icon={faCoins} className="text-amber-500" />}
+                  className="w-32 font-black rounded-2xl"
+                  suffixIcon={<FontAwesomeIcon icon={faCoins} className="text-amber-400" />}
                 >
                   <Option value="USD">USD ($)</Option>
                   <Option value="EUR">EUR (€)</Option>
@@ -354,45 +364,55 @@ const Home = () => {
                   <Option value="PKR">PKR (Rs)</Option>
                 </Select>
 
-                {/* Dark/Light Mode Switch */}
+                {/* Dark / Light Toggle */}
                 <Button
                   size="large"
                   onClick={() => setIsDarkMode(!isDarkMode)}
                   icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-slate-600'} />}
-                  className={`rounded-xl font-bold border ${isDarkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200 text-slate-700'}`}
+                  className={`rounded-2xl font-extrabold border ${
+                    isDarkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-100 border-slate-200 text-slate-700'
+                  }`}
                 >
                   {isDarkMode ? 'Light' : 'Dark'}
                 </Button>
 
+                {/* Load Demo Data */}
                 <Button
-                  icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-purple-600" />}
+                  icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-purple-400" />}
                   size="large"
                   onClick={handleLoadSampleData}
                   loading={loading}
-                  className="bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-bold rounded-xl shadow-2xs"
+                  className={`font-extrabold rounded-2xl border ${
+                    isDarkMode ? 'bg-purple-950/40 border-purple-800/50 text-purple-300 hover:bg-purple-900/60' : 'bg-purple-50 border-purple-200 text-purple-700'
+                  }`}
                 >
-                  Load Demo Data
+                  Demo Data
                 </Button>
 
+                {/* Export CSV */}
                 <Button
-                  icon={<FontAwesomeIcon icon={faFileCsv} className="text-slate-600" />}
+                  icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-slate-300' : 'text-slate-600'} />}
                   size="large"
                   onClick={exportToCSV}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-bold rounded-xl shadow-2xs"
+                  className={`font-extrabold rounded-2xl border ${
+                    isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700' : 'bg-slate-100 border-slate-200 text-slate-700'
+                  }`}
                 >
                   Export CSV
                 </Button>
 
+                {/* Primary Add Transaction */}
                 <Button
                   type="primary"
                   size="large"
                   icon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={handleOpenAddModal}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md shadow-blue-500/20 border-0 px-6"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black rounded-2xl shadow-lg shadow-blue-600/30 border-0 px-6"
                 >
-                  + Add Transaction
+                  + Add Entry
                 </Button>
 
+                {/* Guide Button */}
                 <Button
                   type="text"
                   size="large"
@@ -401,31 +421,35 @@ const Home = () => {
                   title="User Guide"
                 />
               </div>
+
             </div>
           </div>
 
-          {/* Achievement Badges Bar */}
-          <AchievementBadges summary={convertedSummary} transactionCount={transactions.length} />
+          {/* Gamified Milestones & Badges */}
+          <AchievementBadges summary={convertedSummary} transactionCount={transactions.length} isDarkMode={isDarkMode} />
 
-          {/* Stat Cards */}
+          {/* Hero Financial Summary Stat Grid */}
           <SummaryCards
             summary={convertedSummary}
             activeFilter={filterType}
             onSelectFilter={type => setFilterType(type)}
             currencySymbol={currency.symbol}
+            isDarkMode={isDarkMode}
           />
 
           {/* Financial Cash Flow Analytics Chart */}
-          <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} />
+          <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
 
-          {/* Interactive Tools Row */}
+          {/* Interactive Tools (Presets & Budget Meter) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <QuickAddPresets onSuccess={loadData} />
-            <BudgetMeter totalExpenses={convertedSummary.totalExpenses} />
+            <QuickAddPresets onSuccess={loadData} isDarkMode={isDarkMode} />
+            <BudgetMeter totalExpenses={convertedSummary.totalExpenses} isDarkMode={isDarkMode} />
           </div>
 
-          {/* Control & Filter Toolbar */}
-          <Card bordered={false} className={`shadow-sm rounded-2xl border ${isDarkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-200/80 bg-white'}`}>
+          {/* Search, Date & Type Filter Toolbar */}
+          <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
+            isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+          }`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-3">
                 <Segmented
@@ -433,21 +457,21 @@ const Home = () => {
                   value={filterType}
                   onChange={value => setFilterType(value)}
                   options={[
-                    { label: <span className="font-bold px-2">ALL ENTRIES</span>, value: 'all' },
-                    { label: <span className="font-bold text-emerald-700 px-2">💰 INCOME</span>, value: 'income' },
-                    { label: <span className="font-bold text-rose-700 px-2">💸 EXPENSES</span>, value: 'expense' }
+                    { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
+                    { label: <span className="font-extrabold text-emerald-500 px-3">💰 INCOME</span>, value: 'income' },
+                    { label: <span className="font-extrabold text-rose-500 px-3">💸 EXPENSES</span>, value: 'expense' }
                   ]}
-                  className="bg-slate-100 text-slate-700 font-bold p-1 rounded-xl"
+                  className={isDarkMode ? 'bg-slate-800 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
                 />
 
                 <Input
-                  placeholder="Filter category..."
+                  placeholder="Search category..."
                   prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
                   value={searchCategory}
                   onChange={e => setSearchCategory(e.target.value)}
-                  style={{ width: 180 }}
+                  style={{ width: 190 }}
                   size="large"
-                  className="rounded-xl border-slate-300"
+                  className="rounded-2xl"
                   allowClear
                 />
 
@@ -455,7 +479,7 @@ const Home = () => {
                   value={dateRange}
                   onChange={dates => setDateRange(dates)}
                   size="large"
-                  className="rounded-xl border-slate-300"
+                  className="rounded-2xl"
                   format="YYYY-MM-DD"
                 />
               </div>
@@ -468,7 +492,7 @@ const Home = () => {
                     icon={<FontAwesomeIcon icon={faFilterCircleXmark} />}
                     onClick={handleClearFilters}
                     size="large"
-                    className="rounded-xl font-bold"
+                    className="rounded-2xl font-extrabold"
                   >
                     Clear Filters
                   </Button>
@@ -478,58 +502,58 @@ const Home = () => {
                   onClick={loadData}
                   loading={loading}
                   size="large"
-                  className="rounded-xl font-bold border-slate-300 text-slate-700"
+                  className="rounded-2xl font-extrabold"
                 >
                   Refresh
                 </Button>
               </div>
             </div>
 
-            {/* Active Filter Badges */}
+            {/* Active Filter Chips */}
             {hasActiveFilters && (
-              <div className="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
+              <div className="mt-4 pt-3 border-t border-slate-800/40 flex flex-wrap items-center gap-2 text-xs">
                 <span className="font-bold text-slate-400">Active Filters:</span>
                 {filterType !== 'all' && (
-                  <Tag closable onClose={() => setFilterType('all')} color="blue" className="font-bold rounded-lg px-2 py-0.5">
+                  <Tag closable onClose={() => setFilterType('all')} color="blue" className="font-bold rounded-xl px-2.5 py-0.5">
                     Type: {filterType.toUpperCase()}
                   </Tag>
                 )}
                 {searchCategory.trim() !== '' && (
-                  <Tag closable onClose={() => setSearchCategory('')} color="purple" className="font-bold rounded-lg px-2 py-0.5">
+                  <Tag closable onClose={() => setSearchCategory('')} color="purple" className="font-bold rounded-xl px-2.5 py-0.5">
                     Category: &quot;{searchCategory}&quot;
                   </Tag>
                 )}
                 {dateRange !== null && (
-                  <Tag closable onClose={() => setDateRange(null)} color="amber" className="font-bold rounded-lg px-2 py-0.5">
+                  <Tag closable onClose={() => setDateRange(null)} color="amber" className="font-bold rounded-xl px-2.5 py-0.5">
                     Range Filter
                   </Tag>
                 )}
               </div>
             )}
-          </Card>
+          </div>
 
-          {/* Main Content Tabs: Table vs Analytics */}
+          {/* Ledger vs Category Analytics Tabs */}
           <Tabs
             defaultActiveKey="overview"
             size="large"
-            className="light-tabs"
             items={[
               {
                 key: 'overview',
                 label: (
-                  <span className={`font-extrabold px-3 py-1 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
-                    <FontAwesomeIcon icon={faListCheck} className="text-blue-600" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faListCheck} className="text-blue-500" />
                     Transactions Ledger ({currencyKey})
                   </span>
                 ),
                 children: (
-                  <Card bordered={false} className={`shadow-sm rounded-2xl border ${isDarkMode ? 'border-slate-800 bg-slate-900' : 'border-slate-200/80 bg-white'} overflow-hidden p-0`}>
+                  <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
+                    isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+                  }`}>
                     <Table
                       columns={columns}
                       dataSource={transactions}
                       rowKey="id"
                       loading={loading}
-                      className="light-styled-table"
                       pagination={{
                         pageSize: 8,
                         showSizeChanger: true,
@@ -537,28 +561,28 @@ const Home = () => {
                       }}
                       locale={{
                         emptyText: (
-                          <div className="py-12 text-center space-y-3">
-                            <span className="block font-extrabold text-slate-700 text-base">No transactions recorded yet!</span>
-                            <span className="block text-slate-400 text-xs font-medium">Use 1-Click Quick Add buttons above or tap Load Demo Data to test.</span>
-                            <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-blue-600 font-bold rounded-xl">
+                          <div className="py-16 text-center space-y-3">
+                            <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
+                            <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
+                            <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-blue-600 font-extrabold rounded-2xl mt-2">
                               Load Demo Data
                             </Button>
                           </div>
                         )
                       }}
                     />
-                  </Card>
+                  </div>
                 )
               },
               {
                 key: 'analytics',
                 label: (
-                  <span className={`font-extrabold px-3 py-1 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
-                    <FontAwesomeIcon icon={faChartPie} className="text-emerald-600" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faChartPie} className="text-emerald-500" />
                     Category Breakdown Insights
                   </span>
                 ),
-                children: <CategoryAnalytics transactions={transactions} />
+                children: <CategoryAnalytics transactions={transactions} isDarkMode={isDarkMode} />
               }
             ]}
           />
@@ -575,9 +599,9 @@ const Home = () => {
             loading={modalLoading}
           />
 
-          {/* Help & User Guide Modal */}
+          {/* User Guide Modal */}
           <Modal
-            title={<span className="font-extrabold text-slate-900 text-lg">💡 Quick User Guide</span>}
+            title={<span className="font-black text-lg">💡 Quick User Guide</span>}
             open={isHelpOpen}
             onCancel={() => setIsHelpOpen(false)}
             footer={[
@@ -586,21 +610,22 @@ const Home = () => {
               </Button>
             ]}
           >
-            <div className="space-y-4 text-sm text-slate-700 py-2 font-medium">
-              <div className="p-3.5 bg-blue-50/80 rounded-xl text-blue-900 border border-blue-100">
-                Welcome to <strong>FINDIARY PRO</strong>! Here is how to use your financial diary:
+            <div className="space-y-4 text-sm py-2 font-medium">
+              <div className="p-4 bg-blue-500/10 rounded-2xl text-blue-400 border border-blue-500/20">
+                Welcome to <strong>FINDIARY PRO</strong>! Executive financial management simplified.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">
                 <li><strong>Multi-Currency</strong>: Switch between USD $, EUR €, GBP £, and PKR Rs instantly!</li>
                 <li><strong>Dark/Light Mode</strong>: Toggle between Dark 🌙 and Light ☀️ mode with 1 click.</li>
-                <li><strong>1-Click Log</strong>: Use Quick Add preset buttons (☕ Coffee, 🛒 Groceries, 💼 Paycheck) for 1-second logging.</li>
-                <li><strong>Interactive Card Filter</strong>: Click on <em>Total Income</em> or <em>Total Expenses</em> card to filter your ledger.</li>
-                <li><strong>Budget Limit Goal</strong>: Click the gear ⚙️ icon on <em>Monthly Budget Goal</em> meter to adjust your limit.</li>
-                <li><strong>Export CSV</strong>: Download your transaction ledger to Excel anytime via <em>Export CSV</em> button.</li>
+                <li><strong>1-Click Log</strong>: Use Quick Add preset buttons (☕ Coffee, 🛒 Groceries, 💼 Paycheck) for instant logging.</li>
+                <li><strong>Interactive Stat Cards</strong>: Click on <em>Total Income</em> or <em>Total Expenses</em> card to filter your ledger.</li>
+                <li><strong>Budget Target Goal</strong>: Click the gear ⚙️ icon on <em>Monthly Budget Target Goal</em> meter to adjust limit.</li>
+                <li><strong>Export CSV</strong>: Download your transaction ledger to CSV anytime via <em>Export CSV</em> button.</li>
               </ol>
             </div>
           </Modal>
+
         </div>
       </div>
     </ConfigProvider>

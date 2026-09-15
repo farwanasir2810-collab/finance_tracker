@@ -1,4 +1,4 @@
-import { Row, Col, Card, Statistic, Progress, Tag } from 'antd';
+import { Row, Col, Progress } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowTrendUp,
@@ -8,7 +8,7 @@ import {
   faFilter
 } from '@fortawesome/free-solid-svg-icons';
 
-const SummaryCards = ({ summary = {}, activeFilter = 'all', onSelectFilter, currencySymbol = '$' }) => {
+const SummaryCards = ({ summary = {}, activeFilter = 'all', onSelectFilter, currencySymbol = '$', isDarkMode = false }) => {
   const { totalIncome = 0, totalExpenses = 0, balance = 0 } = summary;
 
   const formatCurrency = amount => {
@@ -21,141 +21,166 @@ const SummaryCards = ({ summary = {}, activeFilter = 'all', onSelectFilter, curr
 
   return (
     <Row gutter={[20, 20]} className="mb-6">
-      {/* 1. Total Income (Clickable Filter) */}
+      {/* 1. Total Income Card */}
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          bordered={false}
+        <div
           onClick={() => onSelectFilter && onSelectFilter('income')}
-          className={`shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl border cursor-pointer relative overflow-hidden ${
-            activeFilter === 'income' ? 'ring-2 ring-emerald-500 border-emerald-500 bg-emerald-50/40' : 'border-emerald-200/70 bg-white'
+          className={`group cursor-pointer transition-all duration-300 rounded-3xl p-5 border relative overflow-hidden shadow-sm hover:shadow-lg ${
+            activeFilter === 'income'
+              ? 'ring-2 ring-emerald-500 border-emerald-500 bg-emerald-950/20'
+              : isDarkMode
+              ? 'bg-slate-900/90 border-slate-800 hover:border-emerald-500/50'
+              : 'bg-white border-slate-200/90 hover:border-emerald-300'
           }`}
         >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-emerald-700 font-bold text-xs uppercase tracking-wider">Total Income</span>
-            <div className="w-10 h-10 rounded-xl bg-emerald-100/80 text-emerald-600 flex items-center justify-center text-lg shadow-xs">
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
+
+          <div className="flex items-center justify-between mb-3 relative z-10">
+            <span className="text-emerald-500 font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Total Income
+            </span>
+            <div className="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-lg shadow-inner border border-emerald-500/20 group-hover:scale-110 transition-transform">
               <FontAwesomeIcon icon={faArrowTrendUp} />
             </div>
           </div>
-          <Statistic
-            value={formatCurrency(totalIncome)}
-            valueStyle={{ color: '#047857', fontWeight: 900, fontSize: '1.85rem' }}
-          />
-          <div className="mt-3 flex items-center justify-between">
-            <Tag color="emerald" className="m-0 border-0 font-extrabold px-2.5 py-0.5 rounded-lg text-xs bg-emerald-100 text-emerald-800">
-              ▲ Inflow
-            </Tag>
-            <span className="text-slate-400 text-xs font-semibold flex items-center gap-1">
-              <FontAwesomeIcon icon={faFilter} className="text-slate-300" /> Filter
+
+          <div className="relative z-10 mb-3">
+            <span className={`text-2xl sm:text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              {formatCurrency(totalIncome)}
             </span>
           </div>
-        </Card>
+
+          <div className="flex items-center justify-between relative z-10">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+              ▲ Inflow Record
+            </span>
+            <span className="text-slate-400 text-xs font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <FontAwesomeIcon icon={faFilter} className="text-emerald-500" /> Filter Income
+            </span>
+          </div>
+        </div>
       </Col>
 
-      {/* 2. Total Expenses (Clickable Filter) */}
+      {/* 2. Total Expenses Card */}
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          bordered={false}
+        <div
           onClick={() => onSelectFilter && onSelectFilter('expense')}
-          className={`shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl border cursor-pointer relative overflow-hidden ${
-            activeFilter === 'expense' ? 'ring-2 ring-rose-500 border-rose-500 bg-rose-50/40' : 'border-rose-200/70 bg-white'
+          className={`group cursor-pointer transition-all duration-300 rounded-3xl p-5 border relative overflow-hidden shadow-sm hover:shadow-lg ${
+            activeFilter === 'expense'
+              ? 'ring-2 ring-rose-500 border-rose-500 bg-rose-950/20'
+              : isDarkMode
+              ? 'bg-slate-900/90 border-slate-800 hover:border-rose-500/50'
+              : 'bg-white border-slate-200/90 hover:border-rose-300'
           }`}
         >
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-rose-700 font-bold text-xs uppercase tracking-wider">Total Expenses</span>
-            <div className="w-10 h-10 rounded-xl bg-rose-100/80 text-rose-600 flex items-center justify-center text-lg shadow-xs">
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/20 transition-all"></div>
+
+          <div className="flex items-center justify-between mb-3 relative z-10">
+            <span className="text-rose-500 font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> Total Expenses
+            </span>
+            <div className="w-11 h-11 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center text-lg shadow-inner border border-rose-500/20 group-hover:scale-110 transition-transform">
               <FontAwesomeIcon icon={faArrowTrendDown} />
             </div>
           </div>
-          <Statistic
-            value={formatCurrency(totalExpenses)}
-            valueStyle={{ color: '#be123c', fontWeight: 900, fontSize: '1.85rem' }}
-          />
-          <div className="mt-3 flex items-center justify-between">
-            <Tag color="rose" className="m-0 border-0 font-extrabold px-2.5 py-0.5 rounded-lg text-xs bg-rose-100 text-rose-800">
-              ▼ Outflow
-            </Tag>
-            <span className="text-slate-400 text-xs font-semibold flex items-center gap-1">
-              <FontAwesomeIcon icon={faFilter} className="text-slate-300" /> Filter
+
+          <div className="relative z-10 mb-3">
+            <span className={`text-2xl sm:text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              {formatCurrency(totalExpenses)}
             </span>
           </div>
-        </Card>
+
+          <div className="flex items-center justify-between relative z-10">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black bg-rose-500/10 text-rose-500 border border-rose-500/20">
+              ▼ Outflow Record
+            </span>
+            <span className="text-slate-400 text-xs font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <FontAwesomeIcon icon={faFilter} className="text-rose-500" /> Filter Expenses
+            </span>
+          </div>
+        </div>
       </Col>
 
-      {/* 3. Net Balance (Clickable Filter - Reset) */}
+      {/* 3. Net Balance Card */}
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          bordered={false}
+        <div
           onClick={() => onSelectFilter && onSelectFilter('all')}
-          className={`shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl border cursor-pointer relative overflow-hidden ${
-            activeFilter === 'all' ? 'ring-2 ring-sky-500 border-sky-400 bg-sky-50/30' : balance >= 0 ? 'border-sky-200/70 bg-white' : 'border-amber-200/70 bg-white'
+          className={`group cursor-pointer transition-all duration-300 rounded-3xl p-5 border relative overflow-hidden shadow-sm hover:shadow-lg ${
+            activeFilter === 'all'
+              ? 'ring-2 ring-sky-500 border-sky-500 bg-sky-950/20'
+              : isDarkMode
+              ? 'bg-slate-900/90 border-slate-800 hover:border-sky-500/50'
+              : 'bg-white border-slate-200/90 hover:border-sky-300'
           }`}
         >
-          <div className="flex items-center justify-between mb-3">
-            <span className={balance >= 0 ? 'text-sky-700 font-bold text-xs uppercase tracking-wider' : 'text-amber-700 font-bold text-xs uppercase tracking-wider'}>
-              Net Balance
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-sky-500/10 rounded-full blur-xl group-hover:bg-sky-500/20 transition-all"></div>
+
+          <div className="flex items-center justify-between mb-3 relative z-10">
+            <span className="text-sky-500 font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></span> Net Vault Balance
             </span>
-            <div
-              className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-xs ${
-                balance >= 0
-                  ? 'bg-sky-100/80 text-sky-600'
-                  : 'bg-amber-100/80 text-amber-600'
-              }`}
-            >
+            <div className="w-11 h-11 rounded-2xl bg-sky-500/10 text-sky-500 flex items-center justify-center text-lg shadow-inner border border-sky-500/20 group-hover:scale-110 transition-transform">
               <FontAwesomeIcon icon={faScaleBalanced} />
             </div>
           </div>
-          <Statistic
-            value={formatCurrency(balance)}
-            valueStyle={{
-              color: balance >= 0 ? '#0369a1' : '#b45309',
-              fontWeight: 900,
-              fontSize: '1.85rem'
-            }}
-          />
-          <div className="mt-3 flex items-center justify-between">
-            {balance >= 0 ? (
-              <Tag color="blue" className="m-0 border-0 font-extrabold px-2.5 py-0.5 rounded-lg text-xs bg-sky-100 text-sky-800">
-                ★ Surplus
-              </Tag>
-            ) : (
-              <Tag color="warning" className="m-0 border-0 font-extrabold px-2.5 py-0.5 rounded-lg text-xs bg-amber-100 text-amber-800">
-                ⚠ Deficit
-              </Tag>
-            )}
-            <span className="text-slate-400 text-xs font-semibold flex items-center gap-1">
-              Reset All
+
+          <div className="relative z-10 mb-3">
+            <span className={`text-2xl sm:text-3xl font-black tracking-tight ${balance >= 0 ? 'text-sky-500' : 'text-amber-500'}`}>
+              {formatCurrency(balance)}
             </span>
           </div>
-        </Card>
+
+          <div className="flex items-center justify-between relative z-10">
+            <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-black border ${
+              balance >= 0 ? 'bg-sky-500/10 text-sky-500 border-sky-500/20' : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+            }`}>
+              {balance >= 0 ? '★ Net Surplus' : '⚠ Deficit Caution'}
+            </span>
+            <span className="text-slate-400 text-xs font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              Reset Filters
+            </span>
+          </div>
+        </div>
       </Col>
 
-      {/* 4. Savings Rate Progress */}
+      {/* 4. Savings Ratio Card */}
       <Col xs={24} sm={12} lg={6}>
-        <Card
-          bordered={false}
-          className="shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl border border-indigo-200/70 bg-white relative overflow-hidden"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-indigo-700 font-bold text-xs uppercase tracking-wider">Savings Ratio</span>
-            <div className="w-10 h-10 rounded-xl bg-indigo-100/80 text-indigo-600 flex items-center justify-center text-lg shadow-xs">
+        <div className={`transition-all duration-300 rounded-3xl p-5 border relative overflow-hidden shadow-sm ${
+          isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90'
+        }`}>
+          <div className="absolute -top-12 -right-12 w-28 h-28 bg-indigo-500/10 rounded-full blur-xl"></div>
+
+          <div className="flex items-center justify-between mb-3 relative z-10">
+            <span className="text-indigo-500 font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span> Savings Ratio
+            </span>
+            <div className="w-11 h-11 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-lg shadow-inner border border-indigo-500/20">
               <FontAwesomeIcon icon={faPiggyBank} />
             </div>
           </div>
-          <div className="flex items-baseline justify-between mb-2">
-            <span className="text-3xl font-black text-slate-900">{savingsRate}%</span>
-            <span className="text-slate-500 text-xs font-semibold">Target &gt; 20%</span>
+
+          <div className="flex items-baseline justify-between relative z-10 mb-2">
+            <span className={`text-2xl sm:text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              {savingsRate}%
+            </span>
+            <span className="text-indigo-400 text-xs font-bold bg-indigo-500/10 px-2 py-0.5 rounded-lg border border-indigo-500/20">
+              Target 20%+
+            </span>
           </div>
-          <Progress
-            percent={savingsRate}
-            strokeColor={{
-              '0%': '#4f46e5',
-              '100%': '#10b981'
-            }}
-            trailColor="#e2e8f0"
-            showInfo={false}
-            size="small"
-          />
-        </Card>
+
+          <div className="relative z-10">
+            <Progress
+              percent={savingsRate}
+              strokeColor={{
+                '0%': '#6366f1',
+                '100%': '#10b981'
+              }}
+              trailColor={isDarkMode ? '#1e293b' : '#e2e8f0'}
+              showInfo={false}
+              size="small"
+            />
+          </div>
+        </div>
       </Col>
     </Row>
   );
