@@ -25,38 +25,38 @@ const SummaryCards = ({ summary = {}, activeFilter = 'all', onSelectFilter, curr
       <Col xs={24} sm={12} lg={6}>
         <div
           onClick={() => onSelectFilter && onSelectFilter('income')}
-          className={`cursor-pointer transition-all duration-200 rounded-2xl p-5 border shadow-xs hover:shadow-sm ${
+          className={`cursor-pointer transition-all duration-200 rounded-3xl p-5 border shadow-md hover:shadow-xl ${
             activeFilter === 'income'
-              ? 'ring-2 ring-emerald-500 border-emerald-500 bg-emerald-500/5'
+              ? 'ring-2 ring-emerald-500 border-emerald-500 bg-emerald-950/30'
               : isDarkMode
-              ? 'bg-slate-900 border-slate-800 hover:border-slate-700'
+              ? 'bg-[#120924] border-purple-900/50 hover:border-emerald-500/50'
               : 'bg-white border-slate-200/80 hover:border-slate-300'
           }`}
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">
+            <span className={isDarkMode ? 'text-purple-300/70 font-extrabold text-xs uppercase tracking-wider' : 'text-slate-500 font-bold text-xs uppercase tracking-wider'}>
               Total Inflow
             </span>
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm ${
-              isDarkMode ? 'bg-emerald-500/15 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-base ${
+              isDarkMode ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-emerald-50 text-emerald-600'
             }`}>
               <FontAwesomeIcon icon={faArrowTrendUp} />
             </div>
           </div>
 
           <div className="mb-2">
-            <span className={`text-2xl lg:text-3xl font-extrabold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+            <span className={`text-2xl lg:text-3xl font-black tracking-tight ${isDarkMode ? 'text-emerald-400' : 'text-slate-900'}`}>
               {formatCurrency(totalIncome)}
             </span>
           </div>
 
           <div className="flex items-center justify-between text-xs font-semibold">
-            <span className={`px-2 py-0.5 rounded-md font-bold ${
-              isDarkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-700'
+            <span className={`px-2.5 py-1 rounded-xl font-black ${
+              isDarkMode ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-emerald-50 text-emerald-700'
             }`}>
               ▲ Income
             </span>
-            <span className="text-slate-400 font-medium">Click to filter</span>
+            <span className="text-purple-300/50 font-medium">Click to filter</span>
           </div>
         </div>
       </Col>
@@ -65,38 +65,38 @@ const SummaryCards = ({ summary = {}, activeFilter = 'all', onSelectFilter, curr
       <Col xs={24} sm={12} lg={6}>
         <div
           onClick={() => onSelectFilter && onSelectFilter('expense')}
-          className={`cursor-pointer transition-all duration-200 rounded-2xl p-5 border shadow-xs hover:shadow-sm ${
+          className={`cursor-pointer transition-all duration-200 rounded-3xl p-5 border shadow-md hover:shadow-xl ${
             activeFilter === 'expense'
-              ? 'ring-2 ring-rose-500 border-rose-500 bg-rose-500/5'
+              ? 'ring-2 ring-rose-500 border-rose-500 bg-rose-950/30'
               : isDarkMode
-              ? 'bg-slate-900 border-slate-800 hover:border-slate-700'
+              ? 'bg-[#120924] border-purple-900/50 hover:border-rose-500/50'
               : 'bg-white border-slate-200/80 hover:border-slate-300'
           }`}
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">
+            <span className={isDarkMode ? 'text-purple-300/70 font-extrabold text-xs uppercase tracking-wider' : 'text-slate-500 font-bold text-xs uppercase tracking-wider'}>
               Total Outflow
             </span>
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm ${
-              isDarkMode ? 'bg-rose-500/15 text-rose-400' : 'bg-rose-50 text-rose-600'
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-base ${
+              isDarkMode ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-rose-50 text-rose-600'
             }`}>
               <FontAwesomeIcon icon={faArrowTrendDown} />
             </div>
           </div>
 
           <div className="mb-2">
-            <span className={`text-2xl lg:text-3xl font-extrabold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+            <span className={`text-2xl lg:text-3xl font-black tracking-tight ${isDarkMode ? 'text-rose-400' : 'text-slate-900'}`}>
               {formatCurrency(totalExpenses)}
             </span>
           </div>
 
           <div className="flex items-center justify-between text-xs font-semibold">
-            <span className={`px-2 py-0.5 rounded-md font-bold ${
-              isDarkMode ? 'bg-rose-500/10 text-rose-400' : 'bg-rose-50 text-rose-700'
+            <span className={`px-2.5 py-1 rounded-xl font-black ${
+              isDarkMode ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-rose-50 text-rose-700'
             }`}>
               ▼ Expenses
             </span>
-            <span className="text-slate-400 font-medium">Click to filter</span>
+            <span className="text-purple-300/50 font-medium">Click to filter</span>
           </div>
         </div>
       </Col>
@@ -105,31 +105,31 @@ const SummaryCards = ({ summary = {}, activeFilter = 'all', onSelectFilter, curr
       <Col xs={24} sm={12} lg={6}>
         <div
           onClick={() => onSelectFilter && onSelectFilter('all')}
-          className={`cursor-pointer transition-all duration-200 rounded-2xl p-5 border shadow-xs hover:shadow-sm ${
+          className={`cursor-pointer transition-all duration-200 rounded-3xl p-5 border shadow-md hover:shadow-xl ${
             activeFilter === 'all'
-              ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-500/5'
+              ? 'ring-2 ring-purple-500 border-purple-500 bg-purple-950/40'
               : isDarkMode
-              ? 'bg-slate-900 border-slate-800 hover:border-slate-700'
+              ? 'bg-[#120924] border-purple-900/50 hover:border-purple-600/50'
               : 'bg-white border-slate-200/80 hover:border-slate-300'
           }`}
         >
           <div className="flex items-center justify-between mb-3">
-            <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">
+            <span className={isDarkMode ? 'text-purple-300/70 font-extrabold text-xs uppercase tracking-wider' : 'text-slate-500 font-bold text-xs uppercase tracking-wider'}>
               Net Balance
             </span>
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm ${
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-base ${
               balance >= 0
-                ? isDarkMode ? 'bg-blue-500/15 text-blue-400' : 'bg-blue-50 text-blue-600'
-                : isDarkMode ? 'bg-amber-500/15 text-amber-400' : 'bg-amber-50 text-amber-600'
+                ? isDarkMode ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-blue-50 text-blue-600'
+                : isDarkMode ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-amber-50 text-amber-600'
             }`}>
               <FontAwesomeIcon icon={faScaleBalanced} />
             </div>
           </div>
 
           <div className="mb-2">
-            <span className={`text-2xl lg:text-3xl font-extrabold tracking-tight ${
+            <span className={`text-2xl lg:text-3xl font-black tracking-tight ${
               balance >= 0
-                ? isDarkMode ? 'text-blue-400' : 'text-blue-700'
+                ? isDarkMode ? 'text-purple-200' : 'text-blue-700'
                 : isDarkMode ? 'text-amber-400' : 'text-amber-700'
             }`}>
               {formatCurrency(balance)}
@@ -137,47 +137,47 @@ const SummaryCards = ({ summary = {}, activeFilter = 'all', onSelectFilter, curr
           </div>
 
           <div className="flex items-center justify-between text-xs font-semibold">
-            <span className={`px-2 py-0.5 rounded-md font-bold ${
+            <span className={`px-2.5 py-1 rounded-xl font-black ${
               balance >= 0
-                ? isDarkMode ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-700'
-                : isDarkMode ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-50 text-amber-700'
+                ? isDarkMode ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-blue-50 text-blue-700'
+                : isDarkMode ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-amber-50 text-amber-700'
             }`}>
               {balance >= 0 ? 'Surplus' : 'Deficit'}
             </span>
-            <span className="text-slate-400 font-medium">Reset filters</span>
+            <span className="text-purple-300/50 font-medium">Reset filters</span>
           </div>
         </div>
       </Col>
 
       {/* 4. Savings Ratio Card */}
       <Col xs={24} sm={12} lg={6}>
-        <div className={`rounded-2xl p-5 border shadow-xs transition-colors duration-200 ${
-          isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200/80'
+        <div className={`rounded-3xl p-5 border shadow-md transition-colors duration-200 ${
+          isDarkMode ? 'bg-[#120924] border-purple-900/50' : 'bg-white border-slate-200/80'
         }`}>
           <div className="flex items-center justify-between mb-3">
-            <span className="text-slate-500 font-bold text-xs uppercase tracking-wider">
+            <span className={isDarkMode ? 'text-purple-300/70 font-extrabold text-xs uppercase tracking-wider' : 'text-slate-500 font-bold text-xs uppercase tracking-wider'}>
               Savings Rate
             </span>
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm ${
-              isDarkMode ? 'bg-indigo-500/15 text-indigo-400' : 'bg-indigo-50 text-indigo-600'
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-base ${
+              isDarkMode ? 'bg-violet-500/20 text-violet-300 border border-violet-500/30' : 'bg-indigo-50 text-indigo-600'
             }`}>
               <FontAwesomeIcon icon={faPiggyBank} />
             </div>
           </div>
 
           <div className="flex items-baseline justify-between mb-2">
-            <span className={`text-2xl lg:text-3xl font-extrabold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+            <span className={`text-2xl lg:text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
               {savingsRate}%
             </span>
-            <span className="text-slate-400 text-xs font-medium">
+            <span className="text-purple-300/60 text-xs font-bold bg-purple-500/10 px-2 py-0.5 rounded-lg border border-purple-500/20">
               Target 20%+
             </span>
           </div>
 
           <Progress
             percent={savingsRate}
-            strokeColor="#4f46e5"
-            trailColor={isDarkMode ? '#1e293b' : '#f1f5f9'}
+            strokeColor="#c084fc"
+            trailColor={isDarkMode ? '#2e1065' : '#f1f5f9'}
             showInfo={false}
             size="small"
           />
