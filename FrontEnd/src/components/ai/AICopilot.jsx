@@ -111,15 +111,15 @@ const AICopilot = ({ summary = {}, isDarkMode = false, currencySymbol = '$' }) =
       </div>
 
       {/* Quick Suggestion Chips */}
-      <div className="flex flex-wrap items-center gap-2 mb-4 text-xs">
-        <span className="font-black text-pink-600">Suggested Questions:</span>
+      <div className="flex items-center gap-2 mb-4 text-xs overflow-x-auto pb-1 no-scrollbar">
+        <span className="font-black text-pink-600 shrink-0">Suggested Questions:</span>
         {QUICK_QUESTIONS.map((q, idx) => (
           <button
             key={idx}
             onClick={() => handleSend(q)}
-            className={`px-3 py-1.5 rounded-xl border font-bold text-xs transition-all ${
+            className={`px-3 py-1.5 rounded-xl border font-bold text-xs shrink-0 transition-all ${
               isDarkMode
-                ? 'bg-[#180814] border-pink-900/30 text-pink-200 hover:border-pink-500'
+                ? 'bg-[#180814] border-pink-900/40 text-pink-200 hover:border-pink-500'
                 : 'bg-white border-pink-200 text-pink-900 hover:bg-pink-100 shadow-2xs'
             }`}
           >
@@ -128,25 +128,23 @@ const AICopilot = ({ summary = {}, isDarkMode = false, currencySymbol = '$' }) =
         ))}
       </div>
 
-      {/* Query Input Bar */}
+      {/* Input Bar */}
       <div className="flex items-center gap-2">
         <Input
-          placeholder="Ask anything: e.g. Can I afford a $1,200 laptop next month?"
           value={inputQuery}
           onChange={e => setInputQuery(e.target.value)}
           onPressEnter={() => handleSend()}
-          size="large"
-          className="rounded-2xl h-12 font-semibold"
-          prefix={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-pink-500" />}
+          placeholder="Ask AI Copilot (e.g., 'Can I afford a $1,200 laptop?')..."
+          className="rounded-2xl h-11 border-pink-200 text-xs font-bold"
         />
         <Button
           type="primary"
-          onClick={() => handleSend()}
           loading={loading}
+          onClick={() => handleSend()}
           icon={<FontAwesomeIcon icon={faPaperPlane} />}
-          className="h-12 px-6 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 text-white font-black rounded-2xl shadow-md shadow-pink-500/30 border-0"
+          className="h-11 px-5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black rounded-2xl border-0 shadow-md"
         >
-          Ask AI
+          Ask
         </Button>
       </div>
 
@@ -154,7 +152,7 @@ const AICopilot = ({ summary = {}, isDarkMode = false, currencySymbol = '$' }) =
       <Drawer
         title={<span className="font-black text-lg text-slate-900">🧮 "Show Calculation" Math Breakdown</span>}
         placement="right"
-        width={420}
+        width={typeof window !== 'undefined' && window.innerWidth < 500 ? '90%' : 420}
         onClose={() => setIsDrawerOpen(false)}
         open={isDrawerOpen}
       >

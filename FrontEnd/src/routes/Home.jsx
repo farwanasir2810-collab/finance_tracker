@@ -350,11 +350,11 @@ const Home = () => {
         }
       }}
     >
-      <div className={`min-h-screen ${isDarkMode ? 'bg-[#180715] text-pink-100' : 'bg-gradient-to-br from-pink-50 via-purple-50/50 to-rose-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300 flex flex-col justify-between`}>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-[#180715] text-pink-100' : 'bg-gradient-to-br from-pink-50 via-purple-50/50 to-rose-50 text-slate-900'} p-3 sm:p-4 md:p-8 pb-24 md:pb-8 font-sans antialiased transition-colors duration-300 flex flex-col justify-between`}>
         <div className="max-w-7xl mx-auto space-y-6 w-full">
 
           {/* Clean 3-Layer Sequenced Header Navigation Hub */}
-          <div className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
+          <header role="banner" className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
             isDarkMode
               ? 'bg-[#240c1e] border-pink-900/40 shadow-2xl shadow-pink-950/50'
               : 'bg-white/95 backdrop-blur-md border-pink-200/80 shadow-xl shadow-pink-100/70'
@@ -487,7 +487,7 @@ const Home = () => {
               </div>
 
               {/* Layer 3: Sequenced Navigation Navbar Tabs */}
-              <div className="pt-2 flex flex-wrap items-center gap-2">
+              <nav aria-label="Desktop Workspace Navigation" className="pt-2 flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
                 {[
                   { key: 'overview', label: '🌸 Overview', icon: faGaugeHigh },
                   { key: 'ai', label: '🧠 AI Copilot', icon: faBrain },
@@ -502,7 +502,7 @@ const Home = () => {
                   <button
                     key={nav.key}
                     onClick={() => setActiveWorkspaceKey(nav.key)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs transition-all ${
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs shrink-0 transition-all ${
                       activeWorkspaceKey === nav.key
                         ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/30 border-0 scale-105 ring-2 ring-pink-400/40'
                         : isDarkMode
@@ -519,10 +519,12 @@ const Home = () => {
                     )}
                   </button>
                 ))}
-              </div>
+              </nav>
 
             </div>
-          </div>
+          </header>
+
+          <main role="main" className="space-y-6">
 
           {/* Gamified Milestones & Badges Ribbon */}
           <AchievementBadges summary={convertedSummary} transactionCount={transactions.length} isDarkMode={isDarkMode} />
@@ -775,10 +777,11 @@ const Home = () => {
           {/* Technical Showcase Modal */}
           <RecruiterSpotlightModal open={isSpotlightOpen} onClose={() => setIsSpotlightOpen(false)} />
 
+        </main>
         </div>
 
         {/* Professional Footer with Engineering Link */}
-        <footer className="mt-12 pt-6 border-t border-pink-200/60 dark:border-pink-900/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-pink-600/80">
+        <footer className="mt-12 pt-6 border-t border-pink-200/60 dark:border-pink-900/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-pink-600/80 mb-16 md:mb-0">
           <span>© 2026 Finora Pro Financial Operating System • All Rights Reserved</span>
           <button
             onClick={() => setIsSpotlightOpen(true)}
@@ -788,6 +791,34 @@ const Home = () => {
             <span>⚙️ Engineering & Architecture</span>
           </button>
         </footer>
+
+        {/* Sticky Mobile Navigation Bar for One-Thumb Ergonomics */}
+        <nav aria-label="Mobile Navigation" className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#1f0918]/95 backdrop-blur-lg border-t border-pink-200/80 dark:border-pink-900/40 px-2 py-1.5 md:hidden flex justify-around items-center shadow-2xl">
+          {[
+            { key: 'overview', label: 'Overview', icon: faGaugeHigh },
+            { key: 'ai', label: 'Copilot', icon: faBrain },
+            { key: 'forecast', label: 'Forecast', icon: faWandMagicSparkles },
+            { key: 'networth', label: 'Net Worth', icon: faVault },
+            { key: 'debt', label: 'Debt', icon: faCreditCard },
+            { key: 'calendar', label: 'Calendar', icon: faCalendarDays }
+          ].map(mItem => (
+            <button
+              key={mItem.key}
+              onClick={() => {
+                setActiveWorkspaceKey(mItem.key);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${
+                activeWorkspaceKey === mItem.key
+                  ? 'text-pink-600 dark:text-pink-400 font-black bg-pink-100/70 dark:bg-pink-950/60 scale-105'
+                  : 'text-slate-500 dark:text-pink-300/60 font-semibold hover:text-pink-500'
+              }`}
+            >
+              <FontAwesomeIcon icon={mItem.icon} className="text-base mb-0.5" />
+              <span className="text-[10px] tracking-tight">{mItem.label}</span>
+            </button>
+          ))}
+        </nav>
       </div>
     </ConfigProvider>
   );

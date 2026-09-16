@@ -1,0 +1,7 @@
+# Allow all search crawlers to index Finora Financial OS
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://finora.app/sitemap.xml
