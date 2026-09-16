@@ -10,8 +10,7 @@ import {
   faFileCsv,
   faChartPie,
   faListCheck,
-  faShieldHalved,
-  faVault,
+  faHeart,
   faCircleQuestion,
   faWandMagicSparkles,
   faMoon,
@@ -24,7 +23,8 @@ import {
   faGaugeHigh,
   faStar,
   faTableList,
-  faWallet
+  faSmileBeam,
+  faCrown
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -41,6 +41,7 @@ import RecurringSubscriptions from '../components/transactions/RecurringSubscrip
 import WealthGrowthCalculator from '../components/transactions/WealthGrowthCalculator';
 import EmergencyRunway from '../components/transactions/EmergencyRunway';
 import AIAdvisor from '../components/transactions/AIAdvisor';
+import SpendingMoodTracker from '../components/transactions/SpendingMoodTracker';
 import RecruiterSpotlightModal from '../components/transactions/RecruiterSpotlightModal';
 import {
   fetchTransactions,
@@ -60,15 +61,15 @@ const CURRENCIES = {
 };
 
 const renderPaginationTotal = total => (
-  <span className="font-extrabold text-slate-400 text-xs">Total {total} entries recorded</span>
+  <span className="font-extrabold text-pink-300/70 text-xs">Total {total} cute entries logged ✨</span>
 );
 
 const SAMPLE_ENTRIES = [
-  { type: 'income', amount: 3500, category: 'Salary', description: 'Monthly Software Engineer Salary', date: dayjs().toISOString() },
-  { type: 'expense', amount: 150, category: 'Groceries', description: 'Supermarket Groceries', date: dayjs().subtract(1, 'day').toISOString() },
-  { type: 'expense', amount: 65, category: 'Transport', description: 'Fuel & Rides', date: dayjs().subtract(2, 'day').toISOString() },
-  { type: 'expense', amount: 120, category: 'Utilities', description: 'Electricity & Internet', date: dayjs().subtract(3, 'day').toISOString() },
-  { type: 'income', amount: 450, category: 'Freelance', description: 'UI Design Project', date: dayjs().subtract(4, 'day').toISOString() }
+  { type: 'income', amount: 3500, category: 'Salary', description: 'Monthly Engineer Salary Payout', date: dayjs().toISOString() },
+  { type: 'expense', amount: 45, category: 'Groceries', description: 'Zara Shopping & Fashion Haul', date: dayjs().subtract(1, 'day').toISOString() },
+  { type: 'expense', amount: 15, category: 'Food', description: 'Matcha Latte & Bakery Treats', date: dayjs().subtract(2, 'day').toISOString() },
+  { type: 'expense', amount: 35, category: 'Healthcare', description: 'Skincare & Spa Self Care', date: dayjs().subtract(3, 'day').toISOString() },
+  { type: 'income', amount: 450, category: 'Freelance', description: 'UI Design Freelance Client', date: dayjs().subtract(4, 'day').toISOString() }
 ];
 
 const Home = () => {
@@ -137,10 +138,10 @@ const Home = () => {
     try {
       if (editingTransaction) {
         await updateTransaction(editingTransaction.id, formData);
-        message.success('Transaction updated successfully!');
+        message.success('Transaction updated successfully! ✨');
       } else {
         await createTransaction(formData);
-        message.success('Transaction added successfully!');
+        message.success('Transaction logged successfully! 💖');
       }
       setIsModalOpen(false);
       setEditingTransaction(null);
@@ -175,7 +176,7 @@ const Home = () => {
       for (const sample of SAMPLE_ENTRIES) {
         await createTransaction(sample);
       }
-      message.success('Sample demo data loaded successfully!');
+      message.success('Sample cute demo data loaded! ✨');
       loadData();
     } catch (err) {
       message.error('Failed to load sample data');
@@ -204,11 +205,11 @@ const Home = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `VaultX_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
+    link.setAttribute('download', `BloomVault_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    message.success(`Ledger exported in ${currencyKey}!`);
+    message.success(`Ledger exported in ${currencyKey}! ✨`);
   };
 
   const convertedSummary = {
@@ -226,11 +227,11 @@ const Home = () => {
       render: type =>
         type === 'income' ? (
           <span className="px-3 py-1 text-xs font-black rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 uppercase tracking-wider inline-flex items-center gap-1">
-            ▲ Income
+            ▲ Inflow
           </span>
         ) : (
-          <span className="px-3 py-1 text-xs font-black rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 uppercase tracking-wider inline-flex items-center gap-1">
-            ▼ Expense
+          <span className="px-3 py-1 text-xs font-black rounded-xl border border-pink-500/30 bg-pink-500/10 text-pink-400 uppercase tracking-wider inline-flex items-center gap-1">
+            ▼ Outflow
           </span>
         )
     },
@@ -243,12 +244,12 @@ const Home = () => {
         return (
           <div className="flex items-center gap-3">
             <div
-              className="w-10 h-10 rounded-2xl flex items-center justify-center text-sm shadow-inner border border-white/10"
+              className="w-10 h-10 rounded-2xl flex items-center justify-center text-sm shadow-xs border border-white/10"
               style={{ backgroundColor: meta.bg, color: meta.color }}
             >
               <FontAwesomeIcon icon={meta.icon} />
             </div>
-            <span className={`font-black text-sm ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{text}</span>
+            <span className={`font-black text-sm ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>{text}</span>
           </div>
         );
       }
@@ -257,7 +258,7 @@ const Home = () => {
       title: 'Description / Notes',
       dataIndex: 'description',
       key: 'description',
-      render: text => <span className={`font-medium text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{text || '-'}</span>
+      render: text => <span className={`font-medium text-sm ${isDarkMode ? 'text-pink-300/70' : 'text-slate-600'}`}>{text || '-'}</span>
     },
     {
       title: 'Date',
@@ -265,7 +266,7 @@ const Home = () => {
       key: 'date',
       width: 140,
       sorter: (a, b) => new Date(a.date) - new Date(b.date),
-      render: date => <span className={`font-extrabold text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{dayjs(date).format('MMM DD, YYYY')}</span>
+      render: date => <span className={`font-extrabold text-xs ${isDarkMode ? 'text-pink-300/60' : 'text-slate-500'}`}>{dayjs(date).format('MMM DD, YYYY')}</span>
     },
     {
       title: 'Amount',
@@ -278,7 +279,7 @@ const Home = () => {
         const isIncome = record.type === 'income';
         const converted = Number(amount) * currency.rate;
         return (
-          <span className={`font-black text-base tracking-tight ${isIncome ? 'text-emerald-400' : 'text-rose-400'}`}>
+          <span className={`font-black text-base tracking-tight ${isIncome ? 'text-emerald-400' : 'text-pink-400'}`}>
             {isIncome ? '+' : '-'}{currency.symbol}{converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         );
@@ -293,7 +294,7 @@ const Home = () => {
         <Space size="small">
           <Button
             type="text"
-            className="hover:bg-sky-500/20 rounded-xl text-sky-400 font-bold"
+            className="hover:bg-pink-500/20 rounded-xl text-pink-300 font-bold"
             icon={<FontAwesomeIcon icon={faPenToSquare} />}
             onClick={() => handleOpenEditModal(record)}
             title="Edit"
@@ -309,7 +310,7 @@ const Home = () => {
             <Button
               type="text"
               danger
-              className="hover:bg-rose-500/20 rounded-xl text-rose-400 font-bold"
+              className="hover:bg-rose-500/20 rounded-xl text-pink-400 font-bold"
               icon={<FontAwesomeIcon icon={faTrash} />}
               title="Delete"
             />
@@ -326,48 +327,47 @@ const Home = () => {
       theme={{
         algorithm: isDarkMode ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
         token: {
-          colorPrimary: '#0284c7',
-          colorBgContainer: isDarkMode ? '#0b1329' : '#ffffff',
-          borderRadius: 16,
+          colorPrimary: '#ec4899',
+          colorBgContainer: isDarkMode ? '#240c1e' : '#ffffff',
+          borderRadius: 20,
           fontFamily: 'Plus Jakarta Sans, sans-serif'
         }
       }}
     >
-      <div className={`min-h-screen ${isDarkMode ? 'bg-[#030712] text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-[#180715] text-pink-100' : 'bg-[#fffbfb] text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
-          {/* Connected Executive Top Header Navigation Bar */}
+          {/* Cute Pinterest Aesthetic Top Navigation Header */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
-            isDarkMode ? 'bg-[#0b1329] border-slate-800 shadow-2xl shadow-sky-950/40' : 'bg-white border-slate-200/90 shadow-sm'
+            isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-2xl shadow-pink-950/50' : 'bg-white border-pink-100 shadow-sm'
           }`}>
             <div className="flex flex-col space-y-5">
               
-              {/* Top Row: Brand, Live Status, Controls & Actions */}
+              {/* Top Row: Logo, Girl Power Tag, Controls */}
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-sky-600 via-blue-600 to-cyan-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-sky-600/30">
-                    <FontAwesomeIcon icon={faVault} />
+                  <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-pink-500/30">
+                    <FontAwesomeIcon icon={faWandMagicSparkles} />
                   </div>
                   <div>
                     <div className="flex items-center gap-3">
-                      <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent m-0">
-                        VaultX
+                      <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-pink-300 via-rose-300 to-fuchsia-300 bg-clip-text text-transparent m-0">
+                        BloomVault 🌸
                       </h1>
-                      <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                        EXECUTIVE OS
+                      <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-pink-500/20 text-pink-300 border border-pink-500/30">
+                        <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+                        GIRLS' DIARY
                       </span>
                     </div>
-                    <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <FontAwesomeIcon icon={faShieldHalved} className="text-sky-400" />
-                      Portfolio Financial Operating System • {dayjs().format('dddd, MMMM D, YYYY')}
+                    <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-600/70'}`}>
+                      <FontAwesomeIcon icon={faCrown} className="text-pink-400" />
+                      Cute Aesthetic Finance & Habit Vault • {dayjs().format('dddd, MMMM D, YYYY')}
                     </span>
                   </div>
                 </div>
 
                 {/* Right Action Controls */}
                 <div className="flex flex-wrap items-center gap-3">
-                  {/* Currency Dropdown */}
                   <Select
                     value={currencyKey}
                     onChange={val => setCurrencyKey(val)}
@@ -381,86 +381,81 @@ const Home = () => {
                     <Option value="PKR">PKR (Rs)</Option>
                   </Select>
 
-                  {/* Light / Dark Mode Toggle */}
                   <Button
                     size="large"
                     onClick={() => setIsDarkMode(!isDarkMode)}
                     icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-slate-600'} />}
                     className={`rounded-2xl font-extrabold border ${
-                      isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-slate-100 border-slate-200 text-slate-700'
+                      isDarkMode ? 'bg-[#180814] border-pink-900/40 text-pink-200' : 'bg-pink-50 border-pink-100 text-slate-700'
                     }`}
                   >
-                    {isDarkMode ? 'Light' : 'Dark'}
+                    {isDarkMode ? 'Light 🌸' : 'Dark 🌙'}
                   </Button>
 
-                  {/* Recruiter Spotlight Tech Showcase */}
                   <Button
                     icon={<FontAwesomeIcon icon={faStar} className="text-amber-400" />}
                     size="large"
                     onClick={() => setIsSpotlightOpen(true)}
                     className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-black rounded-2xl"
                   >
-                    Tech Showcase
+                    Portfolio Showcase
                   </Button>
 
-                  {/* Load Demo Data */}
                   <Button
-                    icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-cyan-400" />}
+                    icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-pink-300" />}
                     size="large"
                     onClick={handleLoadSampleData}
                     loading={loading}
                     className={`font-extrabold rounded-2xl border ${
-                      isDarkMode ? 'bg-cyan-950/40 border-cyan-800/50 text-cyan-300 hover:bg-cyan-900/60' : 'bg-blue-50 border-blue-200 text-blue-700'
+                      isDarkMode ? 'bg-pink-950/40 border-pink-800/50 text-pink-300 hover:bg-pink-900/60' : 'bg-pink-50 border-pink-200 text-pink-700'
                     }`}
                   >
-                    Demo Data
+                    Demo Data ✨
                   </Button>
 
-                  {/* Export CSV */}
                   <Button
-                    icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-slate-300' : 'text-slate-600'} />}
+                    icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-pink-300' : 'text-slate-600'} />}
                     size="large"
                     onClick={exportToCSV}
                     className={`font-extrabold rounded-2xl border ${
-                      isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-700'
+                      isDarkMode ? 'bg-[#180814] border-pink-900/40 text-pink-200 hover:bg-pink-950/60' : 'bg-slate-100 border-slate-200 text-slate-700'
                     }`}
                   >
                     Export CSV
                   </Button>
 
-                  {/* Primary Add Entry Button */}
                   <Button
                     type="primary"
                     size="large"
                     icon={<FontAwesomeIcon icon={faPlus} />}
                     onClick={handleOpenAddModal}
-                    className="bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-600 hover:from-sky-500 hover:to-blue-500 text-white font-black rounded-2xl shadow-lg shadow-sky-600/30 border-0 px-6"
+                    className="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 hover:from-pink-600 hover:to-rose-600 text-white font-black rounded-2xl shadow-lg shadow-pink-500/30 border-0 px-6"
                   >
-                    + Add Entry
+                    + Log Entry 💖
                   </Button>
                 </div>
               </div>
 
-              {/* Bottom Row: Executive Connected Navigation Hub */}
-              <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-2">
+              {/* Bottom Row: Cute Pinterest Workspace Navigation Bar */}
+              <div className="pt-4 border-t border-pink-900/40 flex flex-wrap items-center gap-2">
                 {[
-                  { key: 'overview', label: 'Executive Dashboard', icon: faGaugeHigh },
-                  { key: 'ledger', label: 'Transactions Ledger', icon: faTableList, count: transactions.length },
-                  { key: 'ai', label: 'AI Risk Intelligence', icon: faBrain },
-                  { key: 'analytics', label: 'Category Insights', icon: faChartPie },
-                  { key: 'goals', label: 'Savings Vault Goals', icon: faPiggyBank },
-                  { key: 'subscriptions', label: 'Recurring Subscriptions', icon: faRepeat },
-                  { key: 'growth', label: 'Wealth Growth Simulator', icon: faSeedling }
+                  { key: 'overview', label: '🌸 Aesthetic Dashboard', icon: faGaugeHigh },
+                  { key: 'ledger', label: '📋 Transactions Ledger', icon: faTableList, count: transactions.length },
+                  { key: 'vibe', label: '✨ Daily Mood Vibe', icon: faSmileBeam },
+                  { key: 'analytics', label: '💅 Category Insights', icon: faChartPie },
+                  { key: 'goals', label: '💖 Dream Wishlists', icon: faPiggyBank },
+                  { key: 'subscriptions', label: '🔄 Recurring Bills', icon: faRepeat },
+                  { key: 'growth', label: '🌱 Wealth Simulator', icon: faSeedling }
                 ].map(nav => (
                   <button
                     key={nav.key}
                     onClick={() => setActiveWorkspaceKey(nav.key)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs transition-all ${
                       activeWorkspaceKey === nav.key
-                        ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md shadow-sky-600/25 border-0 scale-105'
+                        ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25 border-0 scale-105'
                         : isDarkMode
-                        ? 'bg-slate-900/60 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white'
-                        : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
+                        ? 'bg-[#180814] text-pink-200/80 border border-pink-900/30 hover:border-pink-700/50 hover:text-white'
+                        : 'bg-pink-50 text-pink-900 border border-pink-100 hover:bg-pink-100'
                     }`}
                   >
                     <FontAwesomeIcon icon={nav.icon} />
@@ -477,7 +472,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Achievement Badges Header Ribbon */}
+          {/* Gamified Milestones & Badges Header Ribbon */}
           <AchievementBadges summary={convertedSummary} transactionCount={transactions.length} isDarkMode={isDarkMode} />
 
           {/* Hero Financial Summary Stat Grid */}
@@ -492,11 +487,10 @@ const Home = () => {
             isDarkMode={isDarkMode}
           />
 
-          {/* ========================================================================= */}
-          {/* SECTION 1: EXECUTIVE DASHBOARD OVERVIEW */}
-          {/* ========================================================================= */}
+          {/* SECTION 1: AESTHETIC DASHBOARD OVERVIEW */}
           {activeWorkspaceKey === 'overview' && (
             <div className="space-y-6">
+              <SpendingMoodTracker isDarkMode={isDarkMode} />
               <AIAdvisor summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
               <FinancialHealthScore summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
               <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
@@ -509,14 +503,12 @@ const Home = () => {
             </div>
           )}
 
-          {/* ========================================================================= */}
-          {/* SECTION 2: TRANSACTIONS LEDGER & AUDIT TABLE (PROMINENT & FULL FEATURED) */}
-          {/* ========================================================================= */}
+          {/* SECTION 2: TRANSACTIONS LEDGER & AUDIT TABLE */}
           {activeWorkspaceKey === 'ledger' && (
             <div className="space-y-4">
               {/* Search, Date & Type Filter Toolbar */}
               <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
-                isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+                isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-xl' : 'bg-white border-pink-100 shadow-sm'
               }`}>
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   <div className="flex flex-wrap items-center gap-3">
@@ -526,15 +518,15 @@ const Home = () => {
                       onChange={value => setFilterType(value)}
                       options={[
                         { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
-                        { label: <span className="font-extrabold text-emerald-400 px-3">💰 INCOME</span>, value: 'income' },
-                        { label: <span className="font-extrabold text-rose-400 px-3">💸 EXPENSES</span>, value: 'expense' }
+                        { label: <span className="font-extrabold text-emerald-400 px-3">💰 INFLOW</span>, value: 'income' },
+                        { label: <span className="font-extrabold text-pink-400 px-3">💸 OUTFLOW</span>, value: 'expense' }
                       ]}
-                      className={isDarkMode ? 'bg-slate-900 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
+                      className={isDarkMode ? 'bg-[#180814] text-pink-200 font-extrabold p-1 rounded-2xl' : 'bg-pink-50 text-pink-800 font-extrabold p-1 rounded-2xl'}
                     />
 
                     <Input
                       placeholder="Search category..."
-                      prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
+                      prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-pink-400/60" />}
                       value={searchCategory}
                       onChange={e => setSearchCategory(e.target.value)}
                       style={{ width: 190 }}
@@ -579,10 +571,10 @@ const Home = () => {
 
                 {/* Active Filter Chips */}
                 {hasActiveFilters && (
-                  <div className="mt-4 pt-3 border-t border-slate-800 flex flex-wrap items-center gap-2 text-xs">
-                    <span className="font-bold text-slate-400">Active Filters:</span>
+                  <div className="mt-4 pt-3 border-t border-pink-900/40 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="font-bold text-pink-300/70">Active Filters:</span>
                     {filterType !== 'all' && (
-                      <Tag closable onClose={() => setFilterType('all')} color="blue" className="font-bold rounded-xl px-2.5 py-0.5">
+                      <Tag closable onClose={() => setFilterType('all')} color="magenta" className="font-bold rounded-xl px-2.5 py-0.5">
                         Type: {filterType.toUpperCase()}
                       </Tag>
                     )}
@@ -592,7 +584,7 @@ const Home = () => {
                       </Tag>
                     )}
                     {dateRange !== null && (
-                      <Tag closable onClose={() => setDateRange(null)} color="amber" className="font-bold rounded-xl px-2.5 py-0.5">
+                      <Tag closable onClose={() => setDateRange(null)} color="gold" className="font-bold rounded-xl px-2.5 py-0.5">
                         Range Filter
                       </Tag>
                     )}
@@ -602,19 +594,19 @@ const Home = () => {
 
               {/* Transactions Table Container */}
               <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
-                isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+                isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-xl' : 'bg-white border-pink-100 shadow-sm'
               }`}>
-                <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+                <div className="p-5 border-b border-pink-900/40 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-base border border-sky-500/30">
+                    <div className="w-9 h-9 rounded-2xl bg-pink-500/20 text-pink-300 flex items-center justify-center text-base border border-pink-500/30">
                       <FontAwesomeIcon icon={faTableList} />
                     </div>
                     <div>
-                      <h2 className="text-lg font-black m-0 text-white">Full Transaction Audit Ledger</h2>
-                      <span className="text-xs text-slate-400 font-semibold">Complete ledger of logged income & expense records ({currencyKey})</span>
+                      <h2 className="text-lg font-black m-0 text-white">Full Transaction Audit Ledger 📋</h2>
+                      <span className="text-xs text-pink-300/70 font-semibold">Complete ledger of logged income & expense records ({currencyKey})</span>
                     </div>
                   </div>
-                  <Tag color="blue" className="font-black px-3 py-1 rounded-xl text-xs">
+                  <Tag color="magenta" className="font-black px-3 py-1 rounded-xl text-xs">
                     {transactions.length} Records
                   </Tag>
                 </div>
@@ -632,9 +624,9 @@ const Home = () => {
                   locale={{
                     emptyText: (
                       <div className="py-16 text-center space-y-3">
-                        <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
-                        <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
-                        <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-sky-600 font-extrabold rounded-2xl mt-2">
+                        <span className="block font-black text-pink-300/70 text-lg">No transactions recorded yet! ✨</span>
+                        <span className="block text-pink-300/50 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
+                        <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-pink-600 font-extrabold rounded-2xl mt-2 border-0">
                           Load Demo Data
                         </Button>
                       </div>
@@ -645,37 +637,27 @@ const Home = () => {
             </div>
           )}
 
-          {/* ========================================================================= */}
-          {/* SECTION 3: AI RISK INTELLIGENCE & ADVISORY */}
-          {/* ========================================================================= */}
-          {activeWorkspaceKey === 'ai' && (
-            <AIAdvisor summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
+          {/* SECTION 3: DAILY SPENDING MOOD TRACKER */}
+          {activeWorkspaceKey === 'vibe' && (
+            <SpendingMoodTracker isDarkMode={isDarkMode} />
           )}
 
-          {/* ========================================================================= */}
-          {/* SECTION 4: CATEGORY ANALYTICS & EXPENSE BREAKDOWN */}
-          {/* ========================================================================= */}
+          {/* SECTION 4: CATEGORY ANALYTICS */}
           {activeWorkspaceKey === 'analytics' && (
             <CategoryAnalytics transactions={transactions} isDarkMode={isDarkMode} />
           )}
 
-          {/* ========================================================================= */}
-          {/* SECTION 5: SAVINGS GOALS VAULT & TARGET ALLOCATION */}
-          {/* ========================================================================= */}
+          {/* SECTION 5: SAVINGS GOALS VAULT */}
           {activeWorkspaceKey === 'goals' && (
             <SavingsGoals onSuccess={loadData} isDarkMode={isDarkMode} />
           )}
 
-          {/* ========================================================================= */}
-          {/* SECTION 6: RECURRING BILLS & SUBSCRIPTIONS MANAGER */}
-          {/* ========================================================================= */}
+          {/* SECTION 6: RECURRING SUBSCRIPTIONS */}
           {activeWorkspaceKey === 'subscriptions' && (
             <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
           )}
 
-          {/* ========================================================================= */}
-          {/* SECTION 7: WEALTH GROWTH & COMPOUND INTEREST SIMULATOR */}
-          {/* ========================================================================= */}
+          {/* SECTION 7: WEALTH GROWTH SIMULATOR */}
           {activeWorkspaceKey === 'growth' && (
             <WealthGrowthCalculator isDarkMode={isDarkMode} />
           )}
@@ -698,28 +680,27 @@ const Home = () => {
             open={isHelpOpen}
             onCancel={() => setIsHelpOpen(false)}
             footer={[
-              <Button key="ok" type="primary" onClick={() => setIsHelpOpen(false)} className="bg-sky-600 font-bold rounded-xl">
-                Got it!
+              <Button key="ok" type="primary" onClick={() => setIsHelpOpen(false)} className="bg-pink-600 font-bold rounded-xl border-0">
+                Got it! ✨
               </Button>
             ]}
           >
-            <div className="space-y-4 text-sm py-2 font-medium text-slate-200">
-              <div className="p-4 bg-sky-500/20 rounded-2xl text-sky-200 border border-sky-500/30">
-                Welcome to <strong>VaultX</strong>! Executive financial & wealth operating system.
+            <div className="space-y-4 text-sm py-2 font-medium text-pink-100">
+              <div className="p-4 bg-pink-500/20 rounded-2xl text-pink-200 border border-pink-500/30">
+                Welcome to <strong>BloomVault</strong>! Cute Pinterest aesthetic financial & habit diary 🌸.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">
-                <li><strong>Navbar Tabs</strong>: Connect directly to your Transactions Ledger, Category Analytics, Savings Vault, Subscriptions & Wealth Simulator.</li>
-                <li><strong>AI Risk Advisory</strong>: Automated financial intelligence & alert insights.</li>
+                <li><strong>Girls' Daily Mood Vibe</strong>: Log today's spending feeling (🌸 Mindful, 🛍️ Shopping Therapy, ☕ Cozy Cafe).</li>
+                <li><strong>Navbar Workspaces</strong>: Switch between Ledger, Category Share, Wishlists & Wealth Simulator.</li>
                 <li><strong>Multi-Currency</strong>: Switch between USD $, EUR €, GBP £, and PKR Rs.</li>
-                <li><strong>Wealth Growth Simulator</strong>: Project compound net worth growth over 1 to 30 years.</li>
-                <li><strong>Emergency Safety Runway</strong>: View months of zero-income survival buffer.</li>
-                <li><strong>Export CSV</strong>: Download your transaction ledger anytime.</li>
+                <li><strong>Dream Wishlists</strong>: Track target goals and deposit funds directly with 1 click.</li>
+                <li><strong>Export CSV</strong>: Download your cute transaction ledger anytime.</li>
               </ol>
             </div>
           </Modal>
 
-          {/* Recruiter & Technical Showcase Modal */}
+          {/* Technical Showcase Modal */}
           <RecruiterSpotlightModal open={isSpotlightOpen} onClose={() => setIsSpotlightOpen(false)} />
 
         </div>

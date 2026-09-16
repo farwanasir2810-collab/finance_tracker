@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Progress, Button, InputNumber, Popover, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPiggyBank, faPlus, faBullseye, faLaptop, faPlane, faShield, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faPlus, faLaptop, faPlane, faShirt, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import { createTransaction } from '../../helpers/transactionApi';
 
 const INITIAL_GOALS = [
-  { id: '1', title: 'Emergency Fund', target: 5000, saved: 2800, icon: faShield, color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)' },
-  { id: '2', title: 'New Macbook Pro', target: 2400, saved: 1500, icon: faLaptop, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)' },
-  { id: '3', title: 'Summer Vacation', target: 1800, saved: 600, icon: faPlane, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)' },
-  { id: '4', title: 'Course Certification', target: 500, saved: 350, icon: faGraduationCap, color: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)' }
+  { id: '1', title: '🌸 Soft Girl Emergency Cushion', target: 5000, saved: 2800, icon: faHeart, color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' },
+  { id: '2', title: '💻 Rose Gold Macbook Setup', target: 2400, saved: 1500, icon: faLaptop, color: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)' },
+  { id: '3', title: '✈️ Paris & Bali Vacation Wishlist', target: 1800, saved: 600, icon: faPlane, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)' },
+  { id: '4', title: '🛍️ Designer Dream Wardrobe', target: 800, saved: 500, icon: faShirt, color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.15)' }
 ];
 
 const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
@@ -22,12 +22,10 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
     }
 
     try {
-      // 1. Update Goal Saved Balance locally
       setGoals(prev =>
         prev.map(g => (g.id === goalId ? { ...g, saved: Math.min(g.target, g.saved + depositAmount) } : g))
       );
 
-      // 2. Log transaction entry as savings expense deposit
       await createTransaction({
         type: 'expense',
         amount: depositAmount,
@@ -36,7 +34,7 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
         date: new Date().toISOString()
       });
 
-      message.success(`Deposited $${depositAmount} towards ${goalTitle}!`);
+      message.success(`Deposited $${depositAmount} towards ${goalTitle}! ✨`);
       if (onSuccess) onSuccess();
     } catch (err) {
       message.error('Failed to log goal deposit');
@@ -45,18 +43,20 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
 
   return (
     <div className={`p-6 rounded-3xl border transition-colors duration-300 ${
-      isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+      isDarkMode
+        ? 'bg-[#240c1e] border-pink-900/40 shadow-xl'
+        : 'bg-white border-pink-100 shadow-sm'
     }`}>
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-        <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-lg shadow-inner border border-indigo-500/20">
-          <FontAwesomeIcon icon={faPiggyBank} />
+      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-pink-100 dark:border-pink-900/40">
+        <div className="w-10 h-10 rounded-2xl bg-pink-500/15 text-pink-500 flex items-center justify-center text-lg shadow-inner border border-pink-500/30">
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
         </div>
         <div>
-          <span className={`font-black text-lg block tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-            Multi-Category Savings Goals Vault
+          <span className={`font-black text-lg block tracking-tight ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>
+            Girls' Dream Savings Vault Goals 💖
           </span>
-          <span className={`text-xs font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            Track progress towards financial targets & deposit funds
+          <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-600/70'}`}>
+            Track your dream wishlists & fund your future era
           </span>
         </div>
       </div>
@@ -67,7 +67,7 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
 
           const popoverContent = (
             <div className="p-2 space-y-2 w-52">
-              <span className="font-extrabold text-xs block text-slate-700">Deposit Amount ($)</span>
+              <span className="font-black text-xs block text-slate-700">Deposit Amount ($)</span>
               <InputNumber
                 className="w-full rounded-xl"
                 value={depositAmount}
@@ -80,9 +80,9 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
                 type="primary"
                 size="small"
                 onClick={() => handleDeposit(goal.id, goal.title)}
-                className="w-full bg-blue-600 font-extrabold rounded-xl mt-1"
+                className="w-full bg-pink-600 hover:bg-pink-700 font-extrabold rounded-xl mt-1 border-0"
               >
-                Confirm Deposit
+                Confirm Deposit ✨
               </Button>
             </div>
           );
@@ -90,39 +90,41 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
           return (
             <div
               key={goal.id}
-              className={`p-4 rounded-2xl border transition-all ${
-                isDarkMode ? 'bg-slate-800/60 border-slate-700/60 hover:border-slate-600' : 'bg-slate-50 border-slate-100 hover:border-slate-200'
+              className={`p-4.5 rounded-2xl border transition-all ${
+                isDarkMode
+                  ? 'bg-[#1a0814] border-pink-900/40 hover:border-pink-500/40'
+                  : 'bg-pink-50/40 border-pink-100 hover:border-pink-200'
               }`}
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-base shadow-xs"
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center text-base shadow-xs"
                     style={{ backgroundColor: goal.bg, color: goal.color }}
                   >
                     <FontAwesomeIcon icon={goal.icon} />
                   </div>
                   <div>
-                    <span className={`font-black text-sm block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{goal.title}</span>
-                    <span className="text-xs font-semibold text-slate-400">
+                    <span className={`font-black text-sm block ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>{goal.title}</span>
+                    <span className="text-xs font-bold text-pink-400/80">
                       ${goal.saved.toLocaleString()} of ${goal.target.toLocaleString()}
                     </span>
                   </div>
                 </div>
 
-                <Popover content={popoverContent} title="Add Funds" trigger="click" placement="topRight">
+                <Popover content={popoverContent} title="Add Funds ✨" trigger="click" placement="topRight">
                   <Button
                     type="text"
                     size="small"
                     icon={<FontAwesomeIcon icon={faPlus} />}
-                    className="rounded-xl font-bold bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
+                    className="rounded-xl font-black bg-pink-500/15 text-pink-400 hover:bg-pink-500/25 px-3 py-1"
                   >
                     Deposit
                   </Button>
                 </Popover>
               </div>
 
-              <Progress percent={percent} strokeColor={goal.color} trailColor={isDarkMode ? '#1e293b' : '#e2e8f0'} size="small" />
+              <Progress percent={percent} strokeColor={goal.color} trailColor={isDarkMode ? '#3b1132' : '#fce7f3'} size="small" />
             </div>
           );
         })}
