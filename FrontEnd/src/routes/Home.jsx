@@ -376,12 +376,11 @@ const Home = () => {
 
                 {/* Right Sequenced Action Toolbar */}
                 <div className="flex flex-wrap items-center gap-2.5">
-                  {/* Currency Switcher */}
+                  {/* 1. Currency Switcher */}
                   <Select
                     value={currencyKey}
                     onChange={val => setCurrencyKey(val)}
-                    size="large"
-                    className="w-32 font-black rounded-2xl"
+                    className="w-32 font-black rounded-2xl h-11"
                     suffixIcon={<FontAwesomeIcon icon={faCoins} className="text-amber-400" />}
                   >
                     <Option value="USD">USD ($)</Option>
@@ -390,12 +389,11 @@ const Home = () => {
                     <Option value="PKR">PKR (Rs)</Option>
                   </Select>
 
-                  {/* Mode Toggle */}
+                  {/* 2. Theme Mode Toggle */}
                   <Button
-                    size="large"
                     onClick={() => setIsDarkMode(!isDarkMode)}
                     icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-pink-600'} />}
-                    className={`rounded-2xl font-black border transition-all ${
+                    className={`h-11 px-4 rounded-2xl font-black border flex items-center gap-2 transition-all ${
                       isDarkMode
                         ? 'bg-[#180814] border-pink-900/40 text-pink-200 hover:border-pink-500'
                         : 'bg-pink-50 border-pink-200 text-pink-900 hover:bg-pink-100 shadow-xs'
@@ -404,13 +402,12 @@ const Home = () => {
                     {isDarkMode ? 'Soft Mode 🌸' : 'Cozy Dark 🌙'}
                   </Button>
 
-                  {/* Demo Data Button */}
+                  {/* 3. Demo Data Button */}
                   <Button
                     icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-pink-500" />}
-                    size="large"
                     onClick={handleLoadSampleData}
                     loading={loading}
-                    className={`font-black rounded-2xl border transition-all ${
+                    className={`h-11 px-4 rounded-2xl font-black border flex items-center gap-2 transition-all ${
                       isDarkMode
                         ? 'bg-pink-950/40 border-pink-800/50 text-pink-300 hover:bg-pink-900/60'
                         : 'bg-pink-50 border-pink-200 text-pink-800 hover:bg-pink-100 shadow-xs'
@@ -419,12 +416,11 @@ const Home = () => {
                     Demo Data ✨
                   </Button>
 
-                  {/* Export CSV Button */}
+                  {/* 4. Export CSV Button */}
                   <Button
                     icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-pink-300' : 'text-slate-700'} />}
-                    size="large"
                     onClick={exportToCSV}
-                    className={`font-black rounded-2xl border transition-all ${
+                    className={`h-11 px-4 rounded-2xl font-black border flex items-center gap-2 transition-all ${
                       isDarkMode
                         ? 'bg-[#180814] border-pink-900/40 text-pink-200 hover:bg-pink-950/60'
                         : 'bg-slate-100/90 border-slate-200 text-slate-800 hover:bg-slate-200 shadow-xs'
@@ -433,13 +429,21 @@ const Home = () => {
                     Export CSV
                   </Button>
 
-                  {/* Primary CTA: Log Entry */}
+                  {/* 5. Recruiter Showcase Button */}
+                  <Button
+                    icon={<FontAwesomeIcon icon={faStar} className="text-amber-400" />}
+                    onClick={() => setIsSpotlightOpen(true)}
+                    className="h-11 px-4 bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-300 border border-amber-400/40 font-black rounded-2xl flex items-center gap-2 transition-all shadow-xs"
+                  >
+                    Portfolio Showcase
+                  </Button>
+
+                  {/* 6. Primary CTA: Log Entry */}
                   <Button
                     type="primary"
-                    size="large"
                     icon={<FontAwesomeIcon icon={faPlus} />}
                     onClick={handleOpenAddModal}
-                    className="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 hover:from-pink-600 hover:to-rose-600 text-white font-black rounded-2xl shadow-lg shadow-pink-500/30 border-0 px-6 transition-all hover:scale-105"
+                    className="h-11 px-6 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 hover:from-pink-600 hover:to-rose-600 text-white font-black rounded-2xl shadow-lg shadow-pink-500/30 border-0 flex items-center gap-2 transition-all hover:scale-105"
                   >
                     + Log Entry 💖
                   </Button>
