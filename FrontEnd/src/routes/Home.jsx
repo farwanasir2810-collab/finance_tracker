@@ -21,7 +21,9 @@ import {
   faRepeat,
   faSeedling,
   faBrain,
-  faGaugeHigh
+  faGaugeHigh,
+  faStar,
+  faTableList
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -38,6 +40,7 @@ import RecurringSubscriptions from '../components/transactions/RecurringSubscrip
 import WealthGrowthCalculator from '../components/transactions/WealthGrowthCalculator';
 import EmergencyRunway from '../components/transactions/EmergencyRunway';
 import AIAdvisor from '../components/transactions/AIAdvisor';
+import RecruiterSpotlightModal from '../components/transactions/RecruiterSpotlightModal';
 import {
   fetchTransactions,
   createTransaction,
@@ -73,6 +76,9 @@ const Home = () => {
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState({ totalIncome: 0, totalExpenses: 0, balance: 0 });
 
+  // Navigation Workspace Key
+  const [activeWorkspaceKey, setActiveWorkspaceKey] = useState('overview');
+
   // Theme & Customization
   const [currencyKey, setCurrencyKey] = useState('USD');
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -85,6 +91,7 @@ const Home = () => {
   // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
 
   const currency = CURRENCIES[currencyKey] || CURRENCIES.USD;
@@ -328,106 +335,134 @@ const Home = () => {
       <div className={`min-h-screen ${isDarkMode ? 'bg-[#030712] text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
-          {/* Navigation Top Header */}
+          {/* Connected Executive Top Header Navigation Bar */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
             isDarkMode ? 'bg-[#0b1329] border-slate-800 shadow-2xl shadow-sky-950/40' : 'bg-white border-slate-200/90 shadow-sm'
           }`}>
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="flex flex-col space-y-5">
               
-              {/* Brand Logo & Short Catchy Name: VaultX */}
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-sky-600 via-blue-600 to-cyan-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-sky-600/30">
-                  <FontAwesomeIcon icon={faVault} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-3">
-                    <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent m-0">
-                      VaultX
-                    </h1>
-                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                      FINANCIAL OS
+              {/* Top Row: Brand, Status, Currency, Actions */}
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-sky-600 via-blue-600 to-cyan-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-sky-600/30">
+                    <FontAwesomeIcon icon={faVault} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent m-0">
+                        VaultX
+                      </h1>
+                      <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                        LIVE OS
+                      </span>
+                    </div>
+                    <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      <FontAwesomeIcon icon={faShieldHalved} className="text-sky-400" />
+                      Executive Wealth & Cash Flow Platform • {dayjs().format('dddd, MMMM D, YYYY')}
                     </span>
                   </div>
-                  <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    <FontAwesomeIcon icon={faShieldHalved} className="text-sky-400" />
-                    Executive Wealth & Cash Flow Operating System • {dayjs().format('dddd, MMMM D, YYYY')}
-                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <Select
+                    value={currencyKey}
+                    onChange={val => setCurrencyKey(val)}
+                    size="large"
+                    className="w-32 font-black rounded-2xl"
+                    suffixIcon={<FontAwesomeIcon icon={faCoins} className="text-amber-400" />}
+                  >
+                    <Option value="USD">USD ($)</Option>
+                    <Option value="EUR">EUR (€)</Option>
+                    <Option value="GBP">GBP (£)</Option>
+                    <Option value="PKR">PKR (Rs)</Option>
+                  </Select>
+
+                  <Button
+                    size="large"
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-slate-600'} />}
+                    className={`rounded-2xl font-extrabold border ${
+                      isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    {isDarkMode ? 'Light' : 'Dark'}
+                  </Button>
+
+                  <Button
+                    icon={<FontAwesomeIcon icon={faStar} className="text-amber-400" />}
+                    size="large"
+                    onClick={() => setIsSpotlightOpen(true)}
+                    className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-black rounded-2xl"
+                  >
+                    Tech Showcase
+                  </Button>
+
+                  <Button
+                    icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-cyan-400" />}
+                    size="large"
+                    onClick={handleLoadSampleData}
+                    loading={loading}
+                    className={`font-extrabold rounded-2xl border ${
+                      isDarkMode ? 'bg-cyan-950/40 border-cyan-800/50 text-cyan-300 hover:bg-cyan-900/60' : 'bg-blue-50 border-blue-200 text-blue-700'
+                    }`}
+                  >
+                    Demo Data
+                  </Button>
+
+                  <Button
+                    icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-slate-300' : 'text-slate-600'} />}
+                    size="large"
+                    onClick={exportToCSV}
+                    className={`font-extrabold rounded-2xl border ${
+                      isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    }`}
+                  >
+                    Export CSV
+                  </Button>
+
+                  <Button
+                    type="primary"
+                    size="large"
+                    icon={<FontAwesomeIcon icon={faPlus} />}
+                    onClick={handleOpenAddModal}
+                    className="bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-600 hover:from-sky-500 hover:to-blue-500 text-white font-black rounded-2xl shadow-lg shadow-sky-600/30 border-0 px-6"
+                  >
+                    + Add Entry
+                  </Button>
                 </div>
               </div>
 
-              {/* Toolbar Controls */}
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Currency Switcher */}
-                <Select
-                  value={currencyKey}
-                  onChange={val => setCurrencyKey(val)}
-                  size="large"
-                  className="w-32 font-black rounded-2xl"
-                  suffixIcon={<FontAwesomeIcon icon={faCoins} className="text-amber-400" />}
-                >
-                  <Option value="USD">USD ($)</Option>
-                  <Option value="EUR">EUR (€)</Option>
-                  <Option value="GBP">GBP (£)</Option>
-                  <Option value="PKR">PKR (Rs)</Option>
-                </Select>
-
-                {/* Dark / Light Toggle */}
-                <Button
-                  size="large"
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-slate-600'} />}
-                  className={`rounded-2xl font-extrabold border ${
-                    isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-slate-100 border-slate-200 text-slate-700'
-                  }`}
-                >
-                  {isDarkMode ? 'Light' : 'Dark'}
-                </Button>
-
-                {/* Load Demo Data */}
-                <Button
-                  icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-cyan-400" />}
-                  size="large"
-                  onClick={handleLoadSampleData}
-                  loading={loading}
-                  className={`font-extrabold rounded-2xl border ${
-                    isDarkMode ? 'bg-cyan-950/40 border-cyan-800/50 text-cyan-300 hover:bg-cyan-900/60' : 'bg-blue-50 border-blue-200 text-blue-700'
-                  }`}
-                >
-                  Demo Data
-                </Button>
-
-                {/* Export CSV */}
-                <Button
-                  icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-slate-300' : 'text-slate-600'} />}
-                  size="large"
-                  onClick={exportToCSV}
-                  className={`font-extrabold rounded-2xl border ${
-                    isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-700'
-                  }`}
-                >
-                  Export CSV
-                </Button>
-
-                {/* Primary Add Transaction */}
-                <Button
-                  type="primary"
-                  size="large"
-                  icon={<FontAwesomeIcon icon={faPlus} />}
-                  onClick={handleOpenAddModal}
-                  className="bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-600 hover:from-sky-500 hover:to-blue-500 text-white font-black rounded-2xl shadow-lg shadow-sky-600/30 border-0 px-6"
-                >
-                  + Add Entry
-                </Button>
-
-                {/* Guide Button */}
-                <Button
-                  type="text"
-                  size="large"
-                  icon={<FontAwesomeIcon icon={faCircleQuestion} className="text-slate-400 text-xl" />}
-                  onClick={() => setIsHelpOpen(true)}
-                  title="User Guide"
-                />
+              {/* Bottom Row: Executive Connected Navbar Tabs */}
+              <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-2">
+                {[
+                  { key: 'overview', label: 'Executive Dashboard', icon: faGaugeHigh },
+                  { key: 'ledger', label: 'Transactions Ledger', icon: faTableList, count: transactions.length },
+                  { key: 'analytics', label: 'Category Insights', icon: faChartPie },
+                  { key: 'goals', label: 'Savings Goals', icon: faPiggyBank },
+                  { key: 'subscriptions', label: 'Recurring Subscriptions', icon: faRepeat },
+                  { key: 'growth', label: 'Wealth Growth Simulator', icon: faSeedling }
+                ].map(nav => (
+                  <button
+                    key={nav.key}
+                    onClick={() => setActiveWorkspaceKey(nav.key)}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs transition-all ${
+                      activeWorkspaceKey === nav.key
+                        ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md shadow-sky-600/25 border-0'
+                        : isDarkMode
+                        ? 'bg-slate-900/60 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white'
+                        : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
+                    }`}
+                  >
+                    <FontAwesomeIcon icon={nav.icon} />
+                    <span>{nav.label}</span>
+                    {nav.count !== undefined && (
+                      <span className="px-2 py-0.5 rounded-lg bg-white/20 text-[10px] font-black">
+                        {nav.count}
+                      </span>
+                    )}
+                  </button>
+                ))}
               </div>
 
             </div>
@@ -440,183 +475,160 @@ const Home = () => {
           <SummaryCards
             summary={convertedSummary}
             activeFilter={filterType}
-            onSelectFilter={type => setFilterType(type)}
+            onSelectFilter={type => {
+              setFilterType(type);
+              setActiveWorkspaceKey('ledger');
+            }}
             currencySymbol={currency.symbol}
             isDarkMode={isDarkMode}
           />
 
-          {/* Distinct Feature Workspace Tabs */}
-          <Tabs
-            defaultActiveKey="executive"
-            size="large"
-            items={[
-              {
-                key: 'executive',
-                label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faGaugeHigh} className="text-sky-400" />
-                    Executive Dashboard & AI Insights
-                  </span>
-                ),
-                children: (
-                  <div className="space-y-6">
-                    <AIAdvisor summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
-                    <FinancialHealthScore summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
-                    <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
-                    
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                      <QuickAddPresets onSuccess={loadData} isDarkMode={isDarkMode} />
-                      <BudgetMeter totalExpenses={convertedSummary.totalExpenses} isDarkMode={isDarkMode} />
-                      <EmergencyRunway summary={convertedSummary} isDarkMode={isDarkMode} />
+          {/* Workspace 1: Executive Dashboard Overview */}
+          {activeWorkspaceKey === 'overview' && (
+            <div className="space-y-6">
+              <AIAdvisor summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
+              <FinancialHealthScore summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
+              <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <QuickAddPresets onSuccess={loadData} isDarkMode={isDarkMode} />
+                <BudgetMeter totalExpenses={convertedSummary.totalExpenses} isDarkMode={isDarkMode} />
+                <EmergencyRunway summary={convertedSummary} isDarkMode={isDarkMode} />
+              </div>
+            </div>
+          )}
+
+          {/* Workspace 2: Transactions Ledger Table (Prominent & Full Featured) */}
+          {activeWorkspaceKey === 'ledger' && (
+            <div className="space-y-4">
+              {/* Search, Date & Type Filter Toolbar */}
+              <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
+                isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+              }`}>
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Segmented
+                      size="large"
+                      value={filterType}
+                      onChange={value => setFilterType(value)}
+                      options={[
+                        { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
+                        { label: <span className="font-extrabold text-emerald-400 px-3">💰 INCOME</span>, value: 'income' },
+                        { label: <span className="font-extrabold text-rose-400 px-3">💸 EXPENSES</span>, value: 'expense' }
+                      ]}
+                      className={isDarkMode ? 'bg-slate-900 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
+                    />
+
+                    <Input
+                      placeholder="Search category..."
+                      prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
+                      value={searchCategory}
+                      onChange={e => setSearchCategory(e.target.value)}
+                      style={{ width: 190 }}
+                      size="large"
+                      className="rounded-2xl"
+                      allowClear
+                    />
+
+                    <RangePicker
+                      value={dateRange}
+                      onChange={dates => setDateRange(dates)}
+                      size="large"
+                      className="rounded-2xl"
+                      format="YYYY-MM-DD"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {hasActiveFilters && (
+                      <Button
+                        danger
+                        type="dashed"
+                        icon={<FontAwesomeIcon icon={faArrowsRotate} />}
+                        onClick={handleClearFilters}
+                        size="large"
+                        className="rounded-2xl font-extrabold"
+                      >
+                        Clear Filters
+                      </Button>
+                    )}
+                    <Button
+                      icon={<FontAwesomeIcon icon={faArrowsRotate} />}
+                      onClick={loadData}
+                      loading={loading}
+                      size="large"
+                      className="rounded-2xl font-extrabold"
+                    >
+                      Refresh
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Transactions Ledger Table Container */}
+              <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
+                isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+              }`}>
+                <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-base border border-sky-500/30">
+                      <FontAwesomeIcon icon={faTableList} />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-black m-0 text-white">Full Transaction Audit Ledger</h2>
+                      <span className="text-xs text-slate-400 font-semibold">Complete ledger of logged income & expense records</span>
                     </div>
                   </div>
-                )
-              },
-              {
-                key: 'overview',
-                label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faListCheck} className="text-sky-400" />
-                    Transactions Ledger ({currencyKey})
-                  </span>
-                ),
-                children: (
-                  <div className="space-y-4">
-                    {/* Search, Date & Type Filter Toolbar */}
-                    <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
-                      isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
-                    }`}>
-                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <Segmented
-                            size="large"
-                            value={filterType}
-                            onChange={value => setFilterType(value)}
-                            options={[
-                              { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
-                              { label: <span className="font-extrabold text-emerald-400 px-3">💰 INCOME</span>, value: 'income' },
-                              { label: <span className="font-extrabold text-rose-400 px-3">💸 EXPENSES</span>, value: 'expense' }
-                            ]}
-                            className={isDarkMode ? 'bg-slate-900 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
-                          />
+                  <Tag color="blue" className="font-black px-3 py-1 rounded-xl text-xs">
+                    {transactions.length} Records
+                  </Tag>
+                </div>
 
-                          <Input
-                            placeholder="Search category..."
-                            prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
-                            value={searchCategory}
-                            onChange={e => setSearchCategory(e.target.value)}
-                            style={{ width: 190 }}
-                            size="large"
-                            className="rounded-2xl"
-                            allowClear
-                          />
-
-                          <RangePicker
-                            value={dateRange}
-                            onChange={dates => setDateRange(dates)}
-                            size="large"
-                            className="rounded-2xl"
-                            format="YYYY-MM-DD"
-                          />
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          {hasActiveFilters && (
-                            <Button
-                              danger
-                              type="dashed"
-                              icon={<FontAwesomeIcon icon={faArrowsRotate} />}
-                              onClick={handleClearFilters}
-                              size="large"
-                              className="rounded-2xl font-extrabold"
-                            >
-                              Clear Filters
-                            </Button>
-                          )}
-                          <Button
-                            icon={<FontAwesomeIcon icon={faArrowsRotate} />}
-                            onClick={loadData}
-                            loading={loading}
-                            size="large"
-                            className="rounded-2xl font-extrabold"
-                          >
-                            Refresh
-                          </Button>
-                        </div>
+                <Table
+                  columns={columns}
+                  dataSource={transactions}
+                  rowKey="id"
+                  loading={loading}
+                  pagination={{
+                    pageSize: 10,
+                    showSizeChanger: true,
+                    showTotal: renderPaginationTotal
+                  }}
+                  locale={{
+                    emptyText: (
+                      <div className="py-16 text-center space-y-3">
+                        <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
+                        <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
+                        <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-sky-600 font-extrabold rounded-2xl mt-2">
+                          Load Demo Data
+                        </Button>
                       </div>
-                    </div>
+                    )
+                  }}
+                />
+              </div>
+            </div>
+          )}
 
-                    <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
-                      isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
-                    }`}>
-                      <Table
-                        columns={columns}
-                        dataSource={transactions}
-                        rowKey="id"
-                        loading={loading}
-                        pagination={{
-                          pageSize: 8,
-                          showSizeChanger: true,
-                          showTotal: renderPaginationTotal
-                        }}
-                        locale={{
-                          emptyText: (
-                            <div className="py-16 text-center space-y-3">
-                              <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
-                              <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
-                              <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-sky-600 font-extrabold rounded-2xl mt-2">
-                                Load Demo Data
-                              </Button>
-                            </div>
-                          )
-                        }}
-                      />
-                    </div>
-                  </div>
-                )
-              },
-              {
-                key: 'analytics',
-                label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faChartPie} className="text-emerald-400" />
-                    Category Breakdown Insights
-                  </span>
-                ),
-                children: <CategoryAnalytics transactions={transactions} isDarkMode={isDarkMode} />
-              },
-              {
-                key: 'goals',
-                label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faPiggyBank} className="text-cyan-400" />
-                    Savings Goals Vault
-                  </span>
-                ),
-                children: <SavingsGoals onSuccess={loadData} isDarkMode={isDarkMode} />
-              },
-              {
-                key: 'subscriptions',
-                label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faRepeat} className="text-rose-400" />
-                    Recurring Bills & Subscriptions
-                  </span>
-                ),
-                children: <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
-              },
-              {
-                key: 'growth',
-                label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faSeedling} className="text-teal-400" />
-                    Wealth Growth Simulator
-                  </span>
-                ),
-                children: <WealthGrowthCalculator isDarkMode={isDarkMode} />
-              }
-            ]}
-          />
+          {/* Workspace 3: Category Analytics */}
+          {activeWorkspaceKey === 'analytics' && (
+            <CategoryAnalytics transactions={transactions} isDarkMode={isDarkMode} />
+          )}
+
+          {/* Workspace 4: Savings Goals Vault */}
+          {activeWorkspaceKey === 'goals' && (
+            <SavingsGoals onSuccess={loadData} isDarkMode={isDarkMode} />
+          )}
+
+          {/* Workspace 5: Recurring Subscriptions */}
+          {activeWorkspaceKey === 'subscriptions' && (
+            <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
+          )}
+
+          {/* Workspace 6: Wealth Growth Simulator */}
+          {activeWorkspaceKey === 'growth' && (
+            <WealthGrowthCalculator isDarkMode={isDarkMode} />
+          )}
 
           {/* Add / Edit Transaction Modal */}
           <TransactionModal
@@ -647,15 +659,18 @@ const Home = () => {
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">
+                <li><strong>Navbar Tabs</strong>: Connect directly to your Transactions Ledger, Category Analytics, Savings Vault, Subscriptions & Wealth Simulator.</li>
                 <li><strong>AI Risk Advisory</strong>: Automated financial intelligence & alert insights.</li>
                 <li><strong>Multi-Currency</strong>: Switch between USD $, EUR €, GBP £, and PKR Rs.</li>
                 <li><strong>Wealth Growth Simulator</strong>: Project compound net worth growth over 1 to 30 years.</li>
-                <li><strong>Emergency Safety Runway</strong>: View months of zero-income survival cushion.</li>
-                <li><strong>Savings Goals Vault</strong>: Track target goals and deposit funds directly.</li>
+                <li><strong>Emergency Safety Runway</strong>: View months of zero-income survival buffer.</li>
                 <li><strong>Export CSV</strong>: Download your transaction ledger anytime.</li>
               </ol>
             </div>
           </Modal>
+
+          {/* Recruiter & Technical Showcase Modal */}
+          <RecruiterSpotlightModal open={isSpotlightOpen} onClose={() => setIsSpotlightOpen(false)} />
 
         </div>
       </div>
