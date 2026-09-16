@@ -2,11 +2,11 @@ import { Tag } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBrain,
-  faLightbulb,
   faCircleCheck,
   faTriangleExclamation,
   faShieldHeart,
-  faChartLine
+  faChartLine,
+  faWandMagicSparkles
 } from '@fortawesome/free-solid-svg-icons';
 
 const AIAdvisor = ({ summary = {}, transactions = [], isDarkMode = false }) => {
@@ -18,68 +18,70 @@ const AIAdvisor = ({ summary = {}, transactions = [], isDarkMode = false }) => {
   // Generate Automated AI Recommendations
   const insights = [];
 
-  if (savingsRate >= 30) {
+  if (savingsRate >= 20) {
     insights.push({
       type: 'success',
       icon: faCircleCheck,
-      title: 'Optimal Savings Velocity',
-      text: `Your savings rate of ${savingsRate}% exceeds the benchmark 20%. Consider allocating surplus to long-term wealth investments.`,
-      tagColor: 'emerald'
+      title: 'Queen Savings Velocity ✨',
+      text: `Your savings rate of ${savingsRate}% exceeds your 20% goal target! Deposit surplus into your dream wishlist vault.`,
+      tagColor: 'magenta'
     });
   } else if (savingsRate < 10 && totalIncome > 0) {
     insights.push({
       type: 'warning',
       icon: faTriangleExclamation,
-      title: 'Low Liquidity Margin',
-      text: `Current savings rate is ${savingsRate}%. Reducing monthly discretionary outflows will build a healthier liquidity buffer.`,
-      tagColor: 'amber'
+      title: 'Low Liquidity Margin 💅',
+      text: `Current savings rate is ${savingsRate}%. Cutting non-essential cafe or shopping sprees will boost your cushion.`,
+      tagColor: 'volcano'
     });
   }
 
-  if (expenseRatio > 80 && totalIncome > 0) {
+  if (expenseRatio > 75 && totalIncome > 0) {
     insights.push({
       type: 'danger',
       icon: faTriangleExclamation,
-      title: 'High Burn Rate Alert',
-      text: `You are spending ${expenseRatio}% of total revenue. Look out for non-essential recurring subscription costs.`,
+      title: 'High Burn Rate Warning 🛍️',
+      text: `You spent ${expenseRatio}% of revenue this period. Keep an eye on recurring subscriptions and shopping sprees!`,
       tagColor: 'rose'
     });
   }
 
-  if (transactions.length >= 5) {
+  if (transactions.length >= 3) {
     insights.push({
       type: 'info',
       icon: faChartLine,
-      title: 'Consistent Data Logging',
-      text: `Tracked ${transactions.length} entries. High logging frequency improves financial forecasting accuracy.`,
-      tagColor: 'blue'
+      title: 'Active Vibe Log Consistency 🌸',
+      text: `Recorded ${transactions.length} entries. Daily habit logging powers accurate personal financial AI recommendations.`,
+      tagColor: 'purple'
     });
   }
 
-  if (balance >= 2000) {
+  if (balance >= 1000) {
     insights.push({
       type: 'success',
       icon: faShieldHeart,
-      title: 'Healthy Reserve Cushion',
-      text: `Your net vault balance provides a solid base for emergency runway allocation and target goals deposits.`,
+      title: 'Dream Vault Cushion 💖',
+      text: `Your vault balance of $${balance.toLocaleString()} provides a comfortable safety cushion for your future goals.`,
       tagColor: 'cyan'
     });
   }
 
   return (
-    <div className={`p-6 rounded-3xl border transition-colors duration-300 ${
-      isDarkMode ? 'bg-[#0b1329] border-slate-800 shadow-2xl' : 'bg-white border-slate-200/90 shadow-sm'
+    <div className={`p-6 rounded-3xl border transition-all duration-300 backdrop-blur-md shadow-md ${
+      isDarkMode
+        ? 'bg-[#240c1e]/90 border-pink-900/40 shadow-pink-950/20'
+        : 'bg-white/90 border-pink-200/70 shadow-pink-100/60'
     }`}>
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
-        <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg shadow-inner border border-cyan-500/30">
+      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-pink-100 dark:border-pink-900/40">
+        <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-pink-500 to-purple-600 text-white flex items-center justify-center text-lg shadow-md shadow-pink-500/20">
           <FontAwesomeIcon icon={faBrain} />
         </div>
         <div>
-          <span className={`font-black text-lg block tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-            VaultX AI Financial Intelligence & Risk Advisory
+          <span className={`font-black text-lg block tracking-tight ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>
+            BloomVault AI Vibe & Wealth Intelligence 🌸
           </span>
-          <span className={`text-xs font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            Automated algorithmic recommendations and risk detection engine
+          <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>
+            Automated financial recommendations and spending habit insights
           </span>
         </div>
       </div>
@@ -88,27 +90,29 @@ const AIAdvisor = ({ summary = {}, transactions = [], isDarkMode = false }) => {
         {insights.map((item, idx) => (
           <div
             key={idx}
-            className={`p-4 rounded-2xl border flex items-start gap-3 transition-all ${
-              isDarkMode ? 'bg-[#060c1c] border-slate-800 hover:border-slate-700' : 'bg-slate-50 border-slate-100 hover:border-slate-200'
+            className={`p-4 rounded-2xl border flex items-start gap-3 transition-all hover:scale-[1.01] ${
+              isDarkMode
+                ? 'bg-[#180814] border-pink-900/30 text-pink-100'
+                : 'bg-pink-50/70 border-pink-200/80 text-slate-800 shadow-xs'
             }`}
           >
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-base shrink-0 ${
-              item.type === 'success' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-              item.type === 'danger' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
-              item.type === 'warning' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-              'bg-sky-500/20 text-sky-400 border border-sky-500/30'
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-base shrink-0 ${
+              item.type === 'success' ? 'bg-pink-500/20 text-pink-500 border border-pink-500/30' :
+              item.type === 'danger' ? 'bg-rose-500/20 text-rose-500 border border-rose-500/30' :
+              item.type === 'warning' ? 'bg-amber-500/20 text-amber-500 border border-amber-500/30' :
+              'bg-purple-500/20 text-purple-500 border border-purple-500/30'
             }`}>
               <FontAwesomeIcon icon={item.icon} />
             </div>
 
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className={`font-black text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{item.title}</span>
-                <Tag color={item.tagColor} className="m-0 text-[10px] font-black px-1.5 py-0 border-0 rounded-md uppercase">
-                  INSIGHT
+                <span className={`font-black text-sm ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>{item.title}</span>
+                <Tag color={item.tagColor} className="m-0 text-[10px] font-black px-2 py-0.5 border-0 rounded-lg uppercase">
+                  AI INSIGHT
                 </Tag>
               </div>
-              <p className="text-xs font-medium text-slate-400 m-0 leading-relaxed">
+              <p className={`text-xs font-semibold m-0 leading-relaxed ${isDarkMode ? 'text-pink-300/70' : 'text-slate-600'}`}>
                 {item.text}
               </p>
             </div>

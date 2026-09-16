@@ -10,8 +10,8 @@ const BudgetMeter = ({ totalExpenses = 0, isDarkMode = false }) => {
   const remainingBudget = budgetLimit - totalExpenses;
 
   let statusColor = '#10b981';
-  let statusText = 'Safe & On Track';
-  let statusTagColor = 'emerald';
+  let statusText = 'Safe & On Track 🌸';
+  let statusTagColor = 'magenta';
   let statusIcon = faShieldHalved;
 
   if (spentPercent >= 100) {
@@ -21,14 +21,14 @@ const BudgetMeter = ({ totalExpenses = 0, isDarkMode = false }) => {
     statusIcon = faCircleExclamation;
   } else if (spentPercent >= 75) {
     statusColor = '#f59e0b';
-    statusText = 'Budget Caution';
+    statusText = 'Budget Caution 💅';
     statusTagColor = 'amber';
     statusIcon = faTriangleExclamation;
   }
 
   const budgetSettingsContent = (
     <div className="p-2 space-y-2 w-56">
-      <span className="font-extrabold text-slate-800 text-xs block">Set Monthly Target Limit ($)</span>
+      <span className="font-extrabold text-slate-800 text-xs block">Set Monthly Limit ($)</span>
       <InputNumber
         className="w-full rounded-xl"
         value={budgetLimit}
@@ -42,19 +42,19 @@ const BudgetMeter = ({ totalExpenses = 0, isDarkMode = false }) => {
   );
 
   return (
-    <div className={`p-5 rounded-3xl border transition-colors duration-300 h-full flex flex-col justify-between ${
-      isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+    <div className={`p-6 rounded-3xl border transition-all duration-300 h-full flex flex-col justify-between backdrop-blur-md shadow-md ${
+      isDarkMode ? 'bg-[#240c1e]/90 border-pink-900/40 shadow-pink-950/20' : 'bg-white/90 border-pink-200/70 shadow-pink-100/60'
     }`}>
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center text-base shadow-inner border border-indigo-500/20">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 text-white flex items-center justify-center text-base shadow-sm">
             <FontAwesomeIcon icon={faBullseye} />
           </div>
           <div>
-            <span className={`font-black text-sm block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-              Monthly Budget Target Goal
+            <span className={`font-black text-sm block ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>
+              Monthly Budget Target Goal 🌸
             </span>
-            <Tag color={statusTagColor} className="m-0 font-extrabold px-2.5 py-0.5 rounded-lg border-0 text-xs mt-0.5">
+            <Tag color={statusTagColor} className="m-0 font-black px-2.5 py-0.5 rounded-lg border-0 text-[11px] mt-0.5 shadow-2xs">
               <FontAwesomeIcon icon={statusIcon} className="mr-1" />
               {statusText}
             </Tag>
@@ -62,14 +62,14 @@ const BudgetMeter = ({ totalExpenses = 0, isDarkMode = false }) => {
         </div>
 
         <Popover content={budgetSettingsContent} title="Budget Settings" trigger="click" placement="bottomRight">
-          <Button type="text" size="middle" icon={<FontAwesomeIcon icon={faGear} className="text-slate-400 hover:text-slate-600" />} title="Adjust Target" />
+          <Button type="text" size="middle" icon={<FontAwesomeIcon icon={faGear} className="text-pink-400 hover:text-pink-600" />} title="Adjust Target" />
         </Popover>
       </div>
 
-      <div className="space-y-2 mt-2">
+      <div className="space-y-2.5 mt-2">
         <div className="flex items-baseline justify-between text-xs font-semibold">
-          <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>
-            Spent: <strong className={isDarkMode ? 'text-white font-black' : 'text-slate-900 font-black'}>${Number(totalExpenses).toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong> of ${budgetLimit.toLocaleString()}
+          <span className={isDarkMode ? 'text-pink-300/70' : 'text-slate-600'}>
+            Spent: <strong className={isDarkMode ? 'text-pink-100 font-black' : 'text-slate-900 font-black'}>${Number(totalExpenses).toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong> of ${budgetLimit.toLocaleString()}
           </span>
           <span className={`font-black ${remainingBudget >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
             {remainingBudget >= 0 ? `$${remainingBudget.toLocaleString()} left` : `$${Math.abs(remainingBudget).toLocaleString()} over`}
@@ -78,8 +78,8 @@ const BudgetMeter = ({ totalExpenses = 0, isDarkMode = false }) => {
 
         <Progress
           percent={spentPercent}
-          strokeColor={statusColor}
-          trailColor={isDarkMode ? '#1e293b' : '#e2e8f0'}
+          strokeColor={{ '0%': '#ec4899', '100%': statusColor }}
+          trailColor={isDarkMode ? '#3b1132' : '#fce7f3'}
           size="medium"
         />
       </div>

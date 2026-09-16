@@ -557,8 +557,8 @@ const Home = () => {
           {activeWorkspaceKey === 'ledger' && (
             <div className="space-y-4">
               {/* Search, Date & Type Filter Toolbar */}
-              <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
-                isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-xl' : 'bg-white border-pink-100 shadow-sm'
+              <div className={`p-6 rounded-3xl border transition-all duration-300 backdrop-blur-md shadow-md ${
+                isDarkMode ? 'bg-[#240c1e]/90 border-pink-900/40 shadow-pink-950/20' : 'bg-white/95 border-pink-200/80 shadow-pink-100/70'
               }`}>
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   <div className="flex flex-wrap items-center gap-3">
@@ -567,21 +567,21 @@ const Home = () => {
                       value={filterType}
                       onChange={value => setFilterType(value)}
                       options={[
-                        { label: <span className="font-extrabold px-3">ALL ENTRIES</span>, value: 'all' },
-                        { label: <span className="font-extrabold text-emerald-400 px-3">💰 INFLOW</span>, value: 'income' },
-                        { label: <span className="font-extrabold text-pink-400 px-3">💸 OUTFLOW</span>, value: 'expense' }
+                        { label: <span className="font-black px-3">ALL ENTRIES</span>, value: 'all' },
+                        { label: <span className="font-black text-emerald-500 px-3">💰 INFLOW</span>, value: 'income' },
+                        { label: <span className="font-black text-pink-500 px-3">💸 OUTFLOW</span>, value: 'expense' }
                       ]}
-                      className={isDarkMode ? 'bg-[#180814] text-pink-200 font-extrabold p-1 rounded-2xl' : 'bg-pink-50 text-pink-800 font-extrabold p-1 rounded-2xl'}
+                      className={isDarkMode ? 'bg-[#180814] text-pink-200 font-black p-1 rounded-2xl' : 'bg-pink-100/80 text-pink-900 font-black p-1 rounded-2xl border border-pink-200/60'}
                     />
 
                     <Input
                       placeholder="Search category..."
-                      prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-pink-400/60" />}
+                      prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-pink-500/70" />}
                       value={searchCategory}
                       onChange={e => setSearchCategory(e.target.value)}
                       style={{ width: 190 }}
                       size="large"
-                      className="rounded-2xl"
+                      className="rounded-2xl h-11 font-semibold"
                       allowClear
                     />
 
@@ -589,7 +589,7 @@ const Home = () => {
                       value={dateRange}
                       onChange={dates => setDateRange(dates)}
                       size="large"
-                      className="rounded-2xl"
+                      className="rounded-2xl h-11 font-semibold"
                       format="YYYY-MM-DD"
                     />
                   </div>
@@ -602,7 +602,7 @@ const Home = () => {
                         icon={<FontAwesomeIcon icon={faArrowsRotate} />}
                         onClick={handleClearFilters}
                         size="large"
-                        className="rounded-2xl font-extrabold"
+                        className="rounded-2xl font-black h-11"
                       >
                         Clear Filters
                       </Button>
@@ -612,7 +612,7 @@ const Home = () => {
                       onClick={loadData}
                       loading={loading}
                       size="large"
-                      className="rounded-2xl font-extrabold"
+                      className="rounded-2xl font-black h-11 border-pink-200 text-pink-700 bg-pink-50 hover:bg-pink-100"
                     >
                       Refresh
                     </Button>
@@ -621,20 +621,20 @@ const Home = () => {
 
                 {/* Active Filter Chips */}
                 {hasActiveFilters && (
-                  <div className="mt-4 pt-3 border-t border-pink-900/40 flex flex-wrap items-center gap-2 text-xs">
-                    <span className="font-bold text-pink-300/70">Active Filters:</span>
+                  <div className="mt-4 pt-3 border-t border-pink-200/60 dark:border-pink-900/40 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="font-black text-pink-600">Active Filters:</span>
                     {filterType !== 'all' && (
-                      <Tag closable onClose={() => setFilterType('all')} color="magenta" className="font-bold rounded-xl px-2.5 py-0.5">
+                      <Tag closable onClose={() => setFilterType('all')} color="magenta" className="font-black rounded-xl px-2.5 py-0.5">
                         Type: {filterType.toUpperCase()}
                       </Tag>
                     )}
                     {searchCategory.trim() !== '' && (
-                      <Tag closable onClose={() => setSearchCategory('')} color="purple" className="font-bold rounded-xl px-2.5 py-0.5">
+                      <Tag closable onClose={() => setSearchCategory('')} color="purple" className="font-black rounded-xl px-2.5 py-0.5">
                         Category: &quot;{searchCategory}&quot;
                       </Tag>
                     )}
                     {dateRange !== null && (
-                      <Tag closable onClose={() => setDateRange(null)} color="gold" className="font-bold rounded-xl px-2.5 py-0.5">
+                      <Tag closable onClose={() => setDateRange(null)} color="gold" className="font-black rounded-xl px-2.5 py-0.5">
                         Range Filter
                       </Tag>
                     )}
@@ -643,20 +643,20 @@ const Home = () => {
               </div>
 
               {/* Transactions Table Container */}
-              <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
-                isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-xl' : 'bg-white border-pink-100 shadow-sm'
+              <div className={`rounded-3xl border overflow-hidden transition-all duration-300 backdrop-blur-md shadow-xl ${
+                isDarkMode ? 'bg-[#240c1e]/90 border-pink-900/40 shadow-pink-950/20' : 'bg-white/95 border-pink-200/80 shadow-pink-100/70'
               }`}>
-                <div className="p-5 border-b border-pink-900/40 flex items-center justify-between">
+                <div className="p-5 border-b border-pink-200/60 dark:border-pink-900/40 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-2xl bg-pink-500/20 text-pink-300 flex items-center justify-center text-base border border-pink-500/30">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-500 text-white flex items-center justify-center text-base shadow-sm">
                       <FontAwesomeIcon icon={faTableList} />
                     </div>
                     <div>
-                      <h2 className="text-lg font-black m-0 text-white">Full Transaction Audit Ledger 📋</h2>
-                      <span className="text-xs text-pink-300/70 font-semibold">Complete ledger of logged income & expense records ({currencyKey})</span>
+                      <h2 className={`text-lg font-black m-0 ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>Full Transaction Audit Ledger 📋</h2>
+                      <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>Complete ledger of logged income & expense records ({currencyKey})</span>
                     </div>
                   </div>
-                  <Tag color="magenta" className="font-black px-3 py-1 rounded-xl text-xs">
+                  <Tag color="magenta" className="font-black px-3 py-1 rounded-xl text-xs shadow-2xs">
                     {transactions.length} Records
                   </Tag>
                 </div>
