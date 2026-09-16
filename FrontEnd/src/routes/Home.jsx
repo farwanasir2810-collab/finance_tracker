@@ -83,7 +83,7 @@ const Home = () => {
 
   // Theme & Customization
   const [currencyKey, setCurrencyKey] = useState('USD');
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Filters
   const [filterType, setFilterType] = useState('all');
@@ -334,12 +334,12 @@ const Home = () => {
         }
       }}
     >
-      <div className={`min-h-screen ${isDarkMode ? 'bg-[#180715] text-pink-100' : 'bg-[#fffbfb] text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-[#180715] text-pink-100' : 'bg-gradient-to-br from-pink-50 via-purple-50/50 to-rose-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
           {/* Cute Pinterest Aesthetic Top Navigation Header */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
-            isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-2xl shadow-pink-950/50' : 'bg-white border-pink-100 shadow-sm'
+            isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-2xl shadow-pink-950/50' : 'bg-white/90 backdrop-blur-md border-pink-200/60 shadow-lg shadow-pink-100/60'
           }`}>
             <div className="flex flex-col space-y-5">
               
@@ -351,16 +351,20 @@ const Home = () => {
                   </div>
                   <div>
                     <div className="flex items-center gap-3">
-                      <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-pink-300 via-rose-300 to-fuchsia-300 bg-clip-text text-transparent m-0">
+                      <h1 className={`text-3xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent m-0 ${
+                        isDarkMode ? 'bg-gradient-to-r from-pink-300 via-rose-300 to-fuchsia-300' : 'bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600'
+                      }`}>
                         BloomVault 🌸
                       </h1>
-                      <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-pink-500/20 text-pink-300 border border-pink-500/30">
-                        <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+                      <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border ${
+                        isDarkMode ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-pink-100 text-pink-700 border-pink-200'
+                      }`}>
+                        <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
                         GIRLS' DIARY
                       </span>
                     </div>
-                    <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-600/70'}`}>
-                      <FontAwesomeIcon icon={faCrown} className="text-pink-400" />
+                    <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>
+                      <FontAwesomeIcon icon={faCrown} className="text-pink-500" />
                       Cute Aesthetic Finance & Habit Vault • {dayjs().format('dddd, MMMM D, YYYY')}
                     </span>
                   </div>
@@ -462,7 +466,7 @@ const Home = () => {
                         ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25 border-0 scale-105'
                         : isDarkMode
                         ? 'bg-[#180814] text-pink-200/80 border border-pink-900/30 hover:border-pink-700/50 hover:text-white'
-                        : 'bg-pink-50 text-pink-900 border border-pink-100 hover:bg-pink-100'
+                        : 'bg-pink-100/70 text-pink-900 border border-pink-200/80 hover:bg-pink-200/80 font-black shadow-xs'
                     }`}
                   >
                     <FontAwesomeIcon icon={nav.icon} />
