@@ -338,15 +338,19 @@ const Home = () => {
         <div className="max-w-7xl mx-auto space-y-6">
 
           {/* Cute Pinterest Aesthetic Top Navigation Header */}
-          <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
-            isDarkMode ? 'bg-[#240c1e] border-pink-900/40 shadow-2xl shadow-pink-950/50' : 'bg-white/90 backdrop-blur-md border-pink-200/60 shadow-lg shadow-pink-100/60'
+          <div className={`rounded-3xl border transition-all duration-300 overflow-hidden ${
+            isDarkMode
+              ? 'bg-[#240c1e] border-pink-900/40 shadow-2xl shadow-pink-950/50'
+              : 'bg-white/95 backdrop-blur-md border-pink-200/80 shadow-xl shadow-pink-100/70'
           }`}>
-            <div className="flex flex-col space-y-5">
+            <div className="p-6 space-y-5">
               
-              {/* Top Row: Logo, Girl Power Tag, Controls */}
+              {/* Layer 1: Brand & Right Action Controls Toolbar */}
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                
+                {/* Brand Identity */}
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-pink-500 via-rose-500 to-purple-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-pink-500/30">
+                  <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-pink-500 via-rose-400 to-purple-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-pink-500/30 ring-4 ring-pink-400/20">
                     <FontAwesomeIcon icon={faWandMagicSparkles} />
                   </div>
                   <div>
@@ -356,22 +360,23 @@ const Home = () => {
                       }`}>
                         BloomVault 🌸
                       </h1>
-                      <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border ${
-                        isDarkMode ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-pink-100 text-pink-700 border-pink-200'
+                      <span className={`flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black border ${
+                        isDarkMode ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-pink-100 text-pink-700 border-pink-300/80'
                       }`}>
-                        <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse"></span>
                         GIRLS' DIARY
                       </span>
                     </div>
-                    <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>
+                    <span className={`mt-1 flex items-center gap-2 text-xs font-extrabold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>
                       <FontAwesomeIcon icon={faCrown} className="text-pink-500" />
                       Cute Aesthetic Finance & Habit Vault • {dayjs().format('dddd, MMMM D, YYYY')}
                     </span>
                   </div>
                 </div>
 
-                {/* Right Action Controls */}
-                <div className="flex flex-wrap items-center gap-3">
+                {/* Right Sequenced Action Toolbar */}
+                <div className="flex flex-wrap items-center gap-2.5">
+                  {/* Currency Switcher */}
                   <Select
                     value={currencyKey}
                     onChange={val => setCurrencyKey(val)}
@@ -385,63 +390,93 @@ const Home = () => {
                     <Option value="PKR">PKR (Rs)</Option>
                   </Select>
 
+                  {/* Mode Toggle */}
                   <Button
                     size="large"
                     onClick={() => setIsDarkMode(!isDarkMode)}
-                    icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-slate-600'} />}
-                    className={`rounded-2xl font-extrabold border ${
-                      isDarkMode ? 'bg-[#180814] border-pink-900/40 text-pink-200' : 'bg-pink-50 border-pink-100 text-slate-700'
+                    icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-pink-600'} />}
+                    className={`rounded-2xl font-black border transition-all ${
+                      isDarkMode
+                        ? 'bg-[#180814] border-pink-900/40 text-pink-200 hover:border-pink-500'
+                        : 'bg-pink-50 border-pink-200 text-pink-900 hover:bg-pink-100 shadow-xs'
                     }`}
                   >
-                    {isDarkMode ? 'Light 🌸' : 'Dark 🌙'}
+                    {isDarkMode ? 'Soft Mode 🌸' : 'Cozy Dark 🌙'}
                   </Button>
 
+                  {/* Demo Data Button */}
                   <Button
-                    icon={<FontAwesomeIcon icon={faStar} className="text-amber-400" />}
-                    size="large"
-                    onClick={() => setIsSpotlightOpen(true)}
-                    className="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-black rounded-2xl"
-                  >
-                    Portfolio Showcase
-                  </Button>
-
-                  <Button
-                    icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-pink-300" />}
+                    icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-pink-500" />}
                     size="large"
                     onClick={handleLoadSampleData}
                     loading={loading}
-                    className={`font-extrabold rounded-2xl border ${
-                      isDarkMode ? 'bg-pink-950/40 border-pink-800/50 text-pink-300 hover:bg-pink-900/60' : 'bg-pink-50 border-pink-200 text-pink-700'
+                    className={`font-black rounded-2xl border transition-all ${
+                      isDarkMode
+                        ? 'bg-pink-950/40 border-pink-800/50 text-pink-300 hover:bg-pink-900/60'
+                        : 'bg-pink-50 border-pink-200 text-pink-800 hover:bg-pink-100 shadow-xs'
                     }`}
                   >
                     Demo Data ✨
                   </Button>
 
+                  {/* Export CSV Button */}
                   <Button
-                    icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-pink-300' : 'text-slate-600'} />}
+                    icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-pink-300' : 'text-slate-700'} />}
                     size="large"
                     onClick={exportToCSV}
-                    className={`font-extrabold rounded-2xl border ${
-                      isDarkMode ? 'bg-[#180814] border-pink-900/40 text-pink-200 hover:bg-pink-950/60' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    className={`font-black rounded-2xl border transition-all ${
+                      isDarkMode
+                        ? 'bg-[#180814] border-pink-900/40 text-pink-200 hover:bg-pink-950/60'
+                        : 'bg-slate-100/90 border-slate-200 text-slate-800 hover:bg-slate-200 shadow-xs'
                     }`}
                   >
                     Export CSV
                   </Button>
 
+                  {/* Primary CTA: Log Entry */}
                   <Button
                     type="primary"
                     size="large"
                     icon={<FontAwesomeIcon icon={faPlus} />}
                     onClick={handleOpenAddModal}
-                    className="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 hover:from-pink-600 hover:to-rose-600 text-white font-black rounded-2xl shadow-lg shadow-pink-500/30 border-0 px-6"
+                    className="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 hover:from-pink-600 hover:to-rose-600 text-white font-black rounded-2xl shadow-lg shadow-pink-500/30 border-0 px-6 transition-all hover:scale-105"
                   >
                     + Log Entry 💖
                   </Button>
                 </div>
               </div>
 
-              {/* Bottom Row: Cute Pinterest Workspace Navigation Bar */}
-              <div className="pt-4 border-t border-pink-900/40 flex flex-wrap items-center gap-2">
+              {/* Layer 2: Live Status & Recruiter Ticker Ribbon */}
+              <div className={`p-3.5 rounded-2xl border flex flex-wrap items-center justify-between gap-3 text-xs ${
+                isDarkMode ? 'bg-[#180814]/80 border-pink-900/30' : 'bg-pink-50/80 border-pink-200/60'
+              }`}>
+                <div className="flex flex-wrap items-center gap-4">
+                  <span className="flex items-center gap-1.5 font-black text-pink-600">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    API Connected (Port 4000)
+                  </span>
+                  <span className="text-pink-400">|</span>
+                  <span className={`font-bold ${isDarkMode ? 'text-pink-200' : 'text-slate-700'}`}>
+                    📊 Total Logged: <strong className="text-pink-500">{transactions.length} Entries</strong>
+                  </span>
+                  <span className="text-pink-400">|</span>
+                  <span className={`font-bold ${isDarkMode ? 'text-pink-200' : 'text-slate-700'}`}>
+                    💖 Vault Balance: <strong className="text-emerald-500">{currency.symbol}{(summary.balance * currency.rate).toFixed(2)}</strong>
+                  </span>
+                </div>
+
+                <Button
+                  size="small"
+                  onClick={() => setIsSpotlightOpen(true)}
+                  icon={<FontAwesomeIcon icon={faStar} className="text-amber-400" />}
+                  className="bg-gradient-to-r from-amber-500/20 to-purple-500/20 text-purple-700 dark:text-purple-300 border border-amber-400/40 font-black rounded-xl text-xs px-3 py-1 hover:scale-105 transition-all"
+                >
+                  ⭐ Recruiter Architecture Spotlight
+                </Button>
+              </div>
+
+              {/* Layer 3: Sequenced Navigation Navbar Tabs */}
+              <div className="pt-2 flex flex-wrap items-center gap-2">
                 {[
                   { key: 'overview', label: '🌸 Aesthetic Dashboard', icon: faGaugeHigh },
                   { key: 'ledger', label: '📋 Transactions Ledger', icon: faTableList, count: transactions.length },
@@ -463,7 +498,7 @@ const Home = () => {
                     }}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs transition-all ${
                       activeWorkspaceKey === nav.key
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25 border-0 scale-105'
+                        ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/30 border-0 scale-105 ring-2 ring-pink-400/40'
                         : isDarkMode
                         ? 'bg-[#180814] text-pink-200/80 border border-pink-900/30 hover:border-pink-700/50 hover:text-white'
                         : 'bg-pink-100/70 text-pink-900 border border-pink-200/80 hover:bg-pink-200/80 font-black shadow-xs'
@@ -472,7 +507,7 @@ const Home = () => {
                     <FontAwesomeIcon icon={nav.icon} />
                     <span>{nav.label}</span>
                     {nav.count !== undefined && (
-                      <span className="px-2 py-0.5 rounded-lg bg-white/20 text-[10px] font-black">
+                      <span className="px-2 py-0.5 rounded-lg bg-white/25 text-[10px] font-black">
                         {nav.count}
                       </span>
                     )}
