@@ -23,7 +23,8 @@ import {
   faBrain,
   faGaugeHigh,
   faStar,
-  faTableList
+  faTableList,
+  faWallet
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -76,7 +77,7 @@ const Home = () => {
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState({ totalIncome: 0, totalExpenses: 0, balance: 0 });
 
-  // Navigation Workspace Key
+  // Connected Navigation Workspace Key
   const [activeWorkspaceKey, setActiveWorkspaceKey] = useState('overview');
 
   // Theme & Customization
@@ -341,7 +342,7 @@ const Home = () => {
           }`}>
             <div className="flex flex-col space-y-5">
               
-              {/* Top Row: Brand, Status, Currency, Actions */}
+              {/* Top Row: Brand, Live Status, Controls & Actions */}
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-sky-600 via-blue-600 to-cyan-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-sky-600/30">
@@ -354,17 +355,19 @@ const Home = () => {
                       </h1>
                       <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                         <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                        LIVE OS
+                        EXECUTIVE OS
                       </span>
                     </div>
                     <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                       <FontAwesomeIcon icon={faShieldHalved} className="text-sky-400" />
-                      Executive Wealth & Cash Flow Platform • {dayjs().format('dddd, MMMM D, YYYY')}
+                      Portfolio Financial Operating System • {dayjs().format('dddd, MMMM D, YYYY')}
                     </span>
                   </div>
                 </div>
 
+                {/* Right Action Controls */}
                 <div className="flex flex-wrap items-center gap-3">
+                  {/* Currency Dropdown */}
                   <Select
                     value={currencyKey}
                     onChange={val => setCurrencyKey(val)}
@@ -378,6 +381,7 @@ const Home = () => {
                     <Option value="PKR">PKR (Rs)</Option>
                   </Select>
 
+                  {/* Light / Dark Mode Toggle */}
                   <Button
                     size="large"
                     onClick={() => setIsDarkMode(!isDarkMode)}
@@ -389,6 +393,7 @@ const Home = () => {
                     {isDarkMode ? 'Light' : 'Dark'}
                   </Button>
 
+                  {/* Recruiter Spotlight Tech Showcase */}
                   <Button
                     icon={<FontAwesomeIcon icon={faStar} className="text-amber-400" />}
                     size="large"
@@ -398,6 +403,7 @@ const Home = () => {
                     Tech Showcase
                   </Button>
 
+                  {/* Load Demo Data */}
                   <Button
                     icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-cyan-400" />}
                     size="large"
@@ -410,6 +416,7 @@ const Home = () => {
                     Demo Data
                   </Button>
 
+                  {/* Export CSV */}
                   <Button
                     icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-slate-300' : 'text-slate-600'} />}
                     size="large"
@@ -421,6 +428,7 @@ const Home = () => {
                     Export CSV
                   </Button>
 
+                  {/* Primary Add Entry Button */}
                   <Button
                     type="primary"
                     size="large"
@@ -433,13 +441,14 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Bottom Row: Executive Connected Navbar Tabs */}
+              {/* Bottom Row: Executive Connected Navigation Hub */}
               <div className="pt-4 border-t border-slate-800/80 flex flex-wrap items-center gap-2">
                 {[
                   { key: 'overview', label: 'Executive Dashboard', icon: faGaugeHigh },
                   { key: 'ledger', label: 'Transactions Ledger', icon: faTableList, count: transactions.length },
+                  { key: 'ai', label: 'AI Risk Intelligence', icon: faBrain },
                   { key: 'analytics', label: 'Category Insights', icon: faChartPie },
-                  { key: 'goals', label: 'Savings Goals', icon: faPiggyBank },
+                  { key: 'goals', label: 'Savings Vault Goals', icon: faPiggyBank },
                   { key: 'subscriptions', label: 'Recurring Subscriptions', icon: faRepeat },
                   { key: 'growth', label: 'Wealth Growth Simulator', icon: faSeedling }
                 ].map(nav => (
@@ -448,7 +457,7 @@ const Home = () => {
                     onClick={() => setActiveWorkspaceKey(nav.key)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs transition-all ${
                       activeWorkspaceKey === nav.key
-                        ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md shadow-sky-600/25 border-0'
+                        ? 'bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-md shadow-sky-600/25 border-0 scale-105'
                         : isDarkMode
                         ? 'bg-slate-900/60 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white'
                         : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
@@ -468,7 +477,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Gamified Milestones & Badges */}
+          {/* Achievement Badges Header Ribbon */}
           <AchievementBadges summary={convertedSummary} transactionCount={transactions.length} isDarkMode={isDarkMode} />
 
           {/* Hero Financial Summary Stat Grid */}
@@ -483,7 +492,9 @@ const Home = () => {
             isDarkMode={isDarkMode}
           />
 
-          {/* Workspace 1: Executive Dashboard Overview */}
+          {/* ========================================================================= */}
+          {/* SECTION 1: EXECUTIVE DASHBOARD OVERVIEW */}
+          {/* ========================================================================= */}
           {activeWorkspaceKey === 'overview' && (
             <div className="space-y-6">
               <AIAdvisor summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
@@ -498,7 +509,9 @@ const Home = () => {
             </div>
           )}
 
-          {/* Workspace 2: Transactions Ledger Table (Prominent & Full Featured) */}
+          {/* ========================================================================= */}
+          {/* SECTION 2: TRANSACTIONS LEDGER & AUDIT TABLE (PROMINENT & FULL FEATURED) */}
+          {/* ========================================================================= */}
           {activeWorkspaceKey === 'ledger' && (
             <div className="space-y-4">
               {/* Search, Date & Type Filter Toolbar */}
@@ -563,9 +576,31 @@ const Home = () => {
                     </Button>
                   </div>
                 </div>
+
+                {/* Active Filter Chips */}
+                {hasActiveFilters && (
+                  <div className="mt-4 pt-3 border-t border-slate-800 flex flex-wrap items-center gap-2 text-xs">
+                    <span className="font-bold text-slate-400">Active Filters:</span>
+                    {filterType !== 'all' && (
+                      <Tag closable onClose={() => setFilterType('all')} color="blue" className="font-bold rounded-xl px-2.5 py-0.5">
+                        Type: {filterType.toUpperCase()}
+                      </Tag>
+                    )}
+                    {searchCategory.trim() !== '' && (
+                      <Tag closable onClose={() => setSearchCategory('')} color="purple" className="font-bold rounded-xl px-2.5 py-0.5">
+                        Category: &quot;{searchCategory}&quot;
+                      </Tag>
+                    )}
+                    {dateRange !== null && (
+                      <Tag closable onClose={() => setDateRange(null)} color="amber" className="font-bold rounded-xl px-2.5 py-0.5">
+                        Range Filter
+                      </Tag>
+                    )}
+                  </div>
+                )}
               </div>
 
-              {/* Transactions Ledger Table Container */}
+              {/* Transactions Table Container */}
               <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
                 isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
               }`}>
@@ -576,7 +611,7 @@ const Home = () => {
                     </div>
                     <div>
                       <h2 className="text-lg font-black m-0 text-white">Full Transaction Audit Ledger</h2>
-                      <span className="text-xs text-slate-400 font-semibold">Complete ledger of logged income & expense records</span>
+                      <span className="text-xs text-slate-400 font-semibold">Complete ledger of logged income & expense records ({currencyKey})</span>
                     </div>
                   </div>
                   <Tag color="blue" className="font-black px-3 py-1 rounded-xl text-xs">
@@ -610,22 +645,37 @@ const Home = () => {
             </div>
           )}
 
-          {/* Workspace 3: Category Analytics */}
+          {/* ========================================================================= */}
+          {/* SECTION 3: AI RISK INTELLIGENCE & ADVISORY */}
+          {/* ========================================================================= */}
+          {activeWorkspaceKey === 'ai' && (
+            <AIAdvisor summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
+          )}
+
+          {/* ========================================================================= */}
+          {/* SECTION 4: CATEGORY ANALYTICS & EXPENSE BREAKDOWN */}
+          {/* ========================================================================= */}
           {activeWorkspaceKey === 'analytics' && (
             <CategoryAnalytics transactions={transactions} isDarkMode={isDarkMode} />
           )}
 
-          {/* Workspace 4: Savings Goals Vault */}
+          {/* ========================================================================= */}
+          {/* SECTION 5: SAVINGS GOALS VAULT & TARGET ALLOCATION */}
+          {/* ========================================================================= */}
           {activeWorkspaceKey === 'goals' && (
             <SavingsGoals onSuccess={loadData} isDarkMode={isDarkMode} />
           )}
 
-          {/* Workspace 5: Recurring Subscriptions */}
+          {/* ========================================================================= */}
+          {/* SECTION 6: RECURRING BILLS & SUBSCRIPTIONS MANAGER */}
+          {/* ========================================================================= */}
           {activeWorkspaceKey === 'subscriptions' && (
             <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
           )}
 
-          {/* Workspace 6: Wealth Growth Simulator */}
+          {/* ========================================================================= */}
+          {/* SECTION 7: WEALTH GROWTH & COMPOUND INTEREST SIMULATOR */}
+          {/* ========================================================================= */}
           {activeWorkspaceKey === 'growth' && (
             <WealthGrowthCalculator isDarkMode={isDarkMode} />
           )}
@@ -644,7 +694,7 @@ const Home = () => {
 
           {/* User Guide Modal */}
           <Modal
-            title={<span className="font-black text-lg">💡 Quick User Guide</span>}
+            title={<span className="font-black text-lg text-white">💡 Quick User Guide</span>}
             open={isHelpOpen}
             onCancel={() => setIsHelpOpen(false)}
             footer={[
@@ -653,7 +703,7 @@ const Home = () => {
               </Button>
             ]}
           >
-            <div className="space-y-4 text-sm py-2 font-medium">
+            <div className="space-y-4 text-sm py-2 font-medium text-slate-200">
               <div className="p-4 bg-sky-500/20 rounded-2xl text-sky-200 border border-sky-500/30">
                 Welcome to <strong>VaultX</strong>! Executive financial & wealth operating system.
               </div>
