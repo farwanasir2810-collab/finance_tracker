@@ -445,11 +445,18 @@ const Home = () => {
                   { key: 'analytics', label: '💅 Category Insights', icon: faChartPie },
                   { key: 'goals', label: '💖 Dream Wishlists', icon: faPiggyBank },
                   { key: 'subscriptions', label: '🔄 Recurring Bills', icon: faRepeat },
-                  { key: 'growth', label: '🌱 Wealth Simulator', icon: faSeedling }
+                  { key: 'growth', label: '🌱 Wealth Simulator', icon: faSeedling },
+                  { key: 'architecture', label: '⭐ Recruiter Showcase', icon: faStar }
                 ].map(nav => (
                   <button
                     key={nav.key}
-                    onClick={() => setActiveWorkspaceKey(nav.key)}
+                    onClick={() => {
+                      if (nav.key === 'architecture') {
+                        setIsSpotlightOpen(true);
+                      } else {
+                        setActiveWorkspaceKey(nav.key);
+                      }
+                    }}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs transition-all ${
                       activeWorkspaceKey === nav.key
                         ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25 border-0 scale-105'

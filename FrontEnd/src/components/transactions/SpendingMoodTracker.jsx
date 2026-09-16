@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Tag, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faWandMagicSparkles, faSmileBeam, faBagShopping, faMugHot, faCrown, faGem } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faWandMagicSparkles, faSmileBeam, faBagShopping, faMugHot, faCrown, faGem, faFire } from '@fortawesome/free-solid-svg-icons';
 
 const MOODS = [
   { id: 'mindful', label: '🌸 Peaceful & Mindful', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.12)', icon: faSmileBeam, quote: 'Balanced & intentional spending day!' },
@@ -13,10 +13,12 @@ const MOODS = [
 
 const SpendingMoodTracker = ({ isDarkMode = false }) => {
   const [selectedMood, setSelectedMood] = useState(MOODS[0]);
+  const [streak, setStreak] = useState(5);
 
   const handleSelectMood = mood => {
     setSelectedMood(mood);
-    message.success(`Logged today's vibe: ${mood.label}`);
+    setStreak(prev => prev + 1);
+    message.success(`Logged today's vibe: ${mood.label} ✨ Streak updated!`);
   };
 
   return (
@@ -32,7 +34,7 @@ const SpendingMoodTracker = ({ isDarkMode = false }) => {
           </div>
           <div>
             <h3 className={`font-black text-lg block ${isDarkMode ? 'text-pink-100' : 'text-slate-900'} m-0`}>
-              Girls' Daily Mood & Spending Vibe
+              Girls' Daily Mood & Spending Vibe 🌸
             </h3>
             <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-600/70'}`}>
               How are you feeling about your money today?
@@ -40,13 +42,19 @@ const SpendingMoodTracker = ({ isDarkMode = false }) => {
           </div>
         </div>
 
-        <Tag color="magenta" className="m-0 font-black px-3.5 py-1.5 rounded-xl text-xs border border-pink-300/30 shadow-xs">
-          <FontAwesomeIcon icon={faHeart} className="mr-1.5" />
-          {selectedMood.label}
-        </Tag>
+        <div className="flex items-center gap-2">
+          <Tag color="volcano" className="m-0 font-black px-3.5 py-1.5 rounded-xl text-xs border border-orange-400/30 flex items-center gap-1.5">
+            <FontAwesomeIcon icon={faFire} className="text-amber-400" />
+            {streak} Day Vibe Streak!
+          </Tag>
+          <Tag color="magenta" className="m-0 font-black px-3.5 py-1.5 rounded-xl text-xs border border-pink-300/30">
+            <FontAwesomeIcon icon={faHeart} className="mr-1.5 text-pink-400" />
+            {selectedMood.label}
+          </Tag>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
         {MOODS.map(mood => {
           const isSelected = selectedMood.id === mood.id;
           return (
@@ -76,6 +84,15 @@ const SpendingMoodTracker = ({ isDarkMode = false }) => {
             </button>
           );
         })}
+      </div>
+
+      <div className={`p-4 rounded-2xl border flex items-center gap-3 ${
+        isDarkMode ? 'bg-pink-950/20 border-pink-900/30 text-pink-200' : 'bg-pink-50 border-pink-100 text-pink-900'
+      }`}>
+        <span className="text-xl">✨</span>
+        <p className="text-xs font-extrabold m-0 leading-relaxed">
+          &quot;{selectedMood.quote}&quot; — <span className="text-pink-400">BloomVault Daily Reflection Insight</span>
+        </p>
       </div>
     </div>
   );
