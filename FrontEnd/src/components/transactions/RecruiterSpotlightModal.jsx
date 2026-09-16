@@ -8,8 +8,7 @@ import {
   faShieldHalved,
   faBolt,
   faBrain,
-  faChartPie,
-  faCheckCircle2
+  faCircleCheck
 } from '@fortawesome/free-solid-svg-icons';
 
 const RecruiterSpotlightModal = ({ open, onClose }) => {
