@@ -54,7 +54,7 @@ const CURRENCIES = {
 };
 
 const renderPaginationTotal = total => (
-  <span className="font-extrabold text-purple-300/60 text-xs">Total {total} entries recorded</span>
+  <span className="font-extrabold text-slate-400 text-xs">Total {total} entries recorded</span>
 );
 
 const SAMPLE_ENTRIES = [
@@ -194,7 +194,7 @@ const Home = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `Vaultly_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
+    link.setAttribute('download', `ExpenseTracker_Pro_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -238,7 +238,7 @@ const Home = () => {
             >
               <FontAwesomeIcon icon={meta.icon} />
             </div>
-            <span className={`font-black text-sm ${isDarkMode ? 'text-purple-100' : 'text-slate-900'}`}>{text}</span>
+            <span className={`font-black text-sm ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{text}</span>
           </div>
         );
       }
@@ -247,7 +247,7 @@ const Home = () => {
       title: 'Description / Notes',
       dataIndex: 'description',
       key: 'description',
-      render: text => <span className={`font-medium text-sm ${isDarkMode ? 'text-purple-200/70' : 'text-slate-600'}`}>{text || '-'}</span>
+      render: text => <span className={`font-medium text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{text || '-'}</span>
     },
     {
       title: 'Date',
@@ -255,7 +255,7 @@ const Home = () => {
       key: 'date',
       width: 140,
       sorter: (a, b) => new Date(a.date) - new Date(b.date),
-      render: date => <span className={`font-extrabold text-xs ${isDarkMode ? 'text-purple-300/60' : 'text-slate-500'}`}>{dayjs(date).format('MMM DD, YYYY')}</span>
+      render: date => <span className={`font-extrabold text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{dayjs(date).format('MMM DD, YYYY')}</span>
     },
     {
       title: 'Amount',
@@ -283,7 +283,7 @@ const Home = () => {
         <Space size="small">
           <Button
             type="text"
-            className="hover:bg-purple-500/20 rounded-xl text-purple-300 font-bold"
+            className="hover:bg-sky-500/20 rounded-xl text-sky-400 font-bold"
             icon={<FontAwesomeIcon icon={faPenToSquare} />}
             onClick={() => handleOpenEditModal(record)}
             title="Edit"
@@ -316,40 +316,40 @@ const Home = () => {
       theme={{
         algorithm: isDarkMode ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
         token: {
-          colorPrimary: '#a855f7',
-          colorBgContainer: isDarkMode ? '#120924' : '#ffffff',
+          colorPrimary: '#0284c7',
+          colorBgContainer: isDarkMode ? '#0b1329' : '#ffffff',
           borderRadius: 16,
           fontFamily: 'Plus Jakarta Sans, sans-serif'
         }
       }}
     >
-      <div className={`min-h-screen ${isDarkMode ? 'bg-[#090514] text-purple-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-[#030712] text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
           {/* Navigation Header */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
-            isDarkMode ? 'bg-[#120924] border-purple-900/50 shadow-2xl shadow-purple-950/50' : 'bg-white border-slate-200/90 shadow-sm'
+            isDarkMode ? 'bg-[#0b1329] border-slate-800 shadow-2xl shadow-sky-950/40' : 'bg-white border-slate-200/90 shadow-sm'
           }`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               
-              {/* Brand Logo & Catchy Short Name */}
+              {/* Brand Logo & Descriptive Name */}
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-purple-700 via-indigo-600 to-purple-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-purple-600/30">
+                <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-sky-600 via-blue-600 to-cyan-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-sky-600/30">
                   <FontAwesomeIcon icon={faWallet} />
                 </div>
                 <div>
                   <div className="flex items-center gap-3">
-                    <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-purple-300 via-violet-300 to-fuchsia-300 bg-clip-text text-transparent m-0">
-                      Vaultly
+                    <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent m-0">
+                      ExpenseTracker Pro
                     </h1>
-                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                      <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                      SMART VAULT
+                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                      ACTIVE VAULT
                     </span>
                   </div>
-                  <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-purple-300/70' : 'text-slate-500'}`}>
-                    <FontAwesomeIcon icon={faShieldHalved} className="text-purple-400" />
-                    Smart Finance & Expense Tracker • {dayjs().format('dddd, MMMM D, YYYY')}
+                  <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <FontAwesomeIcon icon={faShieldHalved} className="text-sky-400" />
+                    Executive Income & Expense Management • {dayjs().format('dddd, MMMM D, YYYY')}
                   </span>
                 </div>
               </div>
@@ -376,7 +376,7 @@ const Home = () => {
                   onClick={() => setIsDarkMode(!isDarkMode)}
                   icon={<FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} className={isDarkMode ? 'text-amber-400' : 'text-slate-600'} />}
                   className={`rounded-2xl font-extrabold border ${
-                    isDarkMode ? 'bg-purple-950/60 border-purple-800/60 text-purple-200' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200' : 'bg-slate-100 border-slate-200 text-slate-700'
                   }`}
                 >
                   {isDarkMode ? 'Light' : 'Dark'}
@@ -384,12 +384,12 @@ const Home = () => {
 
                 {/* Load Demo Data */}
                 <Button
-                  icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-fuchsia-400" />}
+                  icon={<FontAwesomeIcon icon={faWandMagicSparkles} className="text-cyan-400" />}
                   size="large"
                   onClick={handleLoadSampleData}
                   loading={loading}
                   className={`font-extrabold rounded-2xl border ${
-                    isDarkMode ? 'bg-fuchsia-950/40 border-fuchsia-800/50 text-fuchsia-300 hover:bg-fuchsia-900/60' : 'bg-purple-50 border-purple-200 text-purple-700'
+                    isDarkMode ? 'bg-cyan-950/40 border-cyan-800/50 text-cyan-300 hover:bg-cyan-900/60' : 'bg-blue-50 border-blue-200 text-blue-700'
                   }`}
                 >
                   Demo Data
@@ -397,11 +397,11 @@ const Home = () => {
 
                 {/* Export CSV */}
                 <Button
-                  icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-purple-300' : 'text-slate-600'} />}
+                  icon={<FontAwesomeIcon icon={faFileCsv} className={isDarkMode ? 'text-slate-300' : 'text-slate-600'} />}
                   size="large"
                   onClick={exportToCSV}
                   className={`font-extrabold rounded-2xl border ${
-                    isDarkMode ? 'bg-purple-950/60 border-purple-800/60 text-purple-200 hover:bg-purple-900/70' : 'bg-slate-100 border-slate-200 text-slate-700'
+                    isDarkMode ? 'bg-slate-900 border-slate-700 text-slate-200 hover:bg-slate-800' : 'bg-slate-100 border-slate-200 text-slate-700'
                   }`}
                 >
                   Export CSV
@@ -413,7 +413,7 @@ const Home = () => {
                   size="large"
                   icon={<FontAwesomeIcon icon={faPlus} />}
                   onClick={handleOpenAddModal}
-                  className="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-500 hover:to-indigo-500 text-white font-black rounded-2xl shadow-lg shadow-purple-600/40 border-0 px-6"
+                  className="bg-gradient-to-r from-sky-600 via-blue-600 to-cyan-600 hover:from-sky-500 hover:to-blue-500 text-white font-black rounded-2xl shadow-lg shadow-sky-600/30 border-0 px-6"
                 >
                   + Add Entry
                 </Button>
@@ -422,7 +422,7 @@ const Home = () => {
                 <Button
                   type="text"
                   size="large"
-                  icon={<FontAwesomeIcon icon={faCircleQuestion} className="text-purple-300/70 text-xl" />}
+                  icon={<FontAwesomeIcon icon={faCircleQuestion} className="text-slate-400 text-xl" />}
                   onClick={() => setIsHelpOpen(true)}
                   title="User Guide"
                 />
@@ -464,8 +464,8 @@ const Home = () => {
               {
                 key: 'overview',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faListCheck} className="text-purple-400" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faListCheck} className="text-sky-400" />
                     Transactions Ledger ({currencyKey})
                   </span>
                 ),
@@ -473,7 +473,7 @@ const Home = () => {
                   <div className="space-y-4">
                     {/* Search, Date & Type Filter Toolbar */}
                     <div className={`p-5 rounded-3xl border transition-colors duration-300 ${
-                      isDarkMode ? 'bg-[#120924] border-purple-900/50' : 'bg-white border-slate-200/90 shadow-sm'
+                      isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
                     }`}>
                       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <div className="flex flex-wrap items-center gap-3">
@@ -486,12 +486,12 @@ const Home = () => {
                               { label: <span className="font-extrabold text-emerald-400 px-3">💰 INCOME</span>, value: 'income' },
                               { label: <span className="font-extrabold text-rose-400 px-3">💸 EXPENSES</span>, value: 'expense' }
                             ]}
-                            className={isDarkMode ? 'bg-purple-950/70 text-purple-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
+                            className={isDarkMode ? 'bg-slate-900 text-slate-200 font-extrabold p-1 rounded-2xl' : 'bg-slate-100 text-slate-700 font-extrabold p-1 rounded-2xl'}
                           />
 
                           <Input
                             placeholder="Search category..."
-                            prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-purple-400/60" />}
+                            prefix={<FontAwesomeIcon icon={faMagnifyingGlass} className="text-slate-400" />}
                             value={searchCategory}
                             onChange={e => setSearchCategory(e.target.value)}
                             style={{ width: 190 }}
@@ -536,7 +536,7 @@ const Home = () => {
                     </div>
 
                     <div className={`rounded-3xl border overflow-hidden transition-colors duration-300 ${
-                      isDarkMode ? 'bg-[#120924] border-purple-900/50' : 'bg-white border-slate-200/90 shadow-sm'
+                      isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
                     }`}>
                       <Table
                         columns={columns}
@@ -551,9 +551,9 @@ const Home = () => {
                         locale={{
                           emptyText: (
                             <div className="py-16 text-center space-y-3">
-                              <span className="block font-black text-purple-300/70 text-lg">No transactions recorded yet!</span>
-                              <span className="block text-purple-300/50 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
-                              <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-purple-600 font-extrabold rounded-2xl mt-2">
+                              <span className="block font-black text-slate-400 text-lg">No transactions recorded yet!</span>
+                              <span className="block text-slate-500 text-xs font-semibold">Use 1-Click Quick Add preset buttons above or tap Demo Data to test out.</span>
+                              <Button type="primary" onClick={handleLoadSampleData} icon={<FontAwesomeIcon icon={faWandMagicSparkles} />} className="bg-sky-600 font-extrabold rounded-2xl mt-2">
                                 Load Demo Data
                               </Button>
                             </div>
@@ -567,7 +567,7 @@ const Home = () => {
               {
                 key: 'analytics',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
                     <FontAwesomeIcon icon={faChartPie} className="text-emerald-400" />
                     Category Breakdown Insights
                   </span>
@@ -577,8 +577,8 @@ const Home = () => {
               {
                 key: 'goals',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faPiggyBank} className="text-violet-400" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faPiggyBank} className="text-cyan-400" />
                     Savings Goals Vault
                   </span>
                 ),
@@ -587,7 +587,7 @@ const Home = () => {
               {
                 key: 'subscriptions',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
                     <FontAwesomeIcon icon={faRepeat} className="text-rose-400" />
                     Recurring Bills & Subscriptions
                   </span>
@@ -597,8 +597,8 @@ const Home = () => {
               {
                 key: 'growth',
                 label: (
-                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-purple-200' : 'text-slate-900'}`}>
-                    <FontAwesomeIcon icon={faSeedling} className="text-fuchsia-400" />
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faSeedling} className="text-teal-400" />
                     Wealth Growth Simulator
                   </span>
                 ),
@@ -625,14 +625,14 @@ const Home = () => {
             open={isHelpOpen}
             onCancel={() => setIsHelpOpen(false)}
             footer={[
-              <Button key="ok" type="primary" onClick={() => setIsHelpOpen(false)} className="bg-purple-600 font-bold rounded-xl">
+              <Button key="ok" type="primary" onClick={() => setIsHelpOpen(false)} className="bg-sky-600 font-bold rounded-xl">
                 Got it!
               </Button>
             ]}
           >
             <div className="space-y-4 text-sm py-2 font-medium">
-              <div className="p-4 bg-purple-500/20 rounded-2xl text-purple-200 border border-purple-500/30">
-                Welcome to <strong>Vaultly</strong>! Smart finance & expense management.
+              <div className="p-4 bg-sky-500/20 rounded-2xl text-sky-200 border border-sky-500/30">
+                Welcome to <strong>ExpenseTracker Pro</strong>! Executive income & expense management.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">

@@ -42,7 +42,7 @@ const FinancialHealthScore = ({ summary = {}, transactions = [], isDarkMode = fa
   } else if (healthScore < 65) {
     grade = { text: 'C Moderate', color: '#f59e0b', tagColor: 'amber', icon: faTriangleExclamation, advice: 'Fair stability. Increase savings buffer to withstand unexpected costs.' };
   } else if (healthScore < 85) {
-    grade = { text: 'B Good', color: '#c084fc', tagColor: 'purple', icon: faShieldHeart, advice: 'Healthy cash flow. Keep maintaining consistent tracking & goal deposits.' };
+    grade = { text: 'B Good', color: '#38bdf8', tagColor: 'blue', icon: faShieldHeart, advice: 'Healthy cash flow. Keep maintaining consistent tracking & goal deposits.' };
   }
 
   // Monthly Forecast Calculations
@@ -54,18 +54,18 @@ const FinancialHealthScore = ({ summary = {}, transactions = [], isDarkMode = fa
 
   return (
     <div className={`p-6 rounded-3xl border transition-colors duration-300 mb-6 ${
-      isDarkMode ? 'bg-[#120924] border-purple-900/50 shadow-2xl' : 'bg-white border-slate-200/90 shadow-sm'
+      isDarkMode ? 'bg-[#0b1329] border-slate-800 shadow-2xl' : 'bg-white border-slate-200/90 shadow-sm'
     }`}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-lg shadow-inner border border-purple-500/30">
+          <div className="w-10 h-10 rounded-2xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-lg shadow-inner border border-cyan-500/30">
             <FontAwesomeIcon icon={faHeartPulse} />
           </div>
           <div>
             <h3 className={`font-black text-lg block ${isDarkMode ? 'text-white' : 'text-slate-900'} m-0`}>
               Financial Health Rating & Forecasting
             </h3>
-            <span className={`text-xs font-semibold ${isDarkMode ? 'text-purple-300/70' : 'text-slate-500'}`}>
+            <span className={`text-xs font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
               Algorithmic credit & cash flow burn rate prediction
             </span>
           </div>
@@ -81,47 +81,47 @@ const FinancialHealthScore = ({ summary = {}, transactions = [], isDarkMode = fa
         
         {/* Health Meter Ring */}
         <div className={`p-5 rounded-2xl border text-center flex flex-col items-center justify-center ${
-          isDarkMode ? 'bg-[#1c0e38] border-purple-900/40' : 'bg-slate-50 border-slate-100'
+          isDarkMode ? 'bg-[#060c1c] border-slate-800' : 'bg-slate-50 border-slate-100'
         }`}>
-          <span className={`text-xs font-black uppercase tracking-wider mb-3 ${isDarkMode ? 'text-purple-300/70' : 'text-slate-500'}`}>
+          <span className={`text-xs font-black uppercase tracking-wider mb-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
             Financial Stability Score
           </span>
           <Progress
             type="dashboard"
             percent={healthScore}
             strokeColor={grade.color}
-            trailColor={isDarkMode ? '#2e1065' : '#e2e8f0'}
+            trailColor={isDarkMode ? '#1e293b' : '#e2e8f0'}
             strokeWidth={10}
             size={130}
             format={percent => (
               <div className="text-center">
                 <span className={`text-2xl font-black block ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{percent}</span>
-                <span className="text-[10px] font-bold text-purple-300/60 uppercase">INDEX</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase">INDEX</span>
               </div>
             )}
           />
-          <span className="text-xs font-extrabold text-purple-300/70 mt-2">{grade.advice}</span>
+          <span className="text-xs font-extrabold text-slate-400 mt-2">{grade.advice}</span>
         </div>
 
         {/* Daily Burn Rate & Forecast */}
         <div className={`p-5 rounded-2xl border space-y-4 col-span-2 ${
-          isDarkMode ? 'bg-[#1c0e38] border-purple-900/40' : 'bg-slate-50 border-slate-100'
+          isDarkMode ? 'bg-[#060c1c] border-slate-800' : 'bg-slate-50 border-slate-100'
         }`}>
-          <div className="flex items-center gap-2 text-xs font-black text-purple-300 uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-black text-cyan-400 uppercase tracking-wider">
             <FontAwesomeIcon icon={faChartLine} />
             Smart Cash Flow Predictions
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className={`p-3.5 rounded-xl border ${isDarkMode ? 'bg-[#120924] border-purple-900/50' : 'bg-white border-slate-200'}`}>
-              <span className="text-purple-300/60 text-xs font-semibold block mb-1">Average Daily Spend</span>
+            <div className={`p-3.5 rounded-xl border ${isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200'}`}>
+              <span className="text-slate-400 text-xs font-semibold block mb-1">Average Daily Spend</span>
               <span className={`text-xl font-black ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                ${dailyBurnRate.toFixed(2)} <span className="text-xs font-medium text-purple-300/50">/ day</span>
+                ${dailyBurnRate.toFixed(2)} <span className="text-xs font-medium text-slate-500">/ day</span>
               </span>
             </div>
 
-            <div className={`p-3.5 rounded-xl border ${isDarkMode ? 'bg-[#120924] border-purple-900/50' : 'bg-white border-slate-200'}`}>
-              <span className="text-purple-300/60 text-xs font-semibold block mb-1">Projected EOM Expenses</span>
+            <div className={`p-3.5 rounded-xl border ${isDarkMode ? 'bg-[#0b1329] border-slate-800' : 'bg-white border-slate-200'}`}>
+              <span className="text-slate-400 text-xs font-semibold block mb-1">Projected EOM Expenses</span>
               <span className="text-xl font-black text-rose-400">
                 ${projectedMonthExpense.toLocaleString()}
               </span>
