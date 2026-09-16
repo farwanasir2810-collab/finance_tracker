@@ -20,7 +20,8 @@ import {
   faPiggyBank,
   faRepeat,
   faSeedling,
-  faWallet
+  faBrain,
+  faGaugeHigh
 } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 
@@ -36,6 +37,7 @@ import SavingsGoals from '../components/transactions/SavingsGoals';
 import RecurringSubscriptions from '../components/transactions/RecurringSubscriptions';
 import WealthGrowthCalculator from '../components/transactions/WealthGrowthCalculator';
 import EmergencyRunway from '../components/transactions/EmergencyRunway';
+import AIAdvisor from '../components/transactions/AIAdvisor';
 import {
   fetchTransactions,
   createTransaction,
@@ -194,7 +196,7 @@ const Home = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `ExpenseTracker_Pro_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
+    link.setAttribute('download', `VaultX_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -326,30 +328,30 @@ const Home = () => {
       <div className={`min-h-screen ${isDarkMode ? 'bg-[#030712] text-slate-100' : 'bg-slate-50 text-slate-900'} p-4 md:p-8 font-sans antialiased transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto space-y-6">
 
-          {/* Navigation Header */}
+          {/* Navigation Top Header */}
           <div className={`rounded-3xl border transition-colors duration-300 p-6 ${
             isDarkMode ? 'bg-[#0b1329] border-slate-800 shadow-2xl shadow-sky-950/40' : 'bg-white border-slate-200/90 shadow-sm'
           }`}>
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               
-              {/* Brand Logo & Descriptive Name */}
+              {/* Brand Logo & Short Catchy Name: VaultX */}
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 rounded-3xl bg-gradient-to-tr from-sky-600 via-blue-600 to-cyan-500 text-white flex items-center justify-center text-2xl font-black shadow-lg shadow-sky-600/30">
-                  <FontAwesomeIcon icon={faWallet} />
+                  <FontAwesomeIcon icon={faVault} />
                 </div>
                 <div>
                   <div className="flex items-center gap-3">
                     <h1 className="text-3xl md:text-4xl font-black tracking-tight bg-gradient-to-r from-sky-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent m-0">
-                      ExpenseTracker Pro
+                      VaultX
                     </h1>
                     <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                       <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                      ACTIVE VAULT
+                      FINANCIAL OS
                     </span>
                   </div>
                   <span className={`mt-1 flex items-center gap-2 text-xs font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                     <FontAwesomeIcon icon={faShieldHalved} className="text-sky-400" />
-                    Executive Income & Expense Management • {dayjs().format('dddd, MMMM D, YYYY')}
+                    Executive Wealth & Cash Flow Operating System • {dayjs().format('dddd, MMMM D, YYYY')}
                   </span>
                 </div>
               </div>
@@ -443,24 +445,33 @@ const Home = () => {
             isDarkMode={isDarkMode}
           />
 
-          {/* Algorithmic Financial Health Rating & Predictions */}
-          <FinancialHealthScore summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
-
-          {/* Cash Flow Analytics Chart */}
-          <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
-
-          {/* Interactive Tools (Presets, Budget & Emergency Runway) */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <QuickAddPresets onSuccess={loadData} isDarkMode={isDarkMode} />
-            <BudgetMeter totalExpenses={convertedSummary.totalExpenses} isDarkMode={isDarkMode} />
-            <EmergencyRunway summary={convertedSummary} isDarkMode={isDarkMode} />
-          </div>
-
-          {/* Main Content Tabs (Ledger, Category Breakdown, Savings Goals, Subscriptions, Wealth Growth) */}
+          {/* Distinct Feature Workspace Tabs */}
           <Tabs
-            defaultActiveKey="overview"
+            defaultActiveKey="executive"
             size="large"
             items={[
+              {
+                key: 'executive',
+                label: (
+                  <span className={`font-black px-3 py-1 flex items-center gap-2 text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
+                    <FontAwesomeIcon icon={faGaugeHigh} className="text-sky-400" />
+                    Executive Dashboard & AI Insights
+                  </span>
+                ),
+                children: (
+                  <div className="space-y-6">
+                    <AIAdvisor summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
+                    <FinancialHealthScore summary={convertedSummary} transactions={transactions} isDarkMode={isDarkMode} />
+                    <FinancialAnalyticsChart summary={convertedSummary} currencySymbol={currency.symbol} isDarkMode={isDarkMode} />
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      <QuickAddPresets onSuccess={loadData} isDarkMode={isDarkMode} />
+                      <BudgetMeter totalExpenses={convertedSummary.totalExpenses} isDarkMode={isDarkMode} />
+                      <EmergencyRunway summary={convertedSummary} isDarkMode={isDarkMode} />
+                    </div>
+                  </div>
+                )
+              },
               {
                 key: 'overview',
                 label: (
@@ -632,16 +643,16 @@ const Home = () => {
           >
             <div className="space-y-4 text-sm py-2 font-medium">
               <div className="p-4 bg-sky-500/20 rounded-2xl text-sky-200 border border-sky-500/30">
-                Welcome to <strong>ExpenseTracker Pro</strong>! Executive income & expense management.
+                Welcome to <strong>VaultX</strong>! Executive financial & wealth operating system.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">
-                <li><strong>Multi-Currency</strong>: Switch between USD $, EUR €, GBP £, and PKR Rs instantly!</li>
-                <li><strong>Wealth Growth Simulator</strong>: Project long-term compound net worth over 1 to 30 years.</li>
-                <li><strong>Emergency Safety Runway</strong>: View months of zero-income survival buffer.</li>
-                <li><strong>Savings Goals Vault</strong>: Track target goals and deposit funds directly with 1 click.</li>
-                <li><strong>Recurring Subscriptions</strong>: Track monthly commitment burdens and log bill payments.</li>
-                <li><strong>Export CSV</strong>: Download your transaction ledger to CSV anytime.</li>
+                <li><strong>AI Risk Advisory</strong>: Automated financial intelligence & alert insights.</li>
+                <li><strong>Multi-Currency</strong>: Switch between USD $, EUR €, GBP £, and PKR Rs.</li>
+                <li><strong>Wealth Growth Simulator</strong>: Project compound net worth growth over 1 to 30 years.</li>
+                <li><strong>Emergency Safety Runway</strong>: View months of zero-income survival cushion.</li>
+                <li><strong>Savings Goals Vault</strong>: Track target goals and deposit funds directly.</li>
+                <li><strong>Export CSV</strong>: Download your transaction ledger anytime.</li>
               </ol>
             </div>
           </Modal>
