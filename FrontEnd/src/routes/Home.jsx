@@ -205,7 +205,7 @@ const Home = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `BloomVault_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
+    link.setAttribute('download', `Finora_${currencyKey}_${dayjs().format('YYYYMMDD_HHmmss')}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -358,7 +358,7 @@ const Home = () => {
                       <h1 className={`text-3xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent m-0 ${
                         isDarkMode ? 'bg-gradient-to-r from-pink-300 via-rose-300 to-fuchsia-300' : 'bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600'
                       }`}>
-                        BloomVault 🌸
+                        Finora 🌸
                       </h1>
                       <span className={`flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black border ${
                         isDarkMode ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-pink-100 text-pink-700 border-pink-300/80'
@@ -737,7 +737,7 @@ const Home = () => {
           >
             <div className="space-y-4 text-sm py-2 font-medium text-pink-100">
               <div className="p-4 bg-pink-500/20 rounded-2xl text-pink-200 border border-pink-500/30">
-                Welcome to <strong>BloomVault</strong>! Cute Pinterest aesthetic financial & habit diary 🌸.
+                Welcome to <strong>Finora</strong>! Cute Pinterest aesthetic financial & habit diary 🌸.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">

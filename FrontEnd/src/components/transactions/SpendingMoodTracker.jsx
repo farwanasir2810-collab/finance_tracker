@@ -91,7 +91,7 @@ const SpendingMoodTracker = ({ isDarkMode = false }) => {
       }`}>
         <span className="text-xl">✨</span>
         <p className="text-xs font-extrabold m-0 leading-relaxed">
-          &quot;{selectedMood.quote}&quot; — <span className="text-pink-400">BloomVault Daily Reflection Insight</span>
+          &quot;{selectedMood.quote}&quot; — <span className="text-pink-400">Finora Daily Reflection Insight</span>
         </p>
       </div>
     </div>

@@ -65,7 +65,7 @@ const FinancialHealthScore = ({ summary = {}, transactions = [], isDarkMode = fa
           </div>
           <div>
             <h3 className={`font-black text-lg block ${isDarkMode ? 'text-pink-100' : 'text-slate-900'} m-0`}>
-              Financial Health Rating & Forecasting 🌸
+              Finora Financial Health Rating & Forecasting 🌸
             </h3>
             <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>
               Algorithmic stability index & month-end cash flow burn prediction

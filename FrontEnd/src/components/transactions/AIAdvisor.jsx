@@ -78,7 +78,7 @@ const AIAdvisor = ({ summary = {}, transactions = [], isDarkMode = false }) => {
         </div>
         <div>
           <span className={`font-black text-lg block tracking-tight ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>
-            BloomVault AI Vibe & Wealth Intelligence 🌸
+            Finora AI Vibe & Wealth Intelligence 🌸
           </span>
           <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>
             Automated financial recommendations and spending habit insights
