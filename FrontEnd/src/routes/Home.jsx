@@ -110,6 +110,7 @@ const Home = () => {
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
+  const [isMoreMobileOpen, setIsMoreMobileOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
 
   const currency = CURRENCIES[currencyKey] || CURRENCIES.PKR;
@@ -374,18 +375,18 @@ const Home = () => {
                       <h1 className={`text-3xl md:text-4xl font-black tracking-tight bg-clip-text text-transparent m-0 ${
                         isDarkMode ? 'bg-gradient-to-r from-pink-300 via-rose-300 to-fuchsia-300' : 'bg-gradient-to-r from-pink-600 via-rose-500 to-purple-600'
                       }`}>
-                        Finora 🌸
+                        Finora
                       </h1>
                       <span className={`flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black border ${
                         isDarkMode ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' : 'bg-pink-100 text-pink-700 border-pink-300/80'
                       }`}>
                         <span className="w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse"></span>
-                        FINANCIAL OS
+                        FINORA PRO
                       </span>
                     </div>
                     <span className={`mt-1 flex items-center gap-2 text-xs font-extrabold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-700/80'}`}>
                       <FontAwesomeIcon icon={faCrown} className="text-pink-500" />
-                      Cute Aesthetic Finance & Habit Vault • {dayjs().format('dddd, MMMM D, YYYY')}
+                      Track. Understand. Plan. Grow. • {dayjs().format('dddd, MMMM D, YYYY')}
                     </span>
                   </div>
                 </div>
@@ -792,15 +793,13 @@ const Home = () => {
           </button>
         </footer>
 
-        {/* Sticky Mobile Navigation Bar for One-Thumb Ergonomics */}
+        {/* Refined Mobile Navigation Bar (5 Core Destinations for One-Thumb Ergonomics) */}
         <nav aria-label="Mobile Navigation" className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-[#1f0918]/95 backdrop-blur-lg border-t border-pink-200/80 dark:border-pink-900/40 px-2 py-1.5 md:hidden flex justify-around items-center shadow-2xl">
           {[
             { key: 'overview', label: 'Overview', icon: faGaugeHigh },
+            { key: 'ledger', label: 'Transactions', icon: faTableList },
             { key: 'ai', label: 'Copilot', icon: faBrain },
-            { key: 'forecast', label: 'Forecast', icon: faWandMagicSparkles },
-            { key: 'networth', label: 'Net Worth', icon: faVault },
-            { key: 'debt', label: 'Debt', icon: faCreditCard },
-            { key: 'calendar', label: 'Calendar', icon: faCalendarDays }
+            { key: 'goals', label: 'Wishlists', icon: faPiggyBank }
           ].map(mItem => (
             <button
               key={mItem.key}
@@ -818,7 +817,48 @@ const Home = () => {
               <span className="text-[10px] tracking-tight">{mItem.label}</span>
             </button>
           ))}
+
+          {/* 5th Destination: More Menu */}
+          <button
+            onClick={() => setIsMoreMobileOpen(true)}
+            className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 dark:text-pink-300/60 font-semibold hover:text-pink-500 transition-all"
+          >
+            <FontAwesomeIcon icon={faGear} className="text-base mb-0.5 text-pink-500" />
+            <span className="text-[10px] tracking-tight font-black text-pink-600">More ≡</span>
+          </button>
         </nav>
+
+        {/* Mobile "More" Drawer for Extended Tools */}
+        <Drawer
+          title={<span className="font-black text-lg text-slate-900">🌸 Finora Navigation & Tools</span>}
+          placement="bottom"
+          height="auto"
+          onClose={() => setIsMoreMobileOpen(false)}
+          open={isMoreMobileOpen}
+        >
+          <div className="grid grid-cols-2 gap-3 py-2 text-xs font-black">
+            {[
+              { key: 'forecast', label: '🔮 Cash-Flow Forecast', icon: faWandMagicSparkles },
+              { key: 'networth', label: '💰 Net Worth Vault', icon: faVault },
+              { key: 'debt', label: '💳 Debt Acceleration', icon: faCreditCard },
+              { key: 'calendar', label: '📅 Money Calendar', icon: faCalendarDays },
+              { key: 'subscriptions', label: '🔄 Subscriptions', icon: faRepeat }
+            ].map(drawerItem => (
+              <button
+                key={drawerItem.key}
+                onClick={() => {
+                  setActiveWorkspaceKey(drawerItem.key);
+                  setIsMoreMobileOpen(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="flex items-center gap-2 p-3.5 rounded-2xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-pink-900 text-left transition-all"
+              >
+                <FontAwesomeIcon icon={drawerItem.icon} className="text-pink-500" />
+                <span>{drawerItem.label}</span>
+              </button>
+            ))}
+          </div>
+        </Drawer>
       </div>
     </ConfigProvider>
   );

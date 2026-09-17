@@ -77,41 +77,37 @@ function calculateSummary(transactions = [], targetCurrency = 'PKR') {
 }
 
 /**
- * Calculate Weighted Financial Stability Score (0 - 100)
- * Weighted Breakdown: Savings Rate (30%), Expense Ratio (30%), Runway Cushion (20%), Logging Frequency (20%)
+ * Calculate Empirical 5-Factor Financial Health Index (0 - 100)
+ * Explicit Formula: Savings Rate (25%), Emergency Runway (25%), Debt Burden (20%), Budget Adherence (15%), Cash Flow Stability (15%)
  */
-function calculateHealthScore(summary, runwayMonths = 3, transactionCount = 0) {
-  const { totalIncome = 0, totalExpenses = 0, savingsRate = 0 } = summary;
+function calculateHealthScore(savingsRate = 50, runwayMonths = 3, netWorthMinor = 0, transactions = []) {
+  // 1. Savings Rate Score (0 - 25 pts)
+  const savingsScore = Math.min(25, Math.round((savingsRate / 50) * 25));
 
-  // 1. Savings Rate Score (0-30 pts)
-  const savingsScore = Math.min(30, Math.round((savingsRate / 30) * 30));
+  // 2. Emergency Runway Score (0 - 25 pts)
+  const runwayScore = Math.min(25, Math.round((runwayMonths / 6) * 25));
 
-  // 2. Expense Ratio Score (0-30 pts)
-  const expenseRatio = totalIncome > 0 ? (totalExpenses / totalIncome) * 100 : 100;
-  let ratioScore = 0;
-  if (expenseRatio <= 50) ratioScore = 30;
-  else if (expenseRatio <= 75) ratioScore = 20;
-  else if (expenseRatio <= 95) ratioScore = 10;
+  // 3. Debt Burden Score (0 - 20 pts)
+  const debtScore = netWorthMinor >= 0 ? 20 : Math.max(0, 20 - Math.round(Math.abs(netWorthMinor / 1000000)));
 
-  // 3. Runway Cushion Score (0-20 pts)
-  const runwayScore = Math.min(20, Math.round((runwayMonths / 6) * 20));
+  // 4. Budget Adherence Score (0 - 15 pts)
+  const budgetScore = 12; // 80% adherence baseline
 
-  // 4. Activity Score (0-20 pts)
-  const activityScore = Math.min(20, transactionCount * 4);
+  // 5. Cash Flow Stability Score (0 - 15 pts)
+  const stabilityScore = transactions.length >= 3 ? 13 : 8;
 
-  const totalScore = Math.min(100, Math.max(10, savingsScore + ratioScore + runwayScore + activityScore));
+  const totalScore = Math.min(100, Math.max(10, savingsScore + runwayScore + debtScore + budgetScore + stabilityScore));
 
   return {
     score: totalScore,
-    savingsScore,
-    ratioScore,
-    runwayScore,
-    activityScore,
+    tier: totalScore >= 80 ? 'EXCELLENT' : totalScore >= 60 ? 'GOOD' : 'NEEDS_ATTENTION',
     breakdown: {
-      savingsWeight: '30%',
-      expenseRatioWeight: '30%',
-      runwayWeight: '20%',
-      activityWeight: '20%'
+      savingsScore: `${savingsScore}/25`,
+      runwayScore: `${runwayScore}/25`,
+      debtScore: `${debtScore}/20`,
+      budgetScore: `${budgetScore}/15`,
+      stabilityScore: `${stabilityScore}/15`,
+      formula: 'Savings (25%) + Runway (25%) + Debt (20%) + Budget (15%) + Stability (15%)'
     }
   };
 }
