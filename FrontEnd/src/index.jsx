@@ -22,12 +22,17 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen bg-pink-50 flex items-center justify-center p-6 font-sans">
-          <div className="max-w-md w-full p-8 rounded-3xl bg-white border border-pink-200 shadow-xl text-center space-y-4">
+          <div className="max-w-xl w-full p-8 rounded-3xl bg-white border border-pink-200 shadow-xl text-center space-y-4">
             <span className="text-4xl block">🌸</span>
-            <h2 className="text-2xl font-black text-slate-900">Finora Pro - Recovery Mode</h2>
-            <p className="text-xs font-semibold text-pink-700 leading-relaxed">
-              An unexpected runtime error occurred. Click below to reload the app cleanly.
-            </p>
+            <h2 className="text-2xl font-black text-slate-900">Finora Pro - Error Debug Diagnostic</h2>
+            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-left overflow-auto max-h-60 text-xs font-mono text-rose-700">
+              <strong className="block mb-2 text-rose-900 font-sans">Error Traceback Details:</strong>
+              {this.state.error && this.state.error.toString()}
+              <br />
+              <span className="text-[10px] text-rose-500 opacity-80 mt-2 block whitespace-pre-wrap">
+                {this.state.error && this.state.error.stack}
+              </span>
+            </div>
             <button
               onClick={() => window.location.reload()}
               className="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-black text-sm rounded-2xl shadow-md border-0 hover:scale-105 transition-all"
