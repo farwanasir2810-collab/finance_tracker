@@ -1,6 +1,6 @@
-# Finora 🌸 — Cute Aesthetic Personal Finance & Habit Vault
+# Finora Pro — Intelligent Financial Operating System & AI Wealth Platform
 
-> **Finora** is a recruiter-ready **Aesthetic Financial Operating System** that blends cute Pinterest soft-girl aesthetics (marshmallow cream, pastel pink, rose & lavender) with senior-level executive financial depth and interactive engineering features.
+> **Finora Pro** is an enterprise-grade **Financial Operating System** that combines intelligent money management, AI-driven cash flow forecasting, net worth tracking, and behavioral spending insights into a sleek, executive platform.
 
 ---
 

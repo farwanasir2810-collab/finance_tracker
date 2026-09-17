@@ -762,7 +762,7 @@ const Home = () => {
           >
             <div className="space-y-4 text-sm py-2 font-medium text-slate-700">
               <div className="p-4 bg-pink-50 rounded-2xl text-pink-900 border border-pink-200">
-                Welcome to <strong>Finora</strong>! Cute Pinterest aesthetic financial & habit diary 🌸.
+                Welcome to <strong>Finora Pro</strong> — your intelligent financial operating system and wealth platform.
               </div>
 
               <ol className="list-decimal list-inside space-y-2.5">
