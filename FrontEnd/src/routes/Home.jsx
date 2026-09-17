@@ -230,9 +230,9 @@ const Home = () => {
   };
 
   const convertedSummary = {
-    totalIncome: summary.totalIncome * currency.rate,
-    totalExpenses: summary.totalExpenses * currency.rate,
-    balance: summary.balance * currency.rate
+    totalIncome: (summary?.totalIncome || 0) * (currency?.rate || 1),
+    totalExpenses: (summary?.totalExpenses || 0) * (currency?.rate || 1),
+    balance: (summary?.balance || 0) * (currency?.rate || 1)
   };
 
   const columns = [
@@ -468,11 +468,11 @@ const Home = () => {
                   </span>
                   <span className="text-pink-400">|</span>
                   <span className={`font-bold ${isDarkMode ? 'text-pink-200' : 'text-slate-700'}`}>
-                    📊 Total Logged: <strong className="text-pink-500">{transactions.length} Entries</strong>
+                    📊 Total Logged: <strong className="text-pink-500">{transactions?.length || 0} Entries</strong>
                   </span>
                   <span className="text-pink-400">|</span>
                   <span className={`font-bold ${isDarkMode ? 'text-pink-200' : 'text-slate-700'}`}>
-                    💖 Vault Balance: <strong className="text-emerald-500">{currency.symbol}{(summary.balance * currency.rate).toFixed(2)}</strong>
+                    💖 Vault Balance: <strong className="text-emerald-500">{currency?.symbol || '$'}{((summary?.balance || 0) * (currency?.rate || 1)).toFixed(2)}</strong>
                   </span>
                 </div>
 
@@ -496,7 +496,7 @@ const Home = () => {
                   { key: 'networth', label: '💰 Net Worth', icon: faVault },
                   { key: 'debt', label: '💳 Debt Planner', icon: faCreditCard },
                   { key: 'calendar', label: '📅 Money Calendar', icon: faCalendarDays },
-                  { key: 'ledger', label: '📋 Audit Ledger', icon: faTableList, count: transactions.length },
+                  { key: 'ledger', label: '📋 Audit Ledger', icon: faTableList, count: transactions?.length || 0 },
                   { key: 'goals', label: '💖 Wishlists', icon: faPiggyBank },
                   { key: 'subscriptions', label: '🔄 Subscriptions', icon: faRepeat }
                 ].map(nav => (
@@ -528,7 +528,7 @@ const Home = () => {
           <main role="main" className="space-y-6">
 
           {/* Gamified Milestones & Badges Ribbon */}
-          <AchievementBadges summary={convertedSummary} transactionCount={transactions.length} isDarkMode={isDarkMode} />
+          <AchievementBadges summary={convertedSummary} transactionCount={transactions?.length || 0} isDarkMode={isDarkMode} />
 
           {/* Hero Financial Summary Stat Grid */}
           <SummaryCards
