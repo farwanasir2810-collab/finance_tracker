@@ -109,3 +109,11 @@ exports.deleteTransaction = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+exports.getAllTransactionsData = async () => {
+  try {
+    return await Transaction.find();
+  } catch (err) {
+    return [];
+  }
+};

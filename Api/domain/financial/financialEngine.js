@@ -42,10 +42,11 @@ function calculateNetWorth(accounts = [], targetCurrency = 'PKR') {
  * Ignores 'TRANSFER' transaction type to keep financial metrics 100% consistent
  */
 function calculateSummary(transactions = [], targetCurrency = 'PKR') {
+  const txList = Array.isArray(transactions) ? transactions : [];
   let totalIncomeMinor = 0;
   let totalExpensesMinor = 0;
 
-  transactions.forEach(t => {
+  txList.forEach(t => {
     if (t.type === 'TRANSFER') return; // Ignore internal transfers
 
     const rawMinor = t.amountMinor || toMinorUnits(t.amount || 0, t.currency || 'PKR');

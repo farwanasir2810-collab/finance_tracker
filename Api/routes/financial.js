@@ -6,7 +6,7 @@ const { generate30DayForecast } = require('../domain/financial/forecastService')
 const { calculateDebtPayoff } = require('../domain/financial/debtService');
 const { detectRecurringPatterns } = require('../domain/financial/recurringDetector');
 const { processAIQuery } = require('../domain/financial/aiService');
-const { getTransactions } = require('../controllers/transactions');
+const { getAllTransactionsData } = require('../controllers/transactions');
 
 // Mock Accounts Data Store
 const MOCK_ACCOUNTS = [
@@ -36,13 +36,17 @@ router.get('/net-worth', (req, res) => {
 });
 
 // GET /api/financial/forecast (30-Day Cash Flow Projection)
-router.get('/forecast', (req, res) => {
-  const currency = req.query.currency || 'PKR';
-  const transactions = getTransactions();
-  const summary = calculateSummary(transactions, currency);
-  
-  const forecast = generate30DayForecast({ currentBalance: summary.balance, transactions, currency });
-  res.json(forecast);
+router.get('/forecast', async (req, res) => {
+  try {
+    const currency = req.query.currency || 'PKR';
+    const transactions = await getAllTransactionsData();
+    const summary = calculateSummary(transactions, currency);
+    
+    const forecast = generate30DayForecast({ currentBalance: summary.balance, transactions, currency });
+    res.json(forecast);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to generate forecast' });
+  }
 });
 
 // POST /api/financial/debt-planner (Loan Payoff Calculator)
@@ -53,20 +57,28 @@ router.post('/debt-planner', (req, res) => {
 });
 
 // GET /api/financial/recurring (Recurring Transaction Detection)
-router.get('/recurring', (req, res) => {
-  const transactions = getTransactions();
-  const recurring = detectRecurringPatterns(transactions);
-  res.json({ recurring });
+router.get('/recurring', async (req, res) => {
+  try {
+    const transactions = await getAllTransactionsData();
+    const recurring = detectRecurringPatterns(transactions);
+    res.json({ recurring });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to detect recurring patterns' });
+  }
 });
 
 // POST /api/financial/ai-query (AI Copilot Natural Language Q&A)
-router.post('/ai-query', (req, res) => {
-  const { query, currency } = req.body;
-  const transactions = getTransactions();
-  const summary = calculateSummary(transactions, currency || 'PKR');
-  
-  const result = processAIQuery({ query, summary, transactions, currency: currency || 'PKR' });
-  res.json(result);
+router.post('/ai-query', async (req, res) => {
+  try {
+    const { query, currency } = req.body;
+    const transactions = await getAllTransactionsData();
+    const summary = calculateSummary(transactions, currency || 'PKR');
+    
+    const result = processAIQuery({ query, summary, transactions, currency: currency || 'PKR' });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to process AI query' });
+  }
 });
 
 module.exports = router;
