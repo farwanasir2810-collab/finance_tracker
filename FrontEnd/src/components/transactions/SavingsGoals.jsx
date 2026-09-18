@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Progress, Button, InputNumber, Popover, message } from 'antd';
+import { Progress, Button, InputNumber, Input, Modal, Popover, Popconfirm, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faPlus, faLaptop, faPlane, faShirt, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faPlus, faLaptop, faPlane, faShirt, faWandMagicSparkles, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { createTransaction } from '../../helpers/transactionApi';
 
 const INITIAL_GOALS = [
@@ -14,6 +14,13 @@ const INITIAL_GOALS = [
 const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
   const [goals, setGoals] = useState(INITIAL_GOALS);
   const [depositAmount, setDepositAmount] = useState(100);
+  
+  // Edit / Add Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingGoal, setEditingGoal] = useState(null);
+  const [formTitle, setFormTitle] = useState('');
+  const [formTarget, setFormTarget] = useState(1000);
+  const [formSaved, setFormSaved] = useState(0);
 
   const handleDeposit = async (goalId, goalTitle) => {
     if (!depositAmount || depositAmount <= 0) {
@@ -41,24 +48,87 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
     }
   };
 
+  const handleOpenAddModal = () => {
+    setEditingGoal(null);
+    setFormTitle('');
+    setFormTarget(1000);
+    setFormSaved(0);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = goal => {
+    setEditingGoal(goal);
+    setFormTitle(goal.title);
+    setFormTarget(goal.target);
+    setFormSaved(goal.saved);
+    setIsModalOpen(true);
+  };
+
+  const handleSaveGoal = () => {
+    if (!formTitle.trim()) {
+      message.warning('Goal title is required');
+      return;
+    }
+
+    if (editingGoal) {
+      setGoals(prev =>
+        prev.map(g =>
+          g.id === editingGoal.id
+            ? { ...g, title: formTitle, target: Number(formTarget), saved: Number(formSaved) }
+            : g
+        )
+      );
+      message.success('Goal updated successfully! ✨');
+    } else {
+      const newGoal = {
+        id: String(Date.now()),
+        title: formTitle,
+        target: Number(formTarget),
+        saved: Number(formSaved),
+        icon: faHeart,
+        color: '#ec4899',
+        bg: 'rgba(236, 72, 153, 0.15)'
+      };
+      setGoals(prev => [...prev, newGoal]);
+      message.success('New wishlist goal created! 🌸');
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteGoal = goalId => {
+    setGoals(prev => prev.filter(g => g.id !== goalId));
+    message.success('Goal removed');
+  };
+
   return (
     <div className={`p-6 rounded-3xl border transition-colors duration-300 ${
       isDarkMode
         ? 'bg-[#240c1e] border-pink-900/40 shadow-xl'
         : 'bg-white border-pink-100 shadow-sm'
     }`}>
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-pink-100 dark:border-pink-900/40">
-        <div className="w-10 h-10 rounded-2xl bg-pink-500/15 text-pink-500 flex items-center justify-center text-lg shadow-inner border border-pink-500/30">
-          <FontAwesomeIcon icon={faWandMagicSparkles} />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-pink-100 dark:border-pink-900/40">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-pink-500/15 text-pink-500 flex items-center justify-center text-lg shadow-inner border border-pink-500/30">
+            <FontAwesomeIcon icon={faWandMagicSparkles} />
+          </div>
+          <div>
+            <span className={`font-black text-lg block tracking-tight ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>
+              Girls' Dream Savings Vault Goals 💖
+            </span>
+            <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-600/70'}`}>
+              Track your dream wishlists & fund your future era
+            </span>
+          </div>
         </div>
-        <div>
-          <span className={`font-black text-lg block tracking-tight ${isDarkMode ? 'text-pink-100' : 'text-slate-900'}`}>
-            Girls' Dream Savings Vault Goals 💖
-          </span>
-          <span className={`text-xs font-semibold ${isDarkMode ? 'text-pink-300/70' : 'text-pink-600/70'}`}>
-            Track your dream wishlists & fund your future era
-          </span>
-        </div>
+
+        <Button
+          type="primary"
+          onClick={handleOpenAddModal}
+          icon={<FontAwesomeIcon icon={faPlus} />}
+          className="bg-pink-600 hover:bg-pink-700 font-extrabold rounded-2xl border-0 text-xs h-9 px-4"
+        >
+          + Add Wishlist Goal
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -112,16 +182,44 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
                   </div>
                 </div>
 
-                <Popover content={popoverContent} title="Add Funds ✨" trigger="click" placement="topRight">
+                <div className="flex items-center gap-1">
+                  <Popover content={popoverContent} title="Add Funds ✨" trigger="click" placement="topRight">
+                    <Button
+                      type="text"
+                      size="small"
+                      icon={<FontAwesomeIcon icon={faPlus} />}
+                      className="rounded-xl font-black bg-pink-500/15 text-pink-400 hover:bg-pink-500/25 px-2.5 py-1 text-xs"
+                    >
+                      Deposit
+                    </Button>
+                  </Popover>
+
                   <Button
                     type="text"
                     size="small"
-                    icon={<FontAwesomeIcon icon={faPlus} />}
-                    className="rounded-xl font-black bg-pink-500/15 text-pink-400 hover:bg-pink-500/25 px-3 py-1"
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                    onClick={() => handleOpenEditModal(goal)}
+                    className="text-pink-500 hover:bg-pink-500/20 rounded-xl px-2 py-1 text-xs"
+                    title="Edit Goal"
+                  />
+
+                  <Popconfirm
+                    title="Delete wishlist goal?"
+                    onConfirm={() => handleDeleteGoal(goal.id)}
+                    okText="Yes, Delete"
+                    cancelText="Cancel"
+                    okButtonProps={{ danger: true }}
                   >
-                    Deposit
-                  </Button>
-                </Popover>
+                    <Button
+                      type="text"
+                      size="small"
+                      danger
+                      icon={<FontAwesomeIcon icon={faTrash} />}
+                      className="text-rose-500 hover:bg-rose-500/20 rounded-xl px-2 py-1 text-xs"
+                      title="Delete Goal"
+                    />
+                  </Popconfirm>
+                </div>
               </div>
 
               <Progress percent={percent} strokeColor={goal.color} trailColor={isDarkMode ? '#3b1132' : '#fce7f3'} size="small" />
@@ -129,6 +227,51 @@ const SavingsGoals = ({ onSuccess, isDarkMode = false }) => {
           );
         })}
       </div>
+
+      {/* Goal Edit / Add Modal */}
+      <Modal
+        title={<span className="font-black text-lg text-slate-900">{editingGoal ? '✏️ Edit Wishlist Goal' : '💖 Add New Wishlist Goal'}</span>}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        onOk={handleSaveGoal}
+        okText={editingGoal ? 'Update Goal' : 'Create Goal'}
+        okButtonProps={{ className: 'bg-pink-600 font-bold rounded-xl border-0' }}
+      >
+        <div className="space-y-4 py-2">
+          <div>
+            <label className="block text-xs font-black text-slate-700 mb-1">Goal Title</label>
+            <Input
+              value={formTitle}
+              onChange={e => setFormTitle(e.target.value)}
+              placeholder="e.g. MacBook Pro, Trip to Tokyo..."
+              className="rounded-xl"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-black text-slate-700 mb-1">Target Amount ($)</label>
+              <InputNumber
+                value={formTarget}
+                onChange={val => setFormTarget(val || 100)}
+                min={10}
+                className="w-full rounded-xl"
+                prefix="$"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-black text-slate-700 mb-1">Current Saved ($)</label>
+              <InputNumber
+                value={formSaved}
+                onChange={val => setFormSaved(val || 0)}
+                min={0}
+                className="w-full rounded-xl"
+                prefix="$"
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

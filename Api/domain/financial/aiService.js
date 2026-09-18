@@ -65,7 +65,8 @@ function processAIQuery({ query = '', summary = {}, transactions = [], currency 
   if (lowerQuery.includes('where') || lowerQuery.includes('spent') || lowerQuery.includes('most')) {
     const categoryTotals = {};
     transactions.forEach(t => {
-      if (t.type === 'EXPENSE' && t.type !== 'TRANSFER') {
+      const tType = (t.type || '').toLowerCase();
+      if (tType === 'expense' && tType !== 'transfer') {
         const cat = t.category || 'Other';
         categoryTotals[cat] = (categoryTotals[cat] || 0) + (Number(t.amount) || 0);
       }

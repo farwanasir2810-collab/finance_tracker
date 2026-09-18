@@ -1,9 +1,10 @@
-import { Button, Tag, message } from 'antd';
+import { useState } from 'react';
+import { Button, Tag, Input, InputNumber, Modal, Popconfirm, message } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRepeat, faTv, faCloud, faMusic, faDumbbell, faWifi, faCreditCard, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faRepeat, faTv, faCloud, faMusic, faDumbbell, faWifi, faCreditCard, faCheck, faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { createTransaction } from '../../helpers/transactionApi';
 
-const SUBSCRIPTIONS = [
+const INITIAL_SUBSCRIPTIONS = [
   { id: '1', name: 'Netflix Premium 4K', cost: 19.99, cycle: 'Monthly', icon: faTv, color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.15)', category: 'Entertainment' },
   { id: '2', name: 'Cloud Hosting (AWS)', cost: 45.00, cycle: 'Monthly', icon: faCloud, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)', category: 'Utilities' },
   { id: '3', name: 'Spotify Duo', cost: 14.99, cycle: 'Monthly', icon: faMusic, color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)', category: 'Entertainment' },
@@ -12,7 +13,14 @@ const SUBSCRIPTIONS = [
 ];
 
 const RecurringSubscriptions = ({ onSuccess, isDarkMode = false }) => {
-  const totalMonthlySub = SUBSCRIPTIONS.reduce((acc, curr) => acc + curr.cost, 0);
+  const [subscriptions, setSubscriptions] = useState(INITIAL_SUBSCRIPTIONS);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingSub, setEditingSub] = useState(null);
+  const [formName, setFormName] = useState('');
+  const [formCost, setFormCost] = useState(15);
+  const [formCategory, setFormCategory] = useState('Utilities');
+
+  const totalMonthlySub = subscriptions.reduce((acc, curr) => acc + curr.cost, 0);
 
   const handlePaySubscription = async sub => {
     try {
@@ -29,6 +37,59 @@ const RecurringSubscriptions = ({ onSuccess, isDarkMode = false }) => {
     } catch (err) {
       message.error(`Failed to log ${sub.name} payment`);
     }
+  };
+
+  const handleOpenAddModal = () => {
+    setEditingSub(null);
+    setFormName('');
+    setFormCost(15);
+    setFormCategory('Utilities');
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = sub => {
+    setEditingSub(sub);
+    setFormName(sub.name);
+    setFormCost(sub.cost);
+    setFormCategory(sub.category || 'Utilities');
+    setIsModalOpen(true);
+  };
+
+  const handleSaveSub = () => {
+    if (!formName.trim()) {
+      message.warning('Subscription name is required');
+      return;
+    }
+
+    if (editingSub) {
+      setSubscriptions(prev =>
+        prev.map(s =>
+          s.id === editingSub.id
+            ? { ...s, name: formName, cost: Number(formCost), category: formCategory }
+            : s
+        )
+      );
+      message.success('Subscription updated! ✨');
+    } else {
+      const newSub = {
+        id: String(Date.now()),
+        name: formName,
+        cost: Number(formCost),
+        cycle: 'Monthly',
+        icon: faRepeat,
+        color: '#ec4899',
+        bg: 'rgba(236, 72, 153, 0.15)',
+        category: formCategory
+      };
+      setSubscriptions(prev => [...prev, newSub]);
+      message.success('New subscription added! 🔄');
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteSub = subId => {
+    setSubscriptions(prev => prev.filter(s => s.id !== subId));
+    message.success('Subscription removed');
   };
 
   return (
@@ -50,14 +111,26 @@ const RecurringSubscriptions = ({ onSuccess, isDarkMode = false }) => {
           </div>
         </div>
 
-        <Tag color="purple" className="m-0 font-black px-3.5 py-1.5 rounded-xl text-xs border border-purple-500/30 bg-purple-500/10 text-purple-400">
-          <FontAwesomeIcon icon={faCreditCard} className="mr-1.5" />
-          Burden: ${totalMonthlySub.toFixed(2)} / month
-        </Tag>
+        <div className="flex items-center gap-2">
+          <Tag color="purple" className="m-0 font-black px-3.5 py-1.5 rounded-xl text-xs border border-purple-500/30 bg-purple-500/10 text-purple-400">
+            <FontAwesomeIcon icon={faCreditCard} className="mr-1.5" />
+            Burden: ${totalMonthlySub.toFixed(2)} / month
+          </Tag>
+
+          <Button
+            type="primary"
+            size="small"
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            onClick={handleOpenAddModal}
+            className="bg-purple-600 hover:bg-purple-700 font-extrabold rounded-xl border-0 text-xs px-3 py-1"
+          >
+            + Add Bill
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {SUBSCRIPTIONS.map(sub => (
+        {subscriptions.map(sub => (
           <div
             key={sub.id}
             className={`p-4 rounded-2xl border flex items-center justify-between transition-all ${
@@ -77,19 +150,91 @@ const RecurringSubscriptions = ({ onSuccess, isDarkMode = false }) => {
               </div>
             </div>
 
-            <Button
-              type="text"
-              size="small"
-              icon={<FontAwesomeIcon icon={faCheck} />}
-              onClick={() => handlePaySubscription(sub)}
-              className="rounded-xl font-black bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 px-3 py-1 text-xs"
-              title="Log bill payment"
-            >
-              Log
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button
+                type="text"
+                size="small"
+                icon={<FontAwesomeIcon icon={faCheck} />}
+                onClick={() => handlePaySubscription(sub)}
+                className="rounded-xl font-black bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 px-2.5 py-1 text-xs"
+                title="Log bill payment"
+              >
+                Log
+              </Button>
+
+              <Button
+                type="text"
+                size="small"
+                icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                onClick={() => handleOpenEditModal(sub)}
+                className="text-purple-400 hover:bg-purple-500/20 rounded-xl px-2 py-1 text-xs"
+                title="Edit Subscription"
+              />
+
+              <Popconfirm
+                title="Delete subscription?"
+                onConfirm={() => handleDeleteSub(sub.id)}
+                okText="Yes, Delete"
+                cancelText="Cancel"
+                okButtonProps={{ danger: true }}
+              >
+                <Button
+                  type="text"
+                  size="small"
+                  danger
+                  icon={<FontAwesomeIcon icon={faTrash} />}
+                  className="text-rose-400 hover:bg-rose-500/20 rounded-xl px-2 py-1 text-xs"
+                  title="Delete Subscription"
+                />
+              </Popconfirm>
+            </div>
           </div>
         ))}
       </div>
+
+      {/* Subscription Edit / Add Modal */}
+      <Modal
+        title={<span className="font-black text-lg text-slate-900">{editingSub ? '✏️ Edit Subscription' : '🔄 Add New Subscription'}</span>}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        onOk={handleSaveSub}
+        okText={editingSub ? 'Update Bill' : 'Create Bill'}
+        okButtonProps={{ className: 'bg-purple-600 font-bold rounded-xl border-0' }}
+      >
+        <div className="space-y-4 py-2">
+          <div>
+            <label className="block text-xs font-black text-slate-700 mb-1">Subscription / Bill Name</label>
+            <Input
+              value={formName}
+              onChange={e => setFormName(e.target.value)}
+              placeholder="e.g. Netflix, Gym Pass, Electric Bill..."
+              className="rounded-xl"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-black text-slate-700 mb-1">Monthly Cost ($)</label>
+              <InputNumber
+                value={formCost}
+                onChange={val => setFormCost(val || 10)}
+                min={1}
+                className="w-full rounded-xl"
+                prefix="$"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-black text-slate-700 mb-1">Category</label>
+              <Input
+                value={formCategory}
+                onChange={e => setFormCategory(e.target.value)}
+                placeholder="Entertainment, Utilities..."
+                className="rounded-xl"
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
