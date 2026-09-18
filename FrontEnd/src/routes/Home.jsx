@@ -229,6 +229,20 @@ const Home = () => {
     message.success(`Ledger exported in ${currencyKey}! ✨`);
   };
 
+  const handleNavigateToSection = (key) => {
+    setActiveWorkspaceKey(key);
+    setIsMoreMobileOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById(`section-${key}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        const mainEl = document.querySelector('main');
+        if (mainEl) mainEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 80);
+  };
+
   const convertedSummary = {
     totalIncome: (summary?.totalIncome || 0) * (currency?.rate || 1),
     totalExpenses: (summary?.totalExpenses || 0) * (currency?.rate || 1),
@@ -502,7 +516,7 @@ const Home = () => {
                 ].map(nav => (
                   <button
                     key={nav.key}
-                    onClick={() => setActiveWorkspaceKey(nav.key)}
+                    onClick={() => handleNavigateToSection(nav.key)}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs shrink-0 transition-all ${
                       activeWorkspaceKey === nav.key
                         ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/30 border-0 scale-105 ring-2 ring-pink-400/40'
@@ -536,7 +550,7 @@ const Home = () => {
             activeFilter={filterType}
             onSelectFilter={type => {
               setFilterType(type);
-              setActiveWorkspaceKey('ledger');
+              handleNavigateToSection('ledger');
             }}
             currencySymbol={currency.symbol}
             isDarkMode={isDarkMode}
@@ -544,7 +558,7 @@ const Home = () => {
 
           {/* SECTION 1: OVERVIEW DASHBOARD */}
           {activeWorkspaceKey === 'overview' && (
-            <div className="space-y-6">
+            <div id="section-overview" className="scroll-mt-24 space-y-6">
               <AICopilot summary={convertedSummary} isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
               <CashFlowTimeline isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
               <NetWorthTracker isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
@@ -563,32 +577,42 @@ const Home = () => {
 
           {/* SECTION 2: AI COPILOT HERO WORKSPACE */}
           {activeWorkspaceKey === 'ai' && (
-            <AICopilot summary={convertedSummary} isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            <div id="section-ai" className="scroll-mt-24">
+              <AICopilot summary={convertedSummary} isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            </div>
           )}
 
           {/* SECTION 3: CASH-FLOW FORECAST TIMELINE */}
           {activeWorkspaceKey === 'forecast' && (
-            <CashFlowTimeline isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            <div id="section-forecast" className="scroll-mt-24">
+              <CashFlowTimeline isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            </div>
           )}
 
           {/* SECTION 4: NET WORTH TRACKER */}
           {activeWorkspaceKey === 'networth' && (
-            <NetWorthTracker isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            <div id="section-networth" className="scroll-mt-24">
+              <NetWorthTracker isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            </div>
           )}
 
           {/* SECTION 5: DEBT PAYOFF PLANNER */}
           {activeWorkspaceKey === 'debt' && (
-            <DebtPlanner isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            <div id="section-debt" className="scroll-mt-24">
+              <DebtPlanner isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            </div>
           )}
 
           {/* SECTION 6: MONEY CALENDAR */}
           {activeWorkspaceKey === 'calendar' && (
-            <FinancialCalendar isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            <div id="section-calendar" className="scroll-mt-24">
+              <FinancialCalendar isDarkMode={isDarkMode} currencySymbol={currency.symbol} />
+            </div>
           )}
 
           {/* SECTION 7: TRANSACTIONS AUDIT LEDGER */}
           {activeWorkspaceKey === 'ledger' && (
-            <div className="space-y-4">
+            <div id="section-ledger" className="scroll-mt-24 space-y-4">
               {/* Search, Date & Type Filter Toolbar */}
               <div className={`p-6 rounded-3xl border transition-all duration-300 backdrop-blur-md shadow-md ${
                 isDarkMode ? 'bg-[#240c1e]/90 border-pink-900/40 shadow-pink-950/20' : 'bg-white/95 border-pink-200/80 shadow-pink-100/70'
@@ -722,12 +746,16 @@ const Home = () => {
 
           {/* SECTION 8: SAVINGS GOALS VAULT */}
           {activeWorkspaceKey === 'goals' && (
-            <SavingsGoals onSuccess={loadData} isDarkMode={isDarkMode} />
+            <div id="section-goals" className="scroll-mt-24">
+              <SavingsGoals onSuccess={loadData} isDarkMode={isDarkMode} />
+            </div>
           )}
 
           {/* SECTION 9: RECURRING SUBSCRIPTIONS */}
           {activeWorkspaceKey === 'subscriptions' && (
-            <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
+            <div id="section-subscriptions" className="scroll-mt-24">
+              <RecurringSubscriptions onSuccess={loadData} isDarkMode={isDarkMode} />
+            </div>
           )}
 
           {/* Add / Edit Transaction Modal */}
@@ -803,10 +831,7 @@ const Home = () => {
           ].map(mItem => (
             <button
               key={mItem.key}
-              onClick={() => {
-                setActiveWorkspaceKey(mItem.key);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
+              onClick={() => handleNavigateToSection(mItem.key)}
               className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${
                 activeWorkspaceKey === mItem.key
                   ? 'text-pink-600 dark:text-pink-400 font-black bg-pink-100/70 dark:bg-pink-950/60 scale-105'
@@ -846,11 +871,7 @@ const Home = () => {
             ].map(drawerItem => (
               <button
                 key={drawerItem.key}
-                onClick={() => {
-                  setActiveWorkspaceKey(drawerItem.key);
-                  setIsMoreMobileOpen(false);
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+                onClick={() => handleNavigateToSection(drawerItem.key)}
                 className="flex items-center gap-2 p-3.5 rounded-2xl bg-pink-50 hover:bg-pink-100 border border-pink-200 text-pink-900 text-left transition-all"
               >
                 <FontAwesomeIcon icon={drawerItem.icon} className="text-pink-500" />
