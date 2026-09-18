@@ -35,16 +35,23 @@ const AICopilot = ({ summary = {}, isDarkMode = false, currencySymbol = '$' }) =
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleSend = async queryText => {
-    const q = queryText || inputQuery;
-    if (!q.trim()) return;
+    const q = typeof queryText === 'string' ? queryText : inputQuery;
+    if (!q || typeof q !== 'string' || !q.trim()) {
+      message.warning('Please enter or select a question for AI Copilot');
+      return;
+    }
 
     setLoading(true);
     try {
-      const res = await queryAICopilot(q);
-      setActiveAnswer(res);
-      setInputQuery('');
+      const res = await queryAICopilot(q.trim(), currencySymbol);
+      if (res) {
+        setActiveAnswer(res);
+        setInputQuery('');
+        message.success('AI Copilot answer updated! ✨');
+      }
     } catch (err) {
-      message.error('Failed to query AI Copilot');
+      console.error('AI Copilot query error:', err);
+      message.error('Failed to query AI Copilot. Check backend server connection.');
     } finally {
       setLoading(false);
     }
